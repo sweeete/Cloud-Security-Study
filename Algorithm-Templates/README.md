@@ -1,0 +1,23 @@
+# 🧮 Algorithm & Data Structure Templates
+
+本目录用于存放算法模板与练习题。
+
+---
+
+## 🛠️ 知识体系划分
+
+### 1. [Data-Structures](./Data-Structures/)
+*   **线性结构**：单/双链表、循环队列、栈的实现。
+*   **树形结构**：二叉树遍历（递归与非递归）、BST、AVL 树思想。
+*   **图论基础**：邻接表存图、最短路径 (Dijkstra/Floyd)、最小生成树 (Prim/Kruskal)。
+*   **重点关注**：指针操作的边界检查、内存泄漏预防（`delete` 释放）。
+
+### 2. [Basic-Algorithms](./Basic-Algorithms/)
+*   **排序与搜索**：快排、归并、堆排、二分查找及其变体。
+*   **动态规划 (DP)**：背包问题、最长公共子序列 (LCS)、最长递增子序列 (LIS)。
+*   **搜索算法**：DFS (回溯剪枝)、BFS (最短路模型)。
+*   **数学基础**：大数运算、素数筛、快速幂。
+
+### 3. [LeetCode-Daily](./LeetCode-Daily/)
+*   每日一题练习记录，侧重于将模板应用于实际场景。
+
