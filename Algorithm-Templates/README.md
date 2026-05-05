@@ -21,3 +21,8 @@
 ### 3. [LeetCode-Daily](./LeetCode-Daily/)
 *   每日一题练习记录，侧重于将模板应用于实际场景。
 
+## 📚 算法练习索引
+
+| 序号 | 题目 | 难度 | 语言 |
+| :--- | :--- | :--- | :--- |
+| 0001 | [两数之和 (Two Sum)](./LeetCode-Daily/0001-TwoSum/README.md) | 🟢 Easy | C |
