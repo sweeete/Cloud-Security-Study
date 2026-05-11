@@ -26,3 +26,4 @@
 | 序号 | 题目 | 难度 | 语言 |
 | :--- | :--- | :--- | :--- |
 | 0001 | [两数之和 (Two Sum)](./LeetCode-Daily/0001-TwoSum) | 🟢 Easy | C/python |
+| 0002 | [两数相加 (Add Two Numbers)](./LeetCode-Daily/0002-AddTwoNumber) | 🟡 Medium | C/python |
