@@ -1,2 +1,5 @@
 .env
 .aider*
+
+# Local scratch C file; do not commit
+a.c
