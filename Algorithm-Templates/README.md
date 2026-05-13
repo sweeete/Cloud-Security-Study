@@ -27,3 +27,4 @@
 | :--- | :--- | :--- | :--- |
 | 0001 | [两数之和 (Two Sum)](./LeetCode-Daily/0001-TwoSum) | 🟢 Easy | C/python |
 | 0002 | [两数相加 (Add Two Numbers)](./LeetCode-Daily/0002-AddTwoNumber) | 🟡 Medium | C/python |
+| 0003 | [无重复字符的最长子串 (Longest Substring Without Repeating Characters)](./LeetCode-Daily/0003-LongestSubstring) | 🟡 Medium | C/python |
