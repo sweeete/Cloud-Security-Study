@@ -35,14 +35,12 @@ _lock = threading.Lock()
 
 
 def _get_exchange():
-    """轻量交易所实例 - 尝试多个节点"""
-    exchange = ccxt.binance({
+    """使用 OKX 作为数据源（国内服务器可访问）"""
+    exchange = ccxt.okx({
         "enableRateLimit": True,
-        "timeout": 3000,
+        "timeout": 5000,
         "options": {"defaultType": "spot"},
     })
-    # 国内服务器尝试使用 binance 备用 API
-    # 如果默认节点超时，会自动降级到模拟数据
     return exchange
 
 
