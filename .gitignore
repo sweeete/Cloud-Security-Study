@@ -3,3 +3,11 @@
 
 # Local scratch C file; do not commit
 a.c
+
+# ===== 毕业设计 =====
+# PPT 和 docx 文件（避免误提交）
+*.pptx
+*.docx
+
+# PPT 生成脚本（保留源码就行）
+Graduation-Project/generate_ppt.py
