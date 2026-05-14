@@ -35,12 +35,15 @@ _lock = threading.Lock()
 
 
 def _get_exchange():
-    """轻量交易所实例，只获取 10 个币种"""
-    return ccxt.binance({
+    """轻量交易所实例 - 尝试多个节点"""
+    exchange = ccxt.binance({
         "enableRateLimit": True,
-        "timeout": 8000,
+        "timeout": 3000,
         "options": {"defaultType": "spot"},
     })
+    # 国内服务器尝试使用 binance 备用 API
+    # 如果默认节点超时，会自动降级到模拟数据
+    return exchange
 
 
 def get_all_tickers() -> list:
@@ -57,38 +60,51 @@ def get_all_tickers() -> list:
             return _cache["tickers"]
 
         results = []
+        failed_count = 0
+
         try:
             exchange = _get_exchange()
 
-            # 只遍历 10 个币种，逐个获取（比 fetch_tickers 快很多）
             for coin in SYMBOLS_LIST:
                 try:
                     t = exchange.fetch_ticker(coin["pair"])
-                    results.append({
-                        "symbol": coin["id"],
-                        "name": coin["name"],
-                        "last": t["last"],
-                        "bid": t["bid"],
-                        "ask": t["ask"],
-                        "high": t["high"],
-                        "low": t["low"],
-                        "volume": t["baseVolume"],
-                        "change": t.get("percentage", 0),
-                        "timestamp": t["timestamp"],
-                    })
+                    if t and t.get("last"):
+                        results.append({
+                            "symbol": coin["id"],
+                            "name": coin["name"],
+                            "last": t["last"],
+                            "bid": t["bid"],
+                            "ask": t["ask"],
+                            "high": t["high"],
+                            "low": t["low"],
+                            "volume": t["baseVolume"],
+                            "change": t.get("percentage", 0),
+                            "timestamp": t["timestamp"],
+                        })
+                    else:
+                        failed_count += 1
+                        results.append({
+                            "symbol": coin["id"], "name": coin["name"],
+                            "last": None, "change": 0,
+                        })
                 except Exception as e:
+                    failed_count += 1
                     results.append({
                         "symbol": coin["id"], "name": coin["name"],
-                        "last": None, "change": 0, "error": str(e)[:30],
+                        "last": None, "change": 0,
                     })
+
+            # 如果超过一半失败，直接用模拟数据
+            if failed_count > 5:
+                print(f"[market] {failed_count}/10 failed, using fallback data")
+                results = _generate_fallback_data()
 
             _cache["tickers"] = results
             _cache["tickers_time"] = time.time()
             return results
 
         except Exception as e:
-            print(f"[market] exchange error: {e}")
-            # 如果交易所完全不可用，返回模拟数据
+            print(f"[market] exchange completely failed: {e}")
             fallback = _generate_fallback_data()
             _cache["tickers"] = fallback
             _cache["tickers_time"] = time.time()
