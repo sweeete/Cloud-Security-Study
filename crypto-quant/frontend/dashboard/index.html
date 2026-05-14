@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoQuant - 量化交易</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 侧边栏 -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>CQ</h2>
+                <span class="version">v1.0</span>
+            </div>
+            <ul class="nav-list">
+                <li class="nav-item active" data-tab="dashboard">
+                    <span class="nav-icon">📊</span> 总览
+                </li>
+                <li class="nav-item" data-tab="market">
+                    <span class="nav-icon">📈</span> 行情
+                </li>
+                <li class="nav-item" data-tab="strategies">
+                    <span class="nav-icon">⚙️</span> 策略
+                </li>
+                <li class="nav-item" data-tab="portfolio">
+                    <span class="nav-icon">💰</span> 持仓
+                </li>
+                <li class="nav-item" data-tab="orders">
+                    <span class="nav-icon">📋</span> 订单
+                </li>
+                <li class="nav-item" data-tab="settings">
+                    <span class="nav-icon">🔧</span> 设置
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <span id="user-display">admin</span>
+                <button onclick="logout()" class="btn-sm">退出</button>
+            </div>
+        </nav>
+
+        <!-- 主内容 -->
+        <main class="main-content">
+            <!-- 总览 -->
+            <section id="tab-dashboard" class="tab-content active">
+                <div class="page-header">
+                    <h1>市场总览</h1>
+                    <span id="overview-time" class="time-label"></span>
+                </div>
+                <div class="ticker-grid" id="ticker-grid">
+                    <!-- 由 JS 动态生成 -->
+                </div>
+                <div class="engine-status-card">
+                    <h3>策略引擎状态</h3>
+                    <div id="engine-status">加载中...</div>
+                </div>
+            </section>
+
+            <!-- 行情 -->
+            <section id="tab-market" class="tab-content">
+                <div class="page-header">
+                    <h1>K 线图表</h1>
+                    <div class="chart-controls">
+                        <select id="chart-symbol" onchange="loadChart()">
+                            <option value="BTC">BTC/USDT</option>
+                            <option value="ETH">ETH/USDT</option>
+                            <option value="SOL">SOL/USDT</option>
+                            <option value="BNB">BNB/USDT</option>
+                            <option value="XRP">XRP/USDT</option>
+                            <option value="DOGE">DOGE/USDT</option>
+                            <option value="ADA">ADA/USDT</option>
+                            <option value="AVAX">AVAX/USDT</option>
+                            <option value="LINK">LINK/USDT</option>
+                            <option value="DOT">DOT/USDT</option>
+                        </select>
+                        <select id="chart-timeframe" onchange="loadChart()">
+                            <option value="1m">1 分钟</option>
+                            <option value="5m">5 分钟</option>
+                            <option value="15m">15 分钟</option>
+                            <option value="1h" selected>1 小时</option>
+                            <option value="4h">4 小时</option>
+                            <option value="1d">日线</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div id="kline-chart"></div>
+                </div>
+                <div class="indicators-panel" id="indicators-panel">
+                    <h3>技术指标</h3>
+                    <div id="indicators-content">选择币种加载指标...</div>
+                </div>
+            </section>
+
+            <!-- 策略 -->
+            <section id="tab-strategies" class="tab-content">
+                <div class="page-header">
+                    <h1>量化策略</h1>
+                    <button onclick="showCreateStrategy()" class="btn-primary">+ 新建策略</button>
+                </div>
+                <div class="strategy-grid" id="strategy-grid">
+                    <!-- 由 JS 动态生成 -->
+                </div>
+            </section>
+
+            <!-- 持仓 -->
+            <section id="tab-portfolio" class="tab-content">
+                <div class="page-header">
+                    <h1>持仓</h1>
+                </div>
+                <div class="portfolio-table-wrap">
+                    <table class="data-table" id="portfolio-table">
+                        <thead>
+                            <tr>
+                                <th>币种</th>
+                                <th>持仓数量</th>
+                                <th>均价</th>
+                                <th>当前价</th>
+                                <th>盈亏</th>
+                            </tr>
+                        </thead>
+                        <tbody id="portfolio-body">
+                            <tr><td colspan="5">加载中...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 订单 -->
+            <section id="tab-orders" class="tab-content">
+                <div class="page-header">
+                    <h1>订单记录</h1>
+                </div>
+                <div class="table-wrap">
+                    <table class="data-table" id="orders-table">
+                        <thead>
+                            <tr>
+                                <th>时间</th>
+                                <th>币种</th>
+                                <th>方向</th>
+                                <th>价格</th>
+                                <th>数量</th>
+                                <th>金额</th>
+                                <th>状态</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-body">
+                            <tr><td colspan="7">加载中...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="page-header" style="margin-top:20px;">
+                    <h2>交易日志</h2>
+                </div>
+                <div class="log-box" id="trade-logs">
+                    加载中...
+                </div>
+            </section>
+
+            <!-- 设置 -->
+            <section id="tab-settings" class="tab-content">
+                <div class="page-header">
+                    <h1>设置</h1>
+                </div>
+                <div class="settings-grid">
+                    <div class="setting-card">
+                        <h3>🔑 交易所 API</h3>
+                        <div class="form-group">
+                            <label>API Key</label>
+                            <input type="text" id="ex-api-key" placeholder="输入 API Key" />
+                        </div>
+                        <div class="form-group">
+                            <label>Secret Key</label>
+                            <input type="password" id="ex-secret" placeholder="输入 Secret Key" />
+                        </div>
+                        <div class="form-group">
+                            <label>Password（如有）</label>
+                            <input type="password" id="ex-password" placeholder="选填" />
+                        </div>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="ex-testnet" checked /> 使用测试网（推荐）
+                        </label>
+                        <button onclick="saveExchangeKeys()" class="btn-primary">保存</button>
+                        <p id="ex-status"></p>
+                    </div>
+                    <div class="setting-card">
+                        <h3>🤖 AI 大模型</h3>
+                        <p class="hint">用于 AI 智能分析策略，支持 OpenAI 兼容接口</p>
+                        <div class="form-group">
+                            <label>提供商</label>
+                            <select id="llm-provider">
+                                <option value="deepseek">DeepSeek</option>
+                                <option value="openai">OpenAI</option>
+                                <option value="custom">自定义</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="llm-base-url-group" class="hidden">
+                            <label>API 地址</label>
+                            <input type="text" id="llm-base-url" placeholder="https://api.deepseek.com" />
+                        </div>
+                        <div class="form-group">
+                            <label>API Key</label>
+                            <input type="password" id="llm-api-key" placeholder="输入 API Key" />
+                        </div>
+                        <div class="form-group">
+                            <label>模型名称</label>
+                            <input type="text" id="llm-model" placeholder="deepseek-chat / gpt-4o" />
+                        </div>
+                        <button onclick="saveLLMKeys()" class="btn-primary">保存</button>
+                        <p id="llm-status"></p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 新建策略弹窗 -->
+    <div id="strategy-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <h2>新建策略</h2>
+            <div class="form-group">
+                <label>策略名称</label>
+                <input type="text" id="strat-name" placeholder="例如：BTC 网格" />
+            </div>
+            <div class="form-group">
+                <label>策略类型</label>
+                <select id="strat-type" onchange="onStrategyTypeChange()"></select>
+            </div>
+            <div class="form-group">
+                <label>交易对</label>
+                <select id="strat-symbol">
+                    <option value="BTC/USDT">BTC/USDT</option>
+                    <option value="ETH/USDT">ETH/USDT</option>
+                    <option value="SOL/USDT">SOL/USDT</option>
+                    <option value="BNB/USDT">BNB/USDT</option>
+                    <option value="XRP/USDT">XRP/USDT</option>
+                    <option value="DOGE/USDT">DOGE/USDT</option>
+                    <option value="ADA/USDT">ADA/USDT</option>
+                    <option value="AVAX/USDT">AVAX/USDT</option>
+                    <option value="LINK/USDT">LINK/USDT</option>
+                    <option value="DOT/USDT">DOT/USDT</option>
+                </select>
+            </div>
+            <div id="strat-params" class="strat-params">
+                <p>选择策略类型后显示参数配置...</p>
+            </div>
+            <button onclick="createStrategy()" class="btn-primary">创建策略</button>
+            <p id="strat-error" class="error-msg"></p>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/lightweight-charts@4.2.1/dist/lightweight-charts.standalone.production.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>

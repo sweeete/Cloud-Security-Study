@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoQuant - 登录</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="login-body">
+    <div class="login-container">
+        <div class="login-box">
+            <div class="login-header">
+                <h1>CryptoQuant</h1>
+                <p>加密货币量化交易系统</p>
+            </div>
+            <div id="setup-form" class="hidden">
+                <h2>首次使用 - 设置密码</h2>
+                <div class="form-group">
+                    <input type="password" id="setup-password" placeholder="设置登录密码（至少6位）" />
+                </div>
+                <div class="form-group">
+                    <input type="password" id="setup-password2" placeholder="确认密码" />
+                </div>
+                <button onclick="handleSetup()" class="btn-primary">设置密码</button>
+                <p id="setup-error" class="error-msg"></p>
+            </div>
+            <div id="login-form">
+                <h2>登录</h2>
+                <div class="form-group">
+                    <input type="text" id="login-username" placeholder="用户名" value="admin" />
+                </div>
+                <div class="form-group">
+                    <input type="password" id="login-password" placeholder="密码" />
+                </div>
+                <button onclick="handleLogin()" class="btn-primary">登录</button>
+                <p id="login-error" class="error-msg"></p>
+            </div>
+        </div>
+    </div>
+    <script>
+        // 检查是否首次使用
+        fetch('/api/setup-status')
+            .then(r => r.json())
+            .then(data => {
+                if (data.firstRun) {
+                    document.getElementById('setup-form').classList.remove('hidden');
+                    document.getElementById('login-form').classList.add('hidden');
+                }
+            });
+
+        async function handleSetup() {
+            const pwd = document.getElementById('setup-password').value;
+            const pwd2 = document.getElementById('setup-password2').value;
+            const err = document.getElementById('setup-error');
+
+            if (pwd.length < 6) { err.textContent = '密码至少6位'; return; }
+            if (pwd !== pwd2) { err.textContent = '两次密码不一致'; return; }
+
+            const res = await fetch('/api/setup-password', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({password: pwd})
+            });
+            const data = await res.json();
+            if (data.ok) {
+                document.getElementById('setup-form').classList.add('hidden');
+                document.getElementById('login-form').classList.remove('hidden');
+                err.textContent = '✅ 密码设置成功，请登录';
+            } else {
+                err.textContent = data.detail || '设置失败';
+            }
+        }
+
+        async function handleLogin() {
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+            const err = document.getElementById('login-error');
+
+            const res = await fetch('/api/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({username, password})
+            });
+            const data = await res.json();
+            if (data.ok) {
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('username', data.username);
+                window.location.href = '/dashboard/';
+            } else {
+                err.textContent = data.detail || '登录失败';
+            }
+        }
+    </script>
+</body>
+</html>
