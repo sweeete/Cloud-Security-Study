@@ -1,0 +1,929 @@
+C:\Users\Girlorn\PycharmProjects\PythonProject1\.venv\Scripts\python.exe C:\Users\Girlorn\PycharmProjects\PythonProject1\erfen\feature_comp.py 
+正在读取纯域名数据集 (各取前 200000 条)...
+执行 8:1:1 严谨划分 (Train:Val:Test)...
+数据就绪: 训练集(319999), 验证集(40000), 测试集(40000)
+提取统计特征中...
+开始 XGBoost 默认参数训练...
+执行性能评估...
+
+=============================================
+            实验结果: 二分类统计特征组 (默认参数)            
+=============================================
+准确率 (Accuracy):   0.9469
+精确率 (Precision):  0.9611
+召回率 (Recall):     0.9315
+F1 值 (F1-Score):    0.9461
+AUC 曲线下面积:      0.9870
+---------------------------------------------
+训练总耗时:          2.83 秒
+单条推理平均延时:     0.000213 毫秒
+=============================================
+
+进程已结束，退出代码为 0
+
+
+C:\Users\Girlorn\PycharmProjects\PythonProject1\.venv\Scripts\python.exe C:\Users\Girlorn\PycharmProjects\PythonProject1\erfen\optuna_feature_comp.py 
+预提取特征中以加速寻优过程...
+正在读取纯域名数据集 (目标各取: 200000 条)...
+执行 8:1:1 严谨划分...
+数据就绪: 训练集(319999), 验证集(40000), 测试集(40000)
+[I 2026-02-24 16:02:57,315] A new study created in memory with name: no-name-85c6dd3b-271d-4966-9e03-aa8458f1bde3
+
+--- 开始统计特征组二分类贝叶斯调参 ---
+[I 2026-02-24 16:03:01,628] Trial 0 finished with value: 0.9447210649324256 and parameters: {'n_estimators': 579, 'max_depth': 6, 'learning_rate': 0.17633520856819151, 'subsample': 0.9719179936571929, 'colsample_bytree': 0.9928305497163146, 'min_child_weight': 1}. Best is trial 0 with value: 0.9447210649324256.
+[I 2026-02-24 16:03:04,368] Trial 1 finished with value: 0.9451887941534713 and parameters: {'n_estimators': 793, 'max_depth': 6, 'learning_rate': 0.018492877516139216, 'subsample': 0.7373165137834712, 'colsample_bytree': 0.7200807647459554, 'min_child_weight': 5}. Best is trial 1 with value: 0.9451887941534713.
+[I 2026-02-24 16:03:07,235] Trial 2 finished with value: 0.944959487947982 and parameters: {'n_estimators': 737, 'max_depth': 8, 'learning_rate': 0.05641191095486375, 'subsample': 0.7737308318257884, 'colsample_bytree': 0.9182764851825538, 'min_child_weight': 8}. Best is trial 1 with value: 0.9451887941534713.
+[I 2026-02-24 16:03:08,900] Trial 3 finished with value: 0.9449701890143346 and parameters: {'n_estimators': 633, 'max_depth': 3, 'learning_rate': 0.06982219604164586, 'subsample': 0.9815082947262688, 'colsample_bytree': 0.8022160085529659, 'min_child_weight': 8}. Best is trial 1 with value: 0.9451887941534713.
+[I 2026-02-24 16:03:12,335] Trial 4 finished with value: 0.9449834899669799 and parameters: {'n_estimators': 937, 'max_depth': 6, 'learning_rate': 0.05934554977614839, 'subsample': 0.8274330169725831, 'colsample_bytree': 0.9282939606099709, 'min_child_weight': 6}. Best is trial 1 with value: 0.9451887941534713.
+[I 2026-02-24 16:03:14,670] Trial 5 finished with value: 0.9451442503047541 and parameters: {'n_estimators': 613, 'max_depth': 7, 'learning_rate': 0.03197001764801879, 'subsample': 0.7598051502258824, 'colsample_bytree': 0.9886235302737166, 'min_child_weight': 10}. Best is trial 1 with value: 0.9451887941534713.
+[I 2026-02-24 16:03:18,458] Trial 6 finished with value: 0.9444232868713027 and parameters: {'n_estimators': 967, 'max_depth': 7, 'learning_rate': 0.2070170833595646, 'subsample': 0.887808869003308, 'colsample_bytree': 0.723618855770523, 'min_child_weight': 2}. Best is trial 1 with value: 0.9451887941534713.
+[I 2026-02-24 16:03:19,273] Trial 7 finished with value: 0.9419190633749046 and parameters: {'n_estimators': 223, 'max_depth': 4, 'learning_rate': 0.014478876522722253, 'subsample': 0.6602750289708098, 'colsample_bytree': 0.8546327808753641, 'min_child_weight': 7}. Best is trial 1 with value: 0.9451887941534713.
+[I 2026-02-24 16:03:23,119] Trial 8 finished with value: 0.945021458137586 and parameters: {'n_estimators': 867, 'max_depth': 8, 'learning_rate': 0.06130957498581922, 'subsample': 0.717881193258899, 'colsample_bytree': 0.7936447976293702, 'min_child_weight': 7}. Best is trial 1 with value: 0.9451887941534713.
+[I 2026-02-24 16:03:25,490] Trial 9 finished with value: 0.9452072177245388 and parameters: {'n_estimators': 854, 'max_depth': 3, 'learning_rate': 0.08323327829508909, 'subsample': 0.8707951052950309, 'colsample_bytree': 0.9685749043713984, 'min_child_weight': 9}. Best is trial 9 with value: 0.9452072177245388.
+[I 2026-02-24 16:03:27,311] Trial 10 finished with value: 0.9449606499111449 and parameters: {'n_estimators': 411, 'max_depth': 10, 'learning_rate': 0.11924000120484557, 'subsample': 0.8745243169838076, 'colsample_bytree': 0.6073783877528514, 'min_child_weight': 10}. Best is trial 9 with value: 0.9452072177245388.
+[I 2026-02-24 16:03:29,858] Trial 11 finished with value: 0.9431365079365079 and parameters: {'n_estimators': 781, 'max_depth': 4, 'learning_rate': 0.011443196798975019, 'subsample': 0.6027686761724469, 'colsample_bytree': 0.6700170524267612, 'min_child_weight': 4}. Best is trial 9 with value: 0.9452072177245388.
+[I 2026-02-24 16:03:32,311] Trial 12 finished with value: 0.944923420225175 and parameters: {'n_estimators': 778, 'max_depth': 5, 'learning_rate': 0.02485775813187573, 'subsample': 0.8546360155032844, 'colsample_bytree': 0.7160465699741687, 'min_child_weight': 4}. Best is trial 9 with value: 0.9452072177245388.
+[I 2026-02-24 16:03:33,417] Trial 13 finished with value: 0.9427911814699241 and parameters: {'n_estimators': 400, 'max_depth': 3, 'learning_rate': 0.027326662660736797, 'subsample': 0.9149716264876654, 'colsample_bytree': 0.7672019132773763, 'min_child_weight': 4}. Best is trial 9 with value: 0.9452072177245388.
+[I 2026-02-24 16:03:38,258] Trial 14 finished with value: 0.9443837495871338 and parameters: {'n_estimators': 996, 'max_depth': 10, 'learning_rate': 0.10376032502184498, 'subsample': 0.7132081156752395, 'colsample_bytree': 0.8550392685675315, 'min_child_weight': 5}. Best is trial 9 with value: 0.9452072177245388.
+[I 2026-02-24 16:03:41,082] Trial 15 finished with value: 0.9448802904511641 and parameters: {'n_estimators': 842, 'max_depth': 5, 'learning_rate': 0.28713048600780827, 'subsample': 0.8074440267064257, 'colsample_bytree': 0.6283408291451487, 'min_child_weight': 9}. Best is trial 9 with value: 0.9452072177245388.
+[I 2026-02-24 16:03:42,669] Trial 16 finished with value: 0.9431728693001398 and parameters: {'n_estimators': 450, 'max_depth': 4, 'learning_rate': 0.01738961013696461, 'subsample': 0.7351679165638328, 'colsample_bytree': 0.6825309314723536, 'min_child_weight': 6}. Best is trial 9 with value: 0.9452072177245388.
+[I 2026-02-24 16:03:45,613] Trial 17 finished with value: 0.9449058904213975 and parameters: {'n_estimators': 688, 'max_depth': 9, 'learning_rate': 0.03769765506793366, 'subsample': 0.9343083064504307, 'colsample_bytree': 0.8531331610236087, 'min_child_weight': 2}. Best is trial 9 with value: 0.9452072177245388.
+[I 2026-02-24 16:03:48,697] Trial 18 finished with value: 0.9450398740285467 and parameters: {'n_estimators': 876, 'max_depth': 5, 'learning_rate': 0.09615388589462943, 'subsample': 0.6687206174137392, 'colsample_bytree': 0.9292320951694343, 'min_child_weight': 5}. Best is trial 9 with value: 0.9452072177245388.
+[I 2026-02-24 16:03:49,294] Trial 19 finished with value: 0.9395688598283612 and parameters: {'n_estimators': 194, 'max_depth': 3, 'learning_rate': 0.017782576231868037, 'subsample': 0.8408128334902515, 'colsample_bytree': 0.7357960499706829, 'min_child_weight': 3}. Best is trial 9 with value: 0.9452072177245388.
+[I 2026-02-24 16:03:52,097] Trial 20 finished with value: 0.9448563014115975 and parameters: {'n_estimators': 676, 'max_depth': 8, 'learning_rate': 0.13939133834115353, 'subsample': 0.7862923759851056, 'colsample_bytree': 0.6598279925364321, 'min_child_weight': 8}. Best is trial 9 with value: 0.9452072177245388.
+[I 2026-02-24 16:03:54,110] Trial 21 finished with value: 0.9452190476190476 and parameters: {'n_estimators': 513, 'max_depth': 7, 'learning_rate': 0.034823662979852246, 'subsample': 0.7641731964375837, 'colsample_bytree': 0.9818323085460713, 'min_child_weight': 10}. Best is trial 21 with value: 0.9452190476190476.
+[I 2026-02-24 16:03:56,150] Trial 22 finished with value: 0.9452061750964859 and parameters: {'n_estimators': 500, 'max_depth': 7, 'learning_rate': 0.04742987176774118, 'subsample': 0.6750520429527855, 'colsample_bytree': 0.9615869876840496, 'min_child_weight': 9}. Best is trial 21 with value: 0.9452190476190476.
+[I 2026-02-24 16:03:58,233] Trial 23 finished with value: 0.9452385183680723 and parameters: {'n_estimators': 501, 'max_depth': 7, 'learning_rate': 0.04151518991202077, 'subsample': 0.6738394721107596, 'colsample_bytree': 0.9682783235171182, 'min_child_weight': 9}. Best is trial 23 with value: 0.9452385183680723.
+[I 2026-02-24 16:03:59,822] Trial 24 finished with value: 0.9451414639101945 and parameters: {'n_estimators': 339, 'max_depth': 9, 'learning_rate': 0.08211402022394611, 'subsample': 0.6197991924007398, 'colsample_bytree': 0.9567550775846888, 'min_child_weight': 9}. Best is trial 23 with value: 0.9452385183680723.
+[I 2026-02-24 16:04:01,828] Trial 25 finished with value: 0.9452273939209264 and parameters: {'n_estimators': 529, 'max_depth': 7, 'learning_rate': 0.04249301903009226, 'subsample': 0.6971642960486004, 'colsample_bytree': 0.8964215821871022, 'min_child_weight': 10}. Best is trial 23 with value: 0.9452385183680723.
+[I 2026-02-24 16:04:03,826] Trial 26 finished with value: 0.9452615001651046 and parameters: {'n_estimators': 529, 'max_depth': 7, 'learning_rate': 0.04361701542320682, 'subsample': 0.6922746613374574, 'colsample_bytree': 0.8842037064209979, 'min_child_weight': 10}. Best is trial 26 with value: 0.9452615001651046.
+[I 2026-02-24 16:04:05,173] Trial 27 finished with value: 0.9452301754564152 and parameters: {'n_estimators': 318, 'max_depth': 8, 'learning_rate': 0.04091275696533127, 'subsample': 0.6408521927644948, 'colsample_bytree': 0.8925377760905021, 'min_child_weight': 10}. Best is trial 26 with value: 0.9452615001651046.
+[I 2026-02-24 16:04:06,660] Trial 28 finished with value: 0.9452892939653202 and parameters: {'n_estimators': 324, 'max_depth': 9, 'learning_rate': 0.025529674238885736, 'subsample': 0.6383903617056583, 'colsample_bytree': 0.8781591771449668, 'min_child_weight': 7}. Best is trial 28 with value: 0.9452892939653202.
+[I 2026-02-24 16:04:07,203] Trial 29 finished with value: 0.9442053528228374 and parameters: {'n_estimators': 109, 'max_depth': 9, 'learning_rate': 0.02477113189926267, 'subsample': 0.6355392194894678, 'colsample_bytree': 0.8237756710531292, 'min_child_weight': 7}. Best is trial 28 with value: 0.9452892939653202.
+[I 2026-02-24 16:04:08,614] Trial 30 finished with value: 0.945262516502488 and parameters: {'n_estimators': 307, 'max_depth': 9, 'learning_rate': 0.029419987177282735, 'subsample': 0.6872533912532854, 'colsample_bytree': 0.8819818995893656, 'min_child_weight': 8}. Best is trial 28 with value: 0.9452892939653202.
+[I 2026-02-24 16:04:09,968] Trial 31 finished with value: 0.9452385183680723 and parameters: {'n_estimators': 303, 'max_depth': 9, 'learning_rate': 0.029627776172770286, 'subsample': 0.6920174524070626, 'colsample_bytree': 0.8808381194418704, 'min_child_weight': 8}. Best is trial 28 with value: 0.9452892939653202.
+[I 2026-02-24 16:04:12,592] Trial 32 finished with value: 0.9451866903733808 and parameters: {'n_estimators': 564, 'max_depth': 10, 'learning_rate': 0.022205718646253855, 'subsample': 0.6472464552131677, 'colsample_bytree': 0.8723328312083001, 'min_child_weight': 7}. Best is trial 28 with value: 0.9452892939653202.
+[I 2026-02-24 16:04:13,473] Trial 33 finished with value: 0.9451335514801005 and parameters: {'n_estimators': 227, 'max_depth': 6, 'learning_rate': 0.047809502307271455, 'subsample': 0.6134845849036082, 'colsample_bytree': 0.9124817161400659, 'min_child_weight': 9}. Best is trial 28 with value: 0.9452892939653202.
+[I 2026-02-24 16:04:15,122] Trial 34 finished with value: 0.944967874647637 and parameters: {'n_estimators': 376, 'max_depth': 8, 'learning_rate': 0.013738498485665426, 'subsample': 0.6845440514992198, 'colsample_bytree': 0.8242000326081851, 'min_child_weight': 8}. Best is trial 28 with value: 0.9452892939653202.
+[I 2026-02-24 16:04:17,122] Trial 35 finished with value: 0.9452329567094071 and parameters: {'n_estimators': 457, 'max_depth': 9, 'learning_rate': 0.020467455683677267, 'subsample': 0.7378753646621715, 'colsample_bytree': 0.9394867113240802, 'min_child_weight': 8}. Best is trial 28 with value: 0.9452892939653202.
+[I 2026-02-24 16:04:18,248] Trial 36 finished with value: 0.9453289657449023 and parameters: {'n_estimators': 272, 'max_depth': 8, 'learning_rate': 0.05065609644910671, 'subsample': 0.712276195341278, 'colsample_bytree': 0.9080254203731071, 'min_child_weight': 6}. Best is trial 36 with value: 0.9453289657449023.
+[I 2026-02-24 16:04:19,337] Trial 37 finished with value: 0.9452615001651046 and parameters: {'n_estimators': 260, 'max_depth': 8, 'learning_rate': 0.06696895454418064, 'subsample': 0.7139602228023846, 'colsample_bytree': 0.9062411540975565, 'min_child_weight': 6}. Best is trial 36 with value: 0.9453289657449023.
+[I 2026-02-24 16:04:19,903] Trial 38 finished with value: 0.9450733539773593 and parameters: {'n_estimators': 111, 'max_depth': 9, 'learning_rate': 0.051640872313244005, 'subsample': 0.7411807641323204, 'colsample_bytree': 0.8307231006806574, 'min_child_weight': 6}. Best is trial 36 with value: 0.9453289657449023.
+[I 2026-02-24 16:04:21,059] Trial 39 finished with value: 0.9450945551465922 and parameters: {'n_estimators': 268, 'max_depth': 8, 'learning_rate': 0.03323459377964109, 'subsample': 0.6304200291597514, 'colsample_bytree': 0.7879622159976915, 'min_child_weight': 7}. Best is trial 36 with value: 0.9453289657449023.
+[I 2026-02-24 16:04:22,018] Trial 40 finished with value: 0.9451247395965652 and parameters: {'n_estimators': 190, 'max_depth': 10, 'learning_rate': 0.05448608457263228, 'subsample': 0.6563569811746264, 'colsample_bytree': 0.8750997779688932, 'min_child_weight': 5}. Best is trial 36 with value: 0.9453289657449023.
+[I 2026-02-24 16:04:23,125] Trial 41 finished with value: 0.9452162649531405 and parameters: {'n_estimators': 259, 'max_depth': 8, 'learning_rate': 0.0672940288497317, 'subsample': 0.7087824905260108, 'colsample_bytree': 0.9067479687879554, 'min_child_weight': 6}. Best is trial 36 with value: 0.9453289657449023.
+[I 2026-02-24 16:04:24,655] Trial 42 finished with value: 0.9450527117998222 and parameters: {'n_estimators': 365, 'max_depth': 8, 'learning_rate': 0.0746332057004446, 'subsample': 0.7235302189108368, 'colsample_bytree': 0.9339171106065108, 'min_child_weight': 6}. Best is trial 36 with value: 0.9453289657449023.
+[I 2026-02-24 16:04:25,397] Trial 43 finished with value: 0.9453797516568904 and parameters: {'n_estimators': 164, 'max_depth': 9, 'learning_rate': 0.0649990789343379, 'subsample': 0.7549833573303865, 'colsample_bytree': 0.8440775172168283, 'min_child_weight': 7}. Best is trial 43 with value: 0.9453797516568904.
+[I 2026-02-24 16:04:26,154] Trial 44 finished with value: 0.9452033924127774 and parameters: {'n_estimators': 153, 'max_depth': 9, 'learning_rate': 0.032415877510609495, 'subsample': 0.7547999850872464, 'colsample_bytree': 0.8421119668227692, 'min_child_weight': 7}. Best is trial 43 with value: 0.9453797516568904.
+[I 2026-02-24 16:04:26,892] Trial 45 finished with value: 0.9452754005942253 and parameters: {'n_estimators': 155, 'max_depth': 10, 'learning_rate': 0.05869774392743992, 'subsample': 0.7876355746632158, 'colsample_bytree': 0.8844770492650422, 'min_child_weight': 8}. Best is trial 43 with value: 0.9453797516568904.
+[I 2026-02-24 16:04:27,653] Trial 46 finished with value: 0.9449494693006958 and parameters: {'n_estimators': 159, 'max_depth': 10, 'learning_rate': 0.14877282351311974, 'subsample': 0.8138667721399613, 'colsample_bytree': 0.8050117237177516, 'min_child_weight': 7}. Best is trial 43 with value: 0.9453797516568904.
+[I 2026-02-24 16:04:29,003] Trial 47 finished with value: 0.9451442503047541 and parameters: {'n_estimators': 291, 'max_depth': 10, 'learning_rate': 0.06106346585177699, 'subsample': 0.7779257808146043, 'colsample_bytree': 0.8578175068040527, 'min_child_weight': 8}. Best is trial 43 with value: 0.9453797516568904.
+[I 2026-02-24 16:04:29,973] Trial 48 finished with value: 0.9450566191032347 and parameters: {'n_estimators': 220, 'max_depth': 9, 'learning_rate': 0.08606622029920825, 'subsample': 0.7945664223576112, 'colsample_bytree': 0.7647115612628468, 'min_child_weight': 7}. Best is trial 43 with value: 0.9453797516568904.
+
+最优参数组合: {'n_estimators': 164, 'max_depth': 9, 'learning_rate': 0.0649990789343379, 'subsample': 0.7549833573303865, 'colsample_bytree': 0.8440775172168283, 'min_child_weight': 7}
+[I 2026-02-24 16:04:30,765] Trial 49 finished with value: 0.9447338330580612 and parameters: {'n_estimators': 150, 'max_depth': 10, 'learning_rate': 0.01016172603106554, 'subsample': 0.9938433095911778, 'colsample_bytree': 0.9453793894654833, 'min_child_weight': 8}. Best is trial 43 with value: 0.9453797516568904.
+
+=============================================
+           实验结果: 二分类统计特征组 (贝叶斯调参版)           
+=============================================
+准确率 (Accuracy):   0.9469
+精确率 (Precision):  0.9614
+召回率 (Recall):     0.9313
+F1 值 (F1-Score):    0.9461
+AUC 曲线下面积:      0.9870
+---------------------------------------------
+训练总耗时:          0.71 秒
+单条推理平均延时:     0.000384 毫秒
+=============================================
+
+进程已结束，退出代码为 0
+
+
+C:\Users\Girlorn\PycharmProjects\PythonProject1\.venv\Scripts\python.exe C:\Users\Girlorn\PycharmProjects\PythonProject1\erfen\2-gram_comp.py 
+正在读取纯域名数据集 (目标各取: 200000 条)...
+执行 8:1:1 严谨划分 (Train:Val:Test)...
+数据就绪: 训练集(319999), 验证集(40000), 测试集(40000)
+
+开始执行 2-gram 特征向量化...
+特征提取完成！特征维度: 1369
+模型训练中 (XGBoost 2-gram 默认参数)...
+执行测试集预测与性能分析...
+
+=============================================
+         实验结果: 二分类 2-gram 特征组 (默认参数)         
+=============================================
+最终特征维度:        1369
+准确率 (Accuracy):   0.9577
+精确率 (Precision):  0.9901
+召回率 (Recall):     0.9245
+F1 值 (F1-Score):    0.9562
+AUC 曲线下面积:      0.9885
+---------------------------------------------
+训练总耗时:          7.16 秒
+单条推理平均延时:     0.000539 毫秒
+=============================================
+
+进程已结束，退出代码为 0
+
+
+C:\Users\Girlorn\PycharmProjects\PythonProject1\.venv\Scripts\python.exe C:\Users\Girlorn\PycharmProjects\PythonProject1\erfen\optuna_2-gram_comp.py 
+正在读取纯域名数据集 (目标各取: 200000 条)...
+执行 8:1:1 严谨划分 (Train:Val:Test)...
+数据就绪: 训练集(319999), 验证集(40000), 测试集(40000)
+
+执行 2-gram 特征提取 (预提取以加速调参)...
+特征提取完成！特征维度: 1369
+
+--- 开始 2-gram 二分类贝叶斯调参 (Optuna) ---
+[I 2026-02-24 16:09:18,197] A new study created in memory with name: no-name-0f27abe3-99df-4eee-922f-e088309e8f3f
+[I 2026-02-24 16:09:22,181] Trial 0 finished with value: 0.9200399012967921 and parameters: {'n_estimators': 269, 'max_depth': 5, 'learning_rate': 0.03138531495268447, 'subsample': 0.6018385326023638, 'colsample_bytree': 0.6984830255784563}. Best is trial 0 with value: 0.9200399012967921.
+[I 2026-02-24 16:09:26,068] Trial 1 finished with value: 0.9466552002710239 and parameters: {'n_estimators': 470, 'max_depth': 10, 'learning_rate': 0.024727003184412802, 'subsample': 0.6828790599303203, 'colsample_bytree': 0.8811247784261944}. Best is trial 1 with value: 0.9466552002710239.
+[I 2026-02-24 16:09:30,560] Trial 2 finished with value: 0.9523933065248411 and parameters: {'n_estimators': 454, 'max_depth': 12, 'learning_rate': 0.027184499416679685, 'subsample': 0.9564995645787963, 'colsample_bytree': 0.882826290169741}. Best is trial 2 with value: 0.9523933065248411.
+[I 2026-02-24 16:09:31,792] Trial 3 finished with value: 0.9191600365201513 and parameters: {'n_estimators': 163, 'max_depth': 9, 'learning_rate': 0.02816102126188172, 'subsample': 0.9019880650628626, 'colsample_bytree': 0.7727112881533609}. Best is trial 2 with value: 0.9523933065248411.
+[I 2026-02-24 16:09:32,999] Trial 4 finished with value: 0.9273474982864977 and parameters: {'n_estimators': 233, 'max_depth': 4, 'learning_rate': 0.055209156432948006, 'subsample': 0.6906484496314022, 'colsample_bytree': 0.7026262243441195}. Best is trial 2 with value: 0.9523933065248411.
+[I 2026-02-24 16:09:35,357] Trial 5 finished with value: 0.9670825114634833 and parameters: {'n_estimators': 334, 'max_depth': 8, 'learning_rate': 0.13877786617466326, 'subsample': 0.6760963818456502, 'colsample_bytree': 0.8683521580488045}. Best is trial 5 with value: 0.9670825114634833.
+[I 2026-02-24 16:09:36,913] Trial 6 finished with value: 0.9326569235621911 and parameters: {'n_estimators': 269, 'max_depth': 6, 'learning_rate': 0.03949964591175034, 'subsample': 0.801026996586988, 'colsample_bytree': 0.8200551129572071}. Best is trial 5 with value: 0.9670825114634833.
+[I 2026-02-24 16:09:42,737] Trial 7 finished with value: 0.9694430250383239 and parameters: {'n_estimators': 595, 'max_depth': 12, 'learning_rate': 0.05760966847730709, 'subsample': 0.6356442471115177, 'colsample_bytree': 0.8163188121457838}. Best is trial 7 with value: 0.9694430250383239.
+[I 2026-02-24 16:09:46,076] Trial 8 finished with value: 0.957229616229487 and parameters: {'n_estimators': 333, 'max_depth': 12, 'learning_rate': 0.04726877373721493, 'subsample': 0.8151064098266219, 'colsample_bytree': 0.7950199949841468}. Best is trial 7 with value: 0.9694430250383239.
+[I 2026-02-24 16:09:47,928] Trial 9 finished with value: 0.9455295592228954 and parameters: {'n_estimators': 276, 'max_depth': 7, 'learning_rate': 0.05991175834227639, 'subsample': 0.625736600262495, 'colsample_bytree': 0.7067648681251097}. Best is trial 7 with value: 0.9694430250383239.
+[I 2026-02-24 16:09:52,788] Trial 10 finished with value: 0.9352751656756686 and parameters: {'n_estimators': 585, 'max_depth': 10, 'learning_rate': 0.01162015542801316, 'subsample': 0.7622754834339056, 'colsample_bytree': 0.9921416106172981}. Best is trial 7 with value: 0.9694430250383239.
+[I 2026-02-24 16:09:54,776] Trial 11 finished with value: 0.9538173983022248 and parameters: {'n_estimators': 423, 'max_depth': 3, 'learning_rate': 0.14326387714720623, 'subsample': 0.7036280380459169, 'colsample_bytree': 0.9091132670911819}. Best is trial 7 with value: 0.9694430250383239.
+[I 2026-02-24 16:09:58,450] Trial 12 finished with value: 0.9767195232804767 and parameters: {'n_estimators': 600, 'max_depth': 8, 'learning_rate': 0.2965319410928068, 'subsample': 0.6544178147714711, 'colsample_bytree': 0.615953295161997}. Best is trial 12 with value: 0.9767195232804767.
+[I 2026-02-24 16:10:02,620] Trial 13 finished with value: 0.9781309118426031 and parameters: {'n_estimators': 600, 'max_depth': 11, 'learning_rate': 0.2863232655544323, 'subsample': 0.7484153359179142, 'colsample_bytree': 0.6039399601463101}. Best is trial 13 with value: 0.9781309118426031.
+[I 2026-02-24 16:10:06,110] Trial 14 finished with value: 0.9777115884594997 and parameters: {'n_estimators': 530, 'max_depth': 10, 'learning_rate': 0.2959795242167478, 'subsample': 0.7531020199960577, 'colsample_bytree': 0.603037657789876}. Best is trial 13 with value: 0.9781309118426031.
+[I 2026-02-24 16:10:09,580] Trial 15 finished with value: 0.9780291933936057 and parameters: {'n_estimators': 517, 'max_depth': 10, 'learning_rate': 0.27969210659508575, 'subsample': 0.7529026510240564, 'colsample_bytree': 0.6127182016034861}. Best is trial 13 with value: 0.9781309118426031.
+[I 2026-02-24 16:10:13,313] Trial 16 finished with value: 0.9757197891321979 and parameters: {'n_estimators': 519, 'max_depth': 11, 'learning_rate': 0.16456439361552044, 'subsample': 0.8446624370242924, 'colsample_bytree': 0.6527130210447887}. Best is trial 13 with value: 0.9781309118426031.
+[I 2026-02-24 16:10:16,037] Trial 17 finished with value: 0.9746231538344414 and parameters: {'n_estimators': 414, 'max_depth': 9, 'learning_rate': 0.21099105352241534, 'subsample': 0.7530164397491066, 'colsample_bytree': 0.6466374368198431}. Best is trial 13 with value: 0.9781309118426031.
+[I 2026-02-24 16:10:19,943] Trial 18 finished with value: 0.9722540701673928 and parameters: {'n_estimators': 505, 'max_depth': 11, 'learning_rate': 0.09356723613757542, 'subsample': 0.8702826971948733, 'colsample_bytree': 0.7566580791513654}. Best is trial 13 with value: 0.9781309118426031.
+[I 2026-02-24 16:10:23,699] Trial 19 finished with value: 0.9685486345504756 and parameters: {'n_estimators': 548, 'max_depth': 9, 'learning_rate': 0.0920797457950199, 'subsample': 0.7255061203189058, 'colsample_bytree': 0.6698200573423901}. Best is trial 13 with value: 0.9781309118426031.
+[I 2026-02-24 16:10:26,528] Trial 20 finished with value: 0.9755973950282543 and parameters: {'n_estimators': 399, 'max_depth': 11, 'learning_rate': 0.2078972007528802, 'subsample': 0.9335678410183884, 'colsample_bytree': 0.6256173575272963}. Best is trial 13 with value: 0.9781309118426031.
+[I 2026-02-24 16:10:30,039] Trial 21 finished with value: 0.9773536317503597 and parameters: {'n_estimators': 526, 'max_depth': 10, 'learning_rate': 0.2885269185833738, 'subsample': 0.747073982929773, 'colsample_bytree': 0.6157989114877704}. Best is trial 13 with value: 0.9781309118426031.
+[I 2026-02-24 16:10:33,720] Trial 22 finished with value: 0.9776283525872747 and parameters: {'n_estimators': 553, 'max_depth': 10, 'learning_rate': 0.22329634190340042, 'subsample': 0.7806924807500037, 'colsample_bytree': 0.6061951144910981}. Best is trial 13 with value: 0.9781309118426031.
+[I 2026-02-24 16:10:36,152] Trial 23 finished with value: 0.9641563246743236 and parameters: {'n_estimators': 488, 'max_depth': 7, 'learning_rate': 0.09163384075806996, 'subsample': 0.9974637514134332, 'colsample_bytree': 0.6731112407776798}. Best is trial 13 with value: 0.9781309118426031.
+[I 2026-02-24 16:10:38,997] Trial 24 finished with value: 0.9767477126826063 and parameters: {'n_estimators': 383, 'max_depth': 11, 'learning_rate': 0.282886402917429, 'subsample': 0.7190052708030107, 'colsample_bytree': 0.6025438117419709}. Best is trial 13 with value: 0.9781309118426031.
+[I 2026-02-24 16:10:42,453] Trial 25 finished with value: 0.9753759541500774 and parameters: {'n_estimators': 558, 'max_depth': 9, 'learning_rate': 0.1733438449474193, 'subsample': 0.8330138362453974, 'colsample_bytree': 0.7411521262437795}. Best is trial 13 with value: 0.9781309118426031.
+[I 2026-02-24 16:10:45,243] Trial 26 finished with value: 0.968844323937177 and parameters: {'n_estimators': 456, 'max_depth': 8, 'learning_rate': 0.12027454653972959, 'subsample': 0.7745113267775071, 'colsample_bytree': 0.6410567892925434}. Best is trial 13 with value: 0.9781309118426031.
+[I 2026-02-24 16:10:49,300] Trial 27 finished with value: 0.9773421910126551 and parameters: {'n_estimators': 560, 'max_depth': 11, 'learning_rate': 0.22690626339420525, 'subsample': 0.7429050645717054, 'colsample_bytree': 0.6775421223256387}. Best is trial 13 with value: 0.9781309118426031.
+[I 2026-02-24 16:10:53,126] Trial 28 finished with value: 0.938116544993066 and parameters: {'n_estimators': 505, 'max_depth': 10, 'learning_rate': 0.015178836340270256, 'subsample': 0.7988593866442552, 'colsample_bytree': 0.7300165060260424}. Best is trial 13 with value: 0.9781309118426031.
+[I 2026-02-24 16:10:53,783] Trial 29 finished with value: 0.9351603927127632 and parameters: {'n_estimators': 101, 'max_depth': 6, 'learning_rate': 0.12317987564001757, 'subsample': 0.8593450058117144, 'colsample_bytree': 0.7105810894177513}. Best is trial 13 with value: 0.9781309118426031.
+
+最优参数锁定: {'n_estimators': 600, 'max_depth': 11, 'learning_rate': 0.2863232655544323, 'subsample': 0.7484153359179142, 'colsample_bytree': 0.6039399601463101}
+执行测试集预测与性能分析...
+
+=============================================
+        实验结果: 二分类 2-gram 特征组 (贝叶斯调参版)        
+=============================================
+最终特征维度:        1369
+最优参数组合:        {'n_estimators': 600, 'max_depth': 11, 'learning_rate': 0.2863232655544323, 'subsample': 0.7484153359179142, 'colsample_bytree': 0.6039399601463101}
+调参迭代次数:        30 次
+调参总耗时:          95.59 秒
+---------------------------------------------
+准确率 (Accuracy):   0.9785
+精确率 (Precision):  0.9862
+召回率 (Recall):     0.9706
+F1 值 (F1-Score):    0.9783
+AUC 曲线下面积:      0.9971
+---------------------------------------------
+最终模型训练耗时:     4.24 秒
+单条推理平均延时:     0.003177 毫秒
+=============================================
+
+进程已结束，退出代码为 0
+
+
+C:\Users\Girlorn\PycharmProjects\PythonProject1\.venv\Scripts\python.exe C:\Users\Girlorn\PycharmProjects\PythonProject1\erfen\2-4gram_comp.py 
+正在读取纯域名数据集 (目标各取: 200000 条)...
+执行 8:1:1 严谨划分 (Train:Val:Test)...
+数据就绪: 训练集(319999), 验证集(40000), 测试集(40000)
+
+开始执行 2-4 gram 特征向量化 (混合 2/3/4 位特征)...
+特征提取完成！复合维度: 213091
+模型训练中 (XGBoost 2-4 gram 混合组)...
+执行测试集预测与性能分析...
+
+=============================================
+        实验结果: 二分类 2-4 gram 特征组 (默认参数)        
+=============================================
+混合特征总维度:      213091
+准确率 (Accuracy):   0.9584
+精确率 (Precision):  0.9912
+召回率 (Recall):     0.9250
+F1 值 (F1-Score):    0.9570
+AUC 曲线下面积:      0.9896
+---------------------------------------------
+训练总耗时:          694.66 秒
+单条推理平均延时:     0.197796 毫秒
+=============================================
+
+进程已结束，退出代码为 0
+
+
+C:\Users\Girlorn\PycharmProjects\PythonProject1\.venv\Scripts\python.exe C:\Users\Girlorn\PycharmProjects\PythonProject1\erfen\optuna_2-4gram_comp.py 
+正在读取纯域名数据集 (目标各取: 200000 条)...
+执行 8:1:1 严谨划分 (Train:Val:Test)...
+数据就绪: 训练集(319999), 验证集(40000), 测试集(40000)
+
+执行 2-4 gram 特征提取 (混合 2/3/4 位特征)...
+[I 2026-02-24 16:34:17,644] A new study created in memory with name: no-name-c1ace7b4-2262-4527-a40a-a4a6e0b25381
+复合特征维度锁定为: 213091
+
+--- 开始 2-4 gram 二分类贝叶斯调参 (Optuna) ---
+[I 2026-02-24 16:35:12,181] Trial 0 finished with value: 0.9619764026997785 and parameters: {'n_estimators': 351, 'max_depth': 6, 'learning_rate': 0.1225999166069956, 'subsample': 0.9814960167027207, 'colsample_bytree': 0.5297677955606663, 'gamma': 4.918575100061576}. Best is trial 0 with value: 0.9619764026997785.
+[I 2026-02-24 16:36:25,570] Trial 1 finished with value: 0.9304650493313443 and parameters: {'n_estimators': 261, 'max_depth': 9, 'learning_rate': 0.023163400627567967, 'subsample': 0.8367046232992973, 'colsample_bytree': 0.9173752660076646, 'gamma': 1.6553114296157534}. Best is trial 0 with value: 0.9619764026997785.
+[I 2026-02-24 16:37:32,101] Trial 2 finished with value: 0.9607529654461062 and parameters: {'n_estimators': 352, 'max_depth': 7, 'learning_rate': 0.09418958606370088, 'subsample': 0.9383713192165171, 'colsample_bytree': 0.5806105556804032, 'gamma': 0.04093064257687906}. Best is trial 0 with value: 0.9619764026997785.
+[I 2026-02-24 16:38:24,672] Trial 3 finished with value: 0.963657859566156 and parameters: {'n_estimators': 155, 'max_depth': 12, 'learning_rate': 0.13779302055178438, 'subsample': 0.9370358913304474, 'colsample_bytree': 0.5219465095911651, 'gamma': 3.001780134946175}. Best is trial 3 with value: 0.963657859566156.
+[I 2026-02-24 16:39:32,086] Trial 4 finished with value: 0.9610041495914843 and parameters: {'n_estimators': 285, 'max_depth': 9, 'learning_rate': 0.0870964607919208, 'subsample': 0.7739872573272366, 'colsample_bytree': 0.7573861892272504, 'gamma': 4.215482709084765}. Best is trial 3 with value: 0.963657859566156.
+[I 2026-02-24 16:40:05,640] Trial 5 finished with value: 0.9309927360774818 and parameters: {'n_estimators': 295, 'max_depth': 4, 'learning_rate': 0.048316116225550425, 'subsample': 0.7028290335709623, 'colsample_bytree': 0.7486706557809517, 'gamma': 4.519013068095516}. Best is trial 3 with value: 0.963657859566156.
+[I 2026-02-24 16:40:47,606] Trial 6 finished with value: 0.937774158808542 and parameters: {'n_estimators': 457, 'max_depth': 3, 'learning_rate': 0.058155456630586265, 'subsample': 0.8388810354681223, 'colsample_bytree': 0.8184777102451208, 'gamma': 1.4194573834239494}. Best is trial 3 with value: 0.963657859566156.
+[I 2026-02-24 16:42:13,812] Trial 7 finished with value: 0.9730995342681903 and parameters: {'n_estimators': 338, 'max_depth': 10, 'learning_rate': 0.16008017368655572, 'subsample': 0.6567002191530773, 'colsample_bytree': 0.7289807246566881, 'gamma': 1.4732626041115426}. Best is trial 7 with value: 0.9730995342681903.
+[I 2026-02-24 16:43:23,229] Trial 8 finished with value: 0.9623525776381522 and parameters: {'n_estimators': 471, 'max_depth': 6, 'learning_rate': 0.09318568845190942, 'subsample': 0.9394560849992273, 'colsample_bytree': 0.5816382152948478, 'gamma': 4.155105738077996}. Best is trial 7 with value: 0.9730995342681903.
+[I 2026-02-24 16:43:59,671] Trial 9 finished with value: 0.9177552513324276 and parameters: {'n_estimators': 206, 'max_depth': 6, 'learning_rate': 0.03148669746325184, 'subsample': 0.6439699139541359, 'colsample_bytree': 0.8534641925642477, 'gamma': 1.1679190794335281}. Best is trial 7 with value: 0.9730995342681903.
+[I 2026-02-24 16:44:34,048] Trial 10 finished with value: 0.9680701485287727 and parameters: {'n_estimators': 103, 'max_depth': 12, 'learning_rate': 0.2931361878410707, 'subsample': 0.6001465597275751, 'colsample_bytree': 0.674972635184916, 'gamma': 2.9084417166473284}. Best is trial 7 with value: 0.9730995342681903.
+[I 2026-02-24 16:45:17,339] Trial 11 finished with value: 0.9712332959298174 and parameters: {'n_estimators': 136, 'max_depth': 12, 'learning_rate': 0.2797245049912991, 'subsample': 0.6007795446196523, 'colsample_bytree': 0.6693316211099513, 'gamma': 2.823865060529936}. Best is trial 7 with value: 0.9730995342681903.
+[I 2026-02-24 16:46:42,857] Trial 12 finished with value: 0.9768925109463188 and parameters: {'n_estimators': 388, 'max_depth': 10, 'learning_rate': 0.27314015453876783, 'subsample': 0.7071601897166679, 'colsample_bytree': 0.6767364848605236, 'gamma': 2.3346905400728604}. Best is trial 12 with value: 0.9768925109463188.
+[I 2026-02-24 16:48:36,736] Trial 13 finished with value: 0.9246291420079776 and parameters: {'n_estimators': 395, 'max_depth': 10, 'learning_rate': 0.011044051212422508, 'subsample': 0.7133648022375603, 'colsample_bytree': 0.6995602556837578, 'gamma': 2.0953136243405033}. Best is trial 12 with value: 0.9768925109463188.
+[I 2026-02-24 16:50:31,274] Trial 14 finished with value: 0.9760052702257582 and parameters: {'n_estimators': 412, 'max_depth': 10, 'learning_rate': 0.1904322105903337, 'subsample': 0.7203301453119156, 'colsample_bytree': 0.9780758983626563, 'gamma': 0.6239473327512557}. Best is trial 12 with value: 0.9768925109463188.
+[I 2026-02-24 16:52:30,883] Trial 15 finished with value: 0.9768607594936709 and parameters: {'n_estimators': 420, 'max_depth': 10, 'learning_rate': 0.20332938852704815, 'subsample': 0.7607458340454919, 'colsample_bytree': 0.9960227231478007, 'gamma': 0.32427559239668824}. Best is trial 12 with value: 0.9768925109463188.
+[I 2026-02-24 16:53:59,292] Trial 16 finished with value: 0.9753214802039212 and parameters: {'n_estimators': 415, 'max_depth': 9, 'learning_rate': 0.21190669228955863, 'subsample': 0.7693565476797469, 'colsample_bytree': 0.9901769588747453, 'gamma': 3.592975288063723}. Best is trial 12 with value: 0.9768925109463188.
+[I 2026-02-24 16:56:16,967] Trial 17 finished with value: 0.9781405574789619 and parameters: {'n_estimators': 489, 'max_depth': 11, 'learning_rate': 0.21806300195561573, 'subsample': 0.8211799751178069, 'colsample_bytree': 0.8147628724193205, 'gamma': 0.6057715622419066}. Best is trial 17 with value: 0.9781405574789619.
+[I 2026-02-24 16:58:23,758] Trial 18 finished with value: 0.9789606458123108 and parameters: {'n_estimators': 488, 'max_depth': 11, 'learning_rate': 0.2966638591618554, 'subsample': 0.868118201091801, 'colsample_bytree': 0.8237454303209338, 'gamma': 0.9137373085896322}. Best is trial 18 with value: 0.9789606458123108.
+[I 2026-02-24 17:01:07,155] Trial 19 finished with value: 0.9687635907800148 and parameters: {'n_estimators': 488, 'max_depth': 11, 'learning_rate': 0.06564881102227815, 'subsample': 0.8679550548430789, 'colsample_bytree': 0.8331944983841727, 'gamma': 0.7937999812924232}. Best is trial 18 with value: 0.9789606458123108.
+[I 2026-02-24 17:03:06,194] Trial 20 finished with value: 0.9204607789358201 and parameters: {'n_estimators': 500, 'max_depth': 8, 'learning_rate': 0.010268532567766423, 'subsample': 0.8826923827833093, 'colsample_bytree': 0.8919963215366131, 'gamma': 0.8990955807696782}. Best is trial 18 with value: 0.9789606458123108.
+[I 2026-02-24 17:04:52,498] Trial 21 finished with value: 0.9787825208385956 and parameters: {'n_estimators': 451, 'max_depth': 11, 'learning_rate': 0.29767333296987125, 'subsample': 0.841224788484632, 'colsample_bytree': 0.7792000893159342, 'gamma': 2.1080642259022078}. Best is trial 18 with value: 0.9789606458123108.
+[I 2026-02-24 17:06:47,313] Trial 22 finished with value: 0.9772192864908599 and parameters: {'n_estimators': 448, 'max_depth': 11, 'learning_rate': 0.22612307167012147, 'subsample': 0.8137736760252847, 'colsample_bytree': 0.7867328934377396, 'gamma': 1.795625260341597}. Best is trial 18 with value: 0.9789606458123108.
+[I 2026-02-24 17:09:05,456] Trial 23 finished with value: 0.9766652309407383 and parameters: {'n_estimators': 442, 'max_depth': 11, 'learning_rate': 0.16521620168864878, 'subsample': 0.8932995520916629, 'colsample_bytree': 0.8729212030800024, 'gamma': 0.4938624456532154}. Best is trial 18 with value: 0.9789606458123108.
+[I 2026-02-24 17:11:46,216] Trial 24 finished with value: 0.975482233502538 and parameters: {'n_estimators': 493, 'max_depth': 11, 'learning_rate': 0.12164003395258996, 'subsample': 0.8031619650519907, 'colsample_bytree': 0.7981591349479852, 'gamma': 0.02234013619690689}. Best is trial 18 with value: 0.9789606458123108.
+[I 2026-02-24 17:13:17,576] Trial 25 finished with value: 0.976523919264568 and parameters: {'n_estimators': 454, 'max_depth': 8, 'learning_rate': 0.25517273793480644, 'subsample': 0.8451731713029011, 'colsample_bytree': 0.9092140636575075, 'gamma': 1.1484313477930728}. Best is trial 18 with value: 0.9789606458123108.
+[I 2026-02-24 17:15:15,139] Trial 26 finished with value: 0.9761910798955349 and parameters: {'n_estimators': 378, 'max_depth': 12, 'learning_rate': 0.16501434391092396, 'subsample': 0.8841784235489397, 'colsample_bytree': 0.9368167721487681, 'gamma': 1.9993905561944765}. Best is trial 18 with value: 0.9789606458123108.
+[I 2026-02-24 17:17:03,502] Trial 27 finished with value: 0.9783751010509296 and parameters: {'n_estimators': 471, 'max_depth': 11, 'learning_rate': 0.2915619994672531, 'subsample': 0.9128794766581867, 'colsample_bytree': 0.7865614292817318, 'gamma': 2.5108880339389765}. Best is trial 18 with value: 0.9789606458123108.
+[I 2026-02-24 17:18:07,039] Trial 28 finished with value: 0.9154458474861928 and parameters: {'n_estimators': 232, 'max_depth': 9, 'learning_rate': 0.016354248044596464, 'subsample': 0.90725902336824, 'colsample_bytree': 0.779233053658274, 'gamma': 3.5066199179976603}. Best is trial 18 with value: 0.9789606458123108.
+[I 2026-02-24 17:19:19,130] Trial 29 finished with value: 0.9660181715517684 and parameters: {'n_estimators': 349, 'max_depth': 8, 'learning_rate': 0.11530438641916615, 'subsample': 0.9842459412463526, 'colsample_bytree': 0.6155856735185214, 'gamma': 2.4304348334805166}. Best is trial 18 with value: 0.9789606458123108.
+
+最优参数组合: {'n_estimators': 488, 'max_depth': 11, 'learning_rate': 0.2966638591618554, 'subsample': 0.868118201091801, 'colsample_bytree': 0.8237454303209338, 'gamma': 0.9137373085896322}
+执行测试集预测与性能分析...
+
+=============================================
+       实验结果: 二分类 2-4 gram 特征组 (贝叶斯调参版)       
+=============================================
+混合特征总维度:      213091
+最优参数组合:        {'n_estimators': 488, 'max_depth': 11, 'learning_rate': 0.2966638591618554, 'subsample': 0.868118201091801, 'colsample_bytree': 0.8237454303209338, 'gamma': 0.9137373085896322}
+调参总耗时:          2701.49 秒
+---------------------------------------------
+准确率 (Accuracy):   0.9803
+精确率 (Precision):  0.9886
+召回率 (Recall):     0.9718
+F1 值 (F1-Score):    0.9801
+AUC 曲线下面积:      0.9976
+---------------------------------------------
+最终模型训练耗时:     122.81 秒
+单条推理平均延时:     0.217010 毫秒
+=============================================
+
+进程已结束，退出代码为 0
+
+C:\Users\Girlorn\PycharmProjects\PythonProject1\.venv\Scripts\python.exe C:\Users\Girlorn\PycharmProjects\PythonProject1\duofen\feature_comp.py 
+正在读取多分类数据集: dga_sampled_8k.txt...
+检测到 10 个家族，样本总量: 80000
+家族样本量区间: [8000, 8000]
+
+正在提取 6 维统计特征...
+开始 XGBoost 多分类训练 (类别数: 10)...
+
+=============================================
+            实验结果: 多分类统计特征组 (默认参数)            
+=============================================
+类别总数:           10
+准确率 (Accuracy):   0.8397
+宏平均 F1 (Macro-F1): 0.8214
+---------------------------------------------
+训练总耗时:          3.26 秒
+单条推理平均延时:     0.000887 毫秒
+=============================================
+
+各家族详细分类报告:
+              precision    recall  f1-score   support
+
+     banjori     0.9988    1.0000    0.9994       800
+      emotet     0.8694    0.9988    0.9296       800
+    gameover     0.9987    0.9875    0.9931       800
+      necurs     0.6452    0.2250    0.3336       800
+   pykspa_v1     0.7241    0.6825    0.7027       800
+      ramnit     0.5149    0.5400    0.5272       800
+      rovnix     0.9987    0.9925    0.9956       800
+       simda     0.7906    0.9912    0.8796       800
+       tinba     0.8448    0.9800    0.9074       800
+       virut     0.8979    1.0000    0.9462       800
+
+    accuracy                         0.8397      8000
+   macro avg     0.8283    0.8398    0.8214      8000
+weighted avg     0.8283    0.8397    0.8214      8000
+
+
+进程已结束，退出代码为 0
+
+C:\Users\Girlorn\PycharmProjects\PythonProject1\.venv\Scripts\python.exe C:\Users\Girlorn\PycharmProjects\PythonProject1\duofen\optuna_feature_comp.py 
+正在读取多分类数据集: dga_sampled_8k.txt...
+
+预提取统计特征以加速调参过程...
+
+--- 开始多分类统计特征组贝叶斯调参 (类别数: 10) ---
+[I 2026-02-24 17:44:50,218] A new study created in memory with name: no-name-15df4eaf-0c04-4ec8-a8fa-6140ae27ed31
+[I 2026-02-24 17:44:58,294] Trial 0 finished with value: 0.8189558150363725 and parameters: {'n_estimators': 474, 'max_depth': 11, 'learning_rate': 0.012456601043467588, 'subsample': 0.9391935478488025, 'colsample_bytree': 0.8639604245340411}. Best is trial 0 with value: 0.8189558150363725.
+[I 2026-02-24 17:45:11,080] Trial 1 finished with value: 0.8215385480378627 and parameters: {'n_estimators': 773, 'max_depth': 15, 'learning_rate': 0.1301052807736442, 'subsample': 0.8932633391770961, 'colsample_bytree': 0.8896517573516507}. Best is trial 1 with value: 0.8215385480378627.
+[I 2026-02-24 17:45:12,690] Trial 2 finished with value: 0.8101083546710208 and parameters: {'n_estimators': 205, 'max_depth': 3, 'learning_rate': 0.1523044381793316, 'subsample': 0.7512636830104151, 'colsample_bytree': 0.9681834503354825}. Best is trial 1 with value: 0.8215385480378627.
+[I 2026-02-24 17:45:20,255] Trial 3 finished with value: 0.8214858250958098 and parameters: {'n_estimators': 530, 'max_depth': 15, 'learning_rate': 0.03293471479248523, 'subsample': 0.6311601284639222, 'colsample_bytree': 0.6585028600599745}. Best is trial 1 with value: 0.8215385480378627.
+[I 2026-02-24 17:45:25,884] Trial 4 finished with value: 0.8179247913080074 and parameters: {'n_estimators': 526, 'max_depth': 8, 'learning_rate': 0.020388106921038218, 'subsample': 0.7847098442213786, 'colsample_bytree': 0.7801671463329178}. Best is trial 1 with value: 0.8215385480378627.
+[I 2026-02-24 17:45:32,701] Trial 5 finished with value: 0.8205349372400998 and parameters: {'n_estimators': 587, 'max_depth': 8, 'learning_rate': 0.023485432841779386, 'subsample': 0.6185085494200169, 'colsample_bytree': 0.8346581699037303}. Best is trial 1 with value: 0.8215385480378627.
+[I 2026-02-24 17:45:36,570] Trial 6 finished with value: 0.8120343192649147 and parameters: {'n_estimators': 411, 'max_depth': 7, 'learning_rate': 0.014408587412820634, 'subsample': 0.9273834056134012, 'colsample_bytree': 0.9784683163435212}. Best is trial 1 with value: 0.8215385480378627.
+[I 2026-02-24 17:45:47,586] Trial 7 finished with value: 0.8198466862482829 and parameters: {'n_estimators': 765, 'max_depth': 11, 'learning_rate': 0.13365479976652309, 'subsample': 0.7952739756807062, 'colsample_bytree': 0.9641864441859394}. Best is trial 1 with value: 0.8215385480378627.
+[I 2026-02-24 17:45:53,605] Trial 8 finished with value: 0.8202152804050323 and parameters: {'n_estimators': 471, 'max_depth': 12, 'learning_rate': 0.17330274642055887, 'subsample': 0.9191078243235712, 'colsample_bytree': 0.6438336373349544}. Best is trial 1 with value: 0.8215385480378627.
+[I 2026-02-24 17:46:00,157] Trial 9 finished with value: 0.8198606616934818 and parameters: {'n_estimators': 461, 'max_depth': 13, 'learning_rate': 0.017687234524829513, 'subsample': 0.8766244913864671, 'colsample_bytree': 0.7177362550492887}. Best is trial 1 with value: 0.8215385480378627.
+[I 2026-02-24 17:46:13,264] Trial 10 finished with value: 0.8213441299984459 and parameters: {'n_estimators': 773, 'max_depth': 15, 'learning_rate': 0.070593360468649, 'subsample': 0.8615503848874655, 'colsample_bytree': 0.8857182827232654}. Best is trial 1 with value: 0.8215385480378627.
+[I 2026-02-24 17:46:22,872] Trial 11 finished with value: 0.8210047696700083 and parameters: {'n_estimators': 655, 'max_depth': 15, 'learning_rate': 0.05178997513343664, 'subsample': 0.621634986970186, 'colsample_bytree': 0.6133504725414111}. Best is trial 1 with value: 0.8215385480378627.
+[I 2026-02-24 17:46:27,438] Trial 12 finished with value: 0.820942729030684 and parameters: {'n_estimators': 290, 'max_depth': 14, 'learning_rate': 0.04490169504093838, 'subsample': 0.6940754277277489, 'colsample_bytree': 0.7309109217313139}. Best is trial 1 with value: 0.8215385480378627.
+[I 2026-02-24 17:46:32,711] Trial 13 finished with value: 0.8196096479872127 and parameters: {'n_estimators': 671, 'max_depth': 4, 'learning_rate': 0.26161481849692825, 'subsample': 0.9896197287881995, 'colsample_bytree': 0.9016474596518993}. Best is trial 1 with value: 0.8215385480378627.
+[I 2026-02-24 17:46:37,698] Trial 14 finished with value: 0.8212475914075938 and parameters: {'n_estimators': 335, 'max_depth': 13, 'learning_rate': 0.08647303873414611, 'subsample': 0.6901112001887323, 'colsample_bytree': 0.7047010540049015}. Best is trial 1 with value: 0.8215385480378627.
+[I 2026-02-24 17:46:46,200] Trial 15 finished with value: 0.8209119023709548 and parameters: {'n_estimators': 667, 'max_depth': 10, 'learning_rate': 0.03553578537951333, 'subsample': 0.8470867005580424, 'colsample_bytree': 0.790039479693066}. Best is trial 1 with value: 0.8215385480378627.
+[I 2026-02-24 17:46:54,896] Trial 16 finished with value: 0.8208666083574998 and parameters: {'n_estimators': 581, 'max_depth': 15, 'learning_rate': 0.029527719967569144, 'subsample': 0.7226059111361772, 'colsample_bytree': 0.6568179112148717}. Best is trial 1 with value: 0.8215385480378627.
+[I 2026-02-24 17:46:56,340] Trial 17 finished with value: 0.8098327532397998 and parameters: {'n_estimators': 146, 'max_depth': 5, 'learning_rate': 0.07642857024265313, 'subsample': 0.658764607854185, 'colsample_bytree': 0.9155508425585871}. Best is trial 1 with value: 0.8215385480378627.
+[I 2026-02-24 17:47:01,738] Trial 18 finished with value: 0.8198947468685592 and parameters: {'n_estimators': 360, 'max_depth': 13, 'learning_rate': 0.1041858740394089, 'subsample': 0.8334672561380391, 'colsample_bytree': 0.8303389821749713}. Best is trial 1 with value: 0.8215385480378627.
+[I 2026-02-24 17:47:10,961] Trial 19 finished with value: 0.8204057193573583 and parameters: {'n_estimators': 718, 'max_depth': 10, 'learning_rate': 0.29100624625897464, 'subsample': 0.9951005803728505, 'colsample_bytree': 0.7565219375747203}. Best is trial 1 with value: 0.8215385480378627.
+[I 2026-02-24 17:47:16,676] Trial 20 finished with value: 0.8100365630996322 and parameters: {'n_estimators': 581, 'max_depth': 6, 'learning_rate': 0.010050949828381471, 'subsample': 0.7580583261316426, 'colsample_bytree': 0.6850243312402036}. Best is trial 1 with value: 0.8215385480378627.
+[I 2026-02-24 17:47:31,337] Trial 21 finished with value: 0.8209579190162215 and parameters: {'n_estimators': 792, 'max_depth': 15, 'learning_rate': 0.07253114550472592, 'subsample': 0.8828710439383427, 'colsample_bytree': 0.9048382432846985}. Best is trial 1 with value: 0.8215385480378627.
+[I 2026-02-24 17:47:43,958] Trial 22 finished with value: 0.820759016277138 and parameters: {'n_estimators': 737, 'max_depth': 14, 'learning_rate': 0.06459974936592375, 'subsample': 0.8420366585939548, 'colsample_bytree': 0.8641656535597145}. Best is trial 1 with value: 0.8215385480378627.
+[I 2026-02-24 17:47:54,511] Trial 23 finished with value: 0.8206393255587795 and parameters: {'n_estimators': 632, 'max_depth': 14, 'learning_rate': 0.03839276481504671, 'subsample': 0.8921069783541457, 'colsample_bytree': 0.9356776060885545}. Best is trial 1 with value: 0.8215385480378627.
+[I 2026-02-24 17:48:05,925] Trial 24 finished with value: 0.8202598797550689 and parameters: {'n_estimators': 718, 'max_depth': 12, 'learning_rate': 0.11503125955981293, 'subsample': 0.8198874905053347, 'colsample_bytree': 0.8501871015701761}. Best is trial 1 with value: 0.8215385480378627.
+[I 2026-02-24 17:48:19,878] Trial 25 finished with value: 0.8200570574519125 and parameters: {'n_estimators': 798, 'max_depth': 15, 'learning_rate': 0.19440645302382423, 'subsample': 0.9530327177678923, 'colsample_bytree': 0.8823041459821325}. Best is trial 1 with value: 0.8215385480378627.
+[I 2026-02-24 17:48:28,310] Trial 26 finished with value: 0.821378398212427 and parameters: {'n_estimators': 525, 'max_depth': 14, 'learning_rate': 0.05754917736587476, 'subsample': 0.8747705383279216, 'colsample_bytree': 0.8141022261713817}. Best is trial 1 with value: 0.8215385480378627.
+[I 2026-02-24 17:48:35,416] Trial 27 finished with value: 0.8200495215226017 and parameters: {'n_estimators': 510, 'max_depth': 12, 'learning_rate': 0.029133471805224125, 'subsample': 0.9118885610579314, 'colsample_bytree': 0.8135307172371422}. Best is trial 1 with value: 0.8215385480378627.
+[I 2026-02-24 17:48:41,841] Trial 28 finished with value: 0.8216827082090055 and parameters: {'n_estimators': 408, 'max_depth': 14, 'learning_rate': 0.05552357326148587, 'subsample': 0.8057777226539009, 'colsample_bytree': 0.7612523310851754}. Best is trial 28 with value: 0.8216827082090055.
+[I 2026-02-24 17:48:47,365] Trial 29 finished with value: 0.8219172661774238 and parameters: {'n_estimators': 404, 'max_depth': 11, 'learning_rate': 0.09795166082785399, 'subsample': 0.9575355986955422, 'colsample_bytree': 0.7496598482422471}. Best is trial 29 with value: 0.8219172661774238.
+
+调参完成！最优 Macro-F1: 0.8219
+
+=============================================
+           实验结果: 多分类统计特征组 (贝叶斯调参版)           
+=============================================
+最优参数组合:        {'n_estimators': 404, 'max_depth': 11, 'learning_rate': 0.09795166082785399, 'subsample': 0.9575355986955422, 'colsample_bytree': 0.7496598482422471}
+准确率 (Accuracy):   0.8370
+宏平均 F1 (Macro-F1): 0.8212
+---------------------------------------------
+调参总耗时:          237.15 秒
+最终模型训练耗时:     5.44 秒
+单条推理平均延时:     0.004123 毫秒
+=============================================
+
+各家族详细分类报告 (最终模型):
+              precision    recall  f1-score   support
+
+     banjori     0.9988    1.0000    0.9994       800
+      emotet     0.8685    0.9988    0.9291       800
+    gameover     0.9987    0.9875    0.9931       800
+      necurs     0.5478    0.2863    0.3760       800
+   pykspa_v1     0.7250    0.6787    0.7011       800
+      ramnit     0.5163    0.4562    0.4844       800
+      rovnix     0.9987    0.9925    0.9956       800
+       simda     0.7922    0.9912    0.8806       800
+       tinba     0.8447    0.9788    0.9068       800
+       virut     0.8979    1.0000    0.9462       800
+
+    accuracy                         0.8370      8000
+   macro avg     0.8189    0.8370    0.8212      8000
+weighted avg     0.8189    0.8370    0.8212      8000
+
+
+进程已结束，退出代码为 0
+
+
+C:\Users\Girlorn\PycharmProjects\PythonProject1\.venv\Scripts\python.exe C:\Users\Girlorn\PycharmProjects\PythonProject1\duofen\2-gram_comp.py 
+正在读取多分类数据集: dga_sampled_8k.txt...
+检测到家族数量: 10
+
+开始执行 2-gram 特征向量化...
+特征提取完成！特征维度: 1296
+开始 XGBoost 多分类训练 (2-gram 组)...
+
+=============================================
+         实验结果: 多分类 2-gram 特征组 (默认参数)         
+=============================================
+特征总维度:         1296
+准确率 (Accuracy):   0.6661
+宏平均 F1 (Macro-F1): 0.6485
+---------------------------------------------
+训练总耗时:          4.49 秒
+单条推理平均延时:     0.001600 毫秒
+=============================================
+
+各家族详细分类报告:
+              precision    recall  f1-score   support
+
+     banjori     1.0000    1.0000    1.0000       800
+      emotet     0.3659    0.3187    0.3407       800
+    gameover     0.8563    0.7600    0.8053       800
+      necurs     0.2618    0.1800    0.2133       800
+   pykspa_v1     0.9277    0.8662    0.8959       800
+      ramnit     0.2857    0.1850    0.2246       800
+      rovnix     0.8176    0.7562    0.7857       800
+       simda     0.7727    0.9688    0.8597       800
+       tinba     0.5396    0.8087    0.6473       800
+       virut     0.6313    0.8175    0.7124       800
+
+    accuracy                         0.6661      8000
+   macro avg     0.6459    0.6661    0.6485      8000
+weighted avg     0.6459    0.6661    0.6485      8000
+
+
+进程已结束，退出代码为 0
+
+
+C:\Users\Girlorn\PycharmProjects\PythonProject1\.venv\Scripts\python.exe C:\Users\Girlorn\PycharmProjects\PythonProject1\duofen\optuna_2-gram_comp.py 
+正在读取多分类数据集: dga_sampled_8k.txt...
+
+执行 2-gram 特征提取 (预提取以加速调参)...
+
+--- 开始多分类 2-gram 贝叶斯调参 (特征维度: 1296) ---
+[I 2026-02-24 18:00:13,187] A new study created in memory with name: no-name-a1ac361c-0998-4770-ab5a-218356748b14
+[I 2026-02-24 18:00:26,026] Trial 0 finished with value: 0.6730684510367649 and parameters: {'n_estimators': 783, 'max_depth': 9, 'learning_rate': 0.04210924375424516, 'subsample': 0.9253811627955322, 'colsample_bytree': 0.9292644720437486, 'gamma': 4.798043442075314}. Best is trial 0 with value: 0.6730684510367649.
+[I 2026-02-24 18:00:29,652] Trial 1 finished with value: 0.5348546333836858 and parameters: {'n_estimators': 327, 'max_depth': 4, 'learning_rate': 0.011817322314021156, 'subsample': 0.8786091896748516, 'colsample_bytree': 0.9800085862340611, 'gamma': 4.384251414456107}. Best is trial 0 with value: 0.6730684510367649.
+[I 2026-02-24 18:00:38,219] Trial 2 finished with value: 0.6425081449006038 and parameters: {'n_estimators': 720, 'max_depth': 6, 'learning_rate': 0.030968937922690558, 'subsample': 0.9392846165994779, 'colsample_bytree': 0.6637192705265169, 'gamma': 3.2126029987226263}. Best is trial 0 with value: 0.6730684510367649.
+[I 2026-02-24 18:00:48,756] Trial 3 finished with value: 0.7053705482365639 and parameters: {'n_estimators': 779, 'max_depth': 11, 'learning_rate': 0.10912925209836856, 'subsample': 0.6610739552592523, 'colsample_bytree': 0.8934177069040777, 'gamma': 3.6649611568940372}. Best is trial 3 with value: 0.7053705482365639.
+[I 2026-02-24 18:00:56,387] Trial 4 finished with value: 0.6541589057501153 and parameters: {'n_estimators': 600, 'max_depth': 4, 'learning_rate': 0.0698805085034968, 'subsample': 0.6271776815948439, 'colsample_bytree': 0.8806923728968579, 'gamma': 1.7571585915128556}. Best is trial 3 with value: 0.7053705482365639.
+[I 2026-02-24 18:01:01,408] Trial 5 finished with value: 0.6980223074066604 and parameters: {'n_estimators': 406, 'max_depth': 10, 'learning_rate': 0.15156443369395298, 'subsample': 0.8388696376553363, 'colsample_bytree': 0.6978517372117595, 'gamma': 4.079814350987619}. Best is trial 3 with value: 0.7053705482365639.
+[I 2026-02-24 18:01:07,880] Trial 6 finished with value: 0.584004110283248 and parameters: {'n_estimators': 515, 'max_depth': 5, 'learning_rate': 0.016339685325546922, 'subsample': 0.8041148200533766, 'colsample_bytree': 0.808115254944662, 'gamma': 2.9472593424786746}. Best is trial 3 with value: 0.7053705482365639.
+[I 2026-02-24 18:01:21,192] Trial 7 finished with value: 0.6757666230949685 and parameters: {'n_estimators': 572, 'max_depth': 15, 'learning_rate': 0.03763813303961515, 'subsample': 0.6667350318886995, 'colsample_bytree': 0.9913843521989135, 'gamma': 1.970141781291928}. Best is trial 3 with value: 0.7053705482365639.
+[I 2026-02-24 18:01:25,144] Trial 8 finished with value: 0.6927287113056786 and parameters: {'n_estimators': 382, 'max_depth': 13, 'learning_rate': 0.2604786356373951, 'subsample': 0.9760573215821451, 'colsample_bytree': 0.975918249100419, 'gamma': 4.420787498429211}. Best is trial 3 with value: 0.7053705482365639.
+[I 2026-02-24 18:01:38,560] Trial 9 finished with value: 0.6702261068182773 and parameters: {'n_estimators': 690, 'max_depth': 11, 'learning_rate': 0.032221017646733435, 'subsample': 0.6191975072132799, 'colsample_bytree': 0.6043228591554654, 'gamma': 1.5390202803992086}. Best is trial 3 with value: 0.7053705482365639.
+[I 2026-02-24 18:01:40,648] Trial 10 finished with value: 0.6173161199546489 and parameters: {'n_estimators': 112, 'max_depth': 8, 'learning_rate': 0.090375563593366, 'subsample': 0.7187344846482633, 'colsample_bytree': 0.8263545556281153, 'gamma': 0.05975859692162988}. Best is trial 3 with value: 0.7053705482365639.
+[I 2026-02-24 18:01:44,771] Trial 11 finished with value: 0.6915187611704382 and parameters: {'n_estimators': 276, 'max_depth': 11, 'learning_rate': 0.1535421653254182, 'subsample': 0.7840202438133761, 'colsample_bytree': 0.7250663509089059, 'gamma': 3.536866199823875}. Best is trial 3 with value: 0.7053705482365639.
+[I 2026-02-24 18:01:50,309] Trial 12 finished with value: 0.6966195686953022 and parameters: {'n_estimators': 415, 'max_depth': 11, 'learning_rate': 0.1329502883127665, 'subsample': 0.8142377379621262, 'colsample_bytree': 0.7349093673407533, 'gamma': 3.8948864814239026}. Best is trial 3 with value: 0.7053705482365639.
+[I 2026-02-24 18:01:52,713] Trial 13 finished with value: 0.6665073470423375 and parameters: {'n_estimators': 155, 'max_depth': 7, 'learning_rate': 0.2338993631063073, 'subsample': 0.7234920669167734, 'colsample_bytree': 0.876043424608894, 'gamma': 2.436999024217678}. Best is trial 3 with value: 0.7053705482365639.
+[I 2026-02-24 18:01:56,490] Trial 14 finished with value: 0.6858845997375506 and parameters: {'n_estimators': 247, 'max_depth': 13, 'learning_rate': 0.13594992894150906, 'subsample': 0.8629886480125878, 'colsample_bytree': 0.741463318901695, 'gamma': 3.949028303641289}. Best is trial 3 with value: 0.7053705482365639.
+[I 2026-02-24 18:02:03,236] Trial 15 finished with value: 0.6825257673450045 and parameters: {'n_estimators': 503, 'max_depth': 10, 'learning_rate': 0.08374808727049812, 'subsample': 0.7362603390526237, 'colsample_bytree': 0.6830672220584406, 'gamma': 4.989035199127168}. Best is trial 3 with value: 0.7053705482365639.
+[I 2026-02-24 18:02:14,688] Trial 16 finished with value: 0.7140742300180183 and parameters: {'n_estimators': 638, 'max_depth': 13, 'learning_rate': 0.17587494627481107, 'subsample': 0.8483790843939853, 'colsample_bytree': 0.8771591734846942, 'gamma': 0.8842525989822434}. Best is trial 16 with value: 0.7140742300180183.
+[I 2026-02-24 18:02:26,761] Trial 17 finished with value: 0.7188071722586994 and parameters: {'n_estimators': 658, 'max_depth': 15, 'learning_rate': 0.21882367578932968, 'subsample': 0.758767667453397, 'colsample_bytree': 0.8707807593927988, 'gamma': 0.5207305463940082}. Best is trial 17 with value: 0.7188071722586994.
+[I 2026-02-24 18:02:38,307] Trial 18 finished with value: 0.722485264654123 and parameters: {'n_estimators': 638, 'max_depth': 15, 'learning_rate': 0.22822286552693283, 'subsample': 0.7619232499890757, 'colsample_bytree': 0.8515254780023525, 'gamma': 0.5191181342688256}. Best is trial 18 with value: 0.722485264654123.
+[I 2026-02-24 18:02:51,503] Trial 19 finished with value: 0.7218566723414547 and parameters: {'n_estimators': 668, 'max_depth': 15, 'learning_rate': 0.29520485303482075, 'subsample': 0.7625474550913787, 'colsample_bytree': 0.7770727378392813, 'gamma': 0.19404987977161542}. Best is trial 18 with value: 0.722485264654123.
+[I 2026-02-24 18:02:59,742] Trial 20 finished with value: 0.7194687487872679 and parameters: {'n_estimators': 536, 'max_depth': 14, 'learning_rate': 0.29617842789167187, 'subsample': 0.6980288237323939, 'colsample_bytree': 0.7652974736219142, 'gamma': 1.0231396252688225}. Best is trial 18 with value: 0.722485264654123.
+[I 2026-02-24 18:03:07,705] Trial 21 finished with value: 0.7178676688419563 and parameters: {'n_estimators': 526, 'max_depth': 14, 'learning_rate': 0.29744071736671474, 'subsample': 0.6906119299173132, 'colsample_bytree': 0.7731996475704147, 'gamma': 1.094250631791197}. Best is trial 18 with value: 0.722485264654123.
+[I 2026-02-24 18:03:23,562] Trial 22 finished with value: 0.7121882174936595 and parameters: {'n_estimators': 597, 'max_depth': 15, 'learning_rate': 0.20253725359594674, 'subsample': 0.7686465072031006, 'colsample_bytree': 0.7774670602411019, 'gamma': 0.0686995779544532}. Best is trial 18 with value: 0.722485264654123.
+[I 2026-02-24 18:03:34,979] Trial 23 finished with value: 0.7235453350197815 and parameters: {'n_estimators': 723, 'max_depth': 14, 'learning_rate': 0.2857948936853663, 'subsample': 0.702855601961855, 'colsample_bytree': 0.8294349072447068, 'gamma': 0.657597112921702}. Best is trial 23 with value: 0.7235453350197815.
+[I 2026-02-24 18:03:48,393] Trial 24 finished with value: 0.71992087225155 and parameters: {'n_estimators': 720, 'max_depth': 14, 'learning_rate': 0.20108552059028653, 'subsample': 0.7451839643942271, 'colsample_bytree': 0.8328214404775235, 'gamma': 0.496850220440402}. Best is trial 23 with value: 0.7235453350197815.
+[I 2026-02-24 18:04:06,218] Trial 25 finished with value: 0.685260918489091 and parameters: {'n_estimators': 747, 'max_depth': 12, 'learning_rate': 0.05567221847717023, 'subsample': 0.6596252057075277, 'colsample_bytree': 0.8345313939153183, 'gamma': 0.40010278585961334}. Best is trial 23 with value: 0.7235453350197815.
+[I 2026-02-24 18:04:18,294] Trial 26 finished with value: 0.7069994660619286 and parameters: {'n_estimators': 655, 'max_depth': 15, 'learning_rate': 0.10887597634385421, 'subsample': 0.8124722688102903, 'colsample_bytree': 0.9380627987424883, 'gamma': 1.319499531708811}. Best is trial 23 with value: 0.7235453350197815.
+[I 2026-02-24 18:04:26,632] Trial 27 finished with value: 0.7162094661589415 and parameters: {'n_estimators': 479, 'max_depth': 13, 'learning_rate': 0.295641204793655, 'subsample': 0.6946829725083061, 'colsample_bytree': 0.7991852608847451, 'gamma': 0.7296275866454929}. Best is trial 23 with value: 0.7235453350197815.
+[I 2026-02-24 18:04:36,307] Trial 28 finished with value: 0.708083391750588 and parameters: {'n_estimators': 795, 'max_depth': 14, 'learning_rate': 0.1878323432405138, 'subsample': 0.7777264094347701, 'colsample_bytree': 0.8480390442541241, 'gamma': 2.2482696599073924}. Best is trial 23 with value: 0.7235453350197815.
+
+调参完成！最优 Macro-F1: 0.7235
+[I 2026-02-24 18:04:49,584] Trial 29 finished with value: 0.7142003116062566 and parameters: {'n_estimators': 672, 'max_depth': 12, 'learning_rate': 0.23077492842840058, 'subsample': 0.8994257433492343, 'colsample_bytree': 0.9134680858553631, 'gamma': 0.19293911408996745}. Best is trial 23 with value: 0.7235453350197815.
+
+=============================================
+        实验结果: 多分类 2-gram 特征组 (贝叶斯调参版)        
+=============================================
+特征总维度:         1296
+最优参数组合:        {'n_estimators': 723, 'max_depth': 14, 'learning_rate': 0.2857948936853663, 'subsample': 0.702855601961855, 'colsample_bytree': 0.8294349072447068, 'gamma': 0.657597112921702}
+准确率 (Accuracy):   0.7219
+宏平均 F1 (Macro-F1): 0.7151
+---------------------------------------------
+调参总耗时:          276.40 秒
+最终模型训练耗时:     12.36 秒
+单条推理平均延时:     0.008693 毫秒
+=============================================
+
+各家族详细分类报告 (最终模型):
+              precision    recall  f1-score   support
+
+     banjori     1.0000    1.0000    1.0000       800
+      emotet     0.4039    0.3912    0.3975       800
+    gameover     0.9001    0.7775    0.8343       800
+      necurs     0.2542    0.2250    0.2387       800
+   pykspa_v1     0.9612    0.9287    0.9447       800
+      ramnit     0.3183    0.2825    0.2993       800
+      rovnix     0.8356    0.8638    0.8494       800
+       simda     0.9546    0.9988    0.9762       800
+       tinba     0.6755    0.7937    0.7299       800
+       virut     0.8158    0.9575    0.8810       800
+
+    accuracy                         0.7219      8000
+   macro avg     0.7119    0.7219    0.7151      8000
+weighted avg     0.7119    0.7219    0.7151      8000
+
+
+进程已结束，退出代码为 0
+
+
+C:\Users\Girlorn\PycharmProjects\PythonProject1\.venv\Scripts\python.exe C:\Users\Girlorn\PycharmProjects\PythonProject1\duofen\optuna_2-gram_comp.py 
+正在读取多分类数据集: dga_sampled_8k.txt...
+检测到家族数量: 10
+
+开始执行 2-4 gram 特征向量化 (混合 2/3/4 位特征)...
+特征提取完成！特征维度: 39170
+开始 XGBoost 多分类训练 (2-4 gram 混合组)...
+
+=============================================
+        实验结果: 多分类 2-4 gram 特征组 (默认参数)        
+=============================================
+混合特征总维度:      39170
+准确率 (Accuracy):   0.6649
+宏平均 F1 (Macro-F1): 0.6456
+---------------------------------------------
+训练总耗时:          38.54 秒
+单条推理平均延时:     0.034399 毫秒
+=============================================
+
+各家族详细分类报告:
+              precision    recall  f1-score   support
+
+     banjori     1.0000    1.0000    1.0000       800
+      emotet     0.3654    0.3225    0.3426       800
+    gameover     0.8503    0.7525    0.7984       800
+      necurs     0.2563    0.1787    0.2106       800
+   pykspa_v1     0.9344    0.8725    0.9024       800
+      ramnit     0.2616    0.1550    0.1947       800
+      rovnix     0.8155    0.7512    0.7820       800
+       simda     0.7754    0.9712    0.8624       800
+       tinba     0.5422    0.8187    0.6524       800
+       virut     0.6236    0.8263    0.7108       800
+
+    accuracy                         0.6649      8000
+   macro avg     0.6425    0.6649    0.6456      8000
+weighted avg     0.6425    0.6649    0.6456      8000
+
+
+进程已结束，退出代码为 0
+
+
+C:\Users\Girlorn\PycharmProjects\PythonProject1\.venv\Scripts\python.exe C:\Users\Girlorn\PycharmProjects\PythonProject1\duofen\optuna_2_4gram_comp.py 
+正在读取多分类数据集: dga_sampled_8k.txt...
+
+执行 2-4 gram 特征向量化 (混合 2/3/4 位特征，min_df=5)...
+[I 2026-02-24 18:15:18,065] A new study created in memory with name: no-name-3685b450-dbdd-4b15-9884-838cd2e849c4
+复合特征维度锁定为: 39170
+
+--- 开始多分类 2-4 gram 贝叶斯调参 (类别数: 10) ---
+[I 2026-02-24 18:15:40,101] Trial 0 finished with value: 0.5117924864682507 and parameters: {'n_estimators': 279, 'max_depth': 3, 'learning_rate': 0.01058602757129499, 'subsample': 0.7269593117816824, 'colsample_bytree': 0.9042336812024643, 'gamma': 1.5241018743897128}. Best is trial 0 with value: 0.5117924864682507.
+[I 2026-02-24 18:16:36,124] Trial 1 finished with value: 0.6389531077110541 and parameters: {'n_estimators': 463, 'max_depth': 7, 'learning_rate': 0.03587167801039534, 'subsample': 0.9265687018534937, 'colsample_bytree': 0.6208389854728182, 'gamma': 1.8745622593327749}. Best is trial 1 with value: 0.6389531077110541.
+[I 2026-02-24 18:17:29,534] Trial 2 finished with value: 0.7015887578854878 and parameters: {'n_estimators': 499, 'max_depth': 9, 'learning_rate': 0.16123058071089438, 'subsample': 0.664478299360812, 'colsample_bytree': 0.7310885585233091, 'gamma': 2.9224206286614036}. Best is trial 2 with value: 0.7015887578854878.
+[I 2026-02-24 18:17:56,260] Trial 3 finished with value: 0.5482366324751784 and parameters: {'n_estimators': 221, 'max_depth': 7, 'learning_rate': 0.011007409734881821, 'subsample': 0.6681483163448615, 'colsample_bytree': 0.5369205583047736, 'gamma': 3.847001615051766}. Best is trial 2 with value: 0.7015887578854878.
+[I 2026-02-24 18:18:16,145] Trial 4 finished with value: 0.6302177791786407 and parameters: {'n_estimators': 237, 'max_depth': 4, 'learning_rate': 0.1148866037597095, 'subsample': 0.7394693899827744, 'colsample_bytree': 0.8267434735548813, 'gamma': 4.570089104529395}. Best is trial 2 with value: 0.7015887578854878.
+[I 2026-02-24 18:18:50,737] Trial 5 finished with value: 0.6100115412378593 and parameters: {'n_estimators': 170, 'max_depth': 11, 'learning_rate': 0.03204617475233258, 'subsample': 0.935082444167074, 'colsample_bytree': 0.7000430846716696, 'gamma': 3.265356539606774}. Best is trial 2 with value: 0.7015887578854878.
+[I 2026-02-24 18:19:55,629] Trial 6 finished with value: 0.6750720705419921 and parameters: {'n_estimators': 397, 'max_depth': 11, 'learning_rate': 0.060070166693164145, 'subsample': 0.7549239166200069, 'colsample_bytree': 0.7138125070020231, 'gamma': 2.703121605217375}. Best is trial 2 with value: 0.7015887578854878.
+[I 2026-02-24 18:20:17,146] Trial 7 finished with value: 0.6182479974029169 and parameters: {'n_estimators': 286, 'max_depth': 3, 'learning_rate': 0.09334996677685056, 'subsample': 0.9148534613522703, 'colsample_bytree': 0.8006293000309508, 'gamma': 4.373577556865599}. Best is trial 2 with value: 0.7015887578854878.
+[I 2026-02-24 18:20:28,358] Trial 8 finished with value: 0.5943285569698682 and parameters: {'n_estimators': 136, 'max_depth': 4, 'learning_rate': 0.09893468006800399, 'subsample': 0.6396406752524132, 'colsample_bytree': 0.6607321879411131, 'gamma': 3.7379451013743523}. Best is trial 2 with value: 0.7015887578854878.
+[I 2026-02-24 18:21:46,687] Trial 9 finished with value: 0.5826095089422368 and parameters: {'n_estimators': 292, 'max_depth': 7, 'learning_rate': 0.020062075297020993, 'subsample': 0.9703325587425716, 'colsample_bytree': 0.7526036451018911, 'gamma': 0.4747188412940684}. Best is trial 2 with value: 0.7015887578854878.
+[I 2026-02-24 18:23:06,675] Trial 10 finished with value: 0.7106114714800917 and parameters: {'n_estimators': 500, 'max_depth': 9, 'learning_rate': 0.298166465410887, 'subsample': 0.8271788201537477, 'colsample_bytree': 0.9976406437408947, 'gamma': 0.18609721877442276}. Best is trial 10 with value: 0.7106114714800917.
+[I 2026-02-24 18:24:28,491] Trial 11 finished with value: 0.7097676091246357 and parameters: {'n_estimators': 498, 'max_depth': 9, 'learning_rate': 0.2905597963547079, 'subsample': 0.8612689240787087, 'colsample_bytree': 0.9794920151908625, 'gamma': 0.097072965826891}. Best is trial 10 with value: 0.7106114714800917.
+[I 2026-02-24 18:25:39,790] Trial 12 finished with value: 0.7037231214725637 and parameters: {'n_estimators': 410, 'max_depth': 9, 'learning_rate': 0.2677838956671012, 'subsample': 0.8416522972310644, 'colsample_bytree': 0.9750850033299157, 'gamma': 0.015331823176409465}. Best is trial 10 with value: 0.7106114714800917.
+[I 2026-02-24 18:26:34,234] Trial 13 finished with value: 0.7040319533676841 and parameters: {'n_estimators': 377, 'max_depth': 9, 'learning_rate': 0.27747904383457517, 'subsample': 0.8467368712164525, 'colsample_bytree': 0.9909125661691343, 'gamma': 0.983428873497016}. Best is trial 10 with value: 0.7106114714800917.
+[I 2026-02-24 18:27:49,420] Trial 14 finished with value: 0.6985645054749201 and parameters: {'n_estimators': 447, 'max_depth': 10, 'learning_rate': 0.172257031189367, 'subsample': 0.8371534607275639, 'colsample_bytree': 0.8955766103002892, 'gamma': 0.8499173283939898}. Best is trial 10 with value: 0.7106114714800917.
+[I 2026-02-24 18:29:13,342] Trial 15 finished with value: 0.6967918498306183 and parameters: {'n_estimators': 349, 'max_depth': 12, 'learning_rate': 0.19429178024857396, 'subsample': 0.8028937377624255, 'colsample_bytree': 0.9164546628009106, 'gamma': 0.1667828135622349}. Best is trial 10 with value: 0.7106114714800917.
+[I 2026-02-24 18:30:03,283] Trial 16 finished with value: 0.710757875796431 and parameters: {'n_estimators': 499, 'max_depth': 8, 'learning_rate': 0.29859969313009865, 'subsample': 0.8798553209699229, 'colsample_bytree': 0.8521910420175745, 'gamma': 1.7965565524436102}. Best is trial 16 with value: 0.710757875796431.
+[I 2026-02-24 18:30:52,028] Trial 17 finished with value: 0.6549020355728431 and parameters: {'n_estimators': 447, 'max_depth': 6, 'learning_rate': 0.061520804734512775, 'subsample': 0.8789988299863398, 'colsample_bytree': 0.8374868477713262, 'gamma': 2.0336762348691413}. Best is trial 16 with value: 0.710757875796431.
+[I 2026-02-24 18:31:29,903] Trial 18 finished with value: 0.672072435295403 and parameters: {'n_estimators': 339, 'max_depth': 6, 'learning_rate': 0.13369477608215824, 'subsample': 0.7974013903666852, 'colsample_bytree': 0.8738319770583282, 'gamma': 1.1009491724365759}. Best is trial 16 with value: 0.710757875796431.
+[I 2026-02-24 18:32:15,004] Trial 19 finished with value: 0.6985365197445568 and parameters: {'n_estimators': 429, 'max_depth': 8, 'learning_rate': 0.21821335742535694, 'subsample': 0.9846419164094129, 'colsample_bytree': 0.9315964540126801, 'gamma': 2.327104068901852}. Best is trial 16 with value: 0.710757875796431.
+
+调参完成！最优 Macro-F1: 0.7108
+
+使用最优参数在测试集上进行最终评估...
+
+==================================================
+            实验结果: 多分类 2-4 gram 贝叶斯调参版             
+==================================================
+混合特征总维度:      39170
+最优参数组合:        {'n_estimators': 499, 'max_depth': 8, 'learning_rate': 0.29859969313009865, 'subsample': 0.8798553209699229, 'colsample_bytree': 0.8521910420175745, 'gamma': 1.7965565524436102}
+调参总耗时:          1016.94 秒
+--------------------------------------------------
+准确率 (Accuracy):   0.7199
+宏平均 F1 (Macro-F1): 0.7100
+训练总耗时:          48.83 秒
+单条推理平均延时:     0.073162 毫秒
+==================================================
+
+各家族详细分类报告 (最终模型):
+              precision    recall  f1-score   support
+
+     banjori     1.0000    1.0000    1.0000       800
+      emotet     0.3876    0.3450    0.3651       800
+    gameover     0.8974    0.8200    0.8570       800
+      necurs     0.2927    0.2550    0.2725       800
+   pykspa_v1     0.9627    0.9025    0.9316       800
+      ramnit     0.3093    0.2575    0.2810       800
+      rovnix     0.8544    0.8438    0.8491       800
+       simda     0.9368    1.0000    0.9674       800
+       tinba     0.6694    0.8225    0.7381       800
+       virut     0.7493    0.9525    0.8387       800
+
+    accuracy                         0.7199      8000
+   macro avg     0.7060    0.7199    0.7100      8000
+weighted avg     0.7060    0.7199    0.7100      8000
+
+
+进程已结束，退出代码为 0
+
+
+
+
+C:\Users\Girlorn\PycharmProjects\PythonProject1\.venv\Scripts\python.exe C:\Users\Girlorn\PycharmProjects\PythonProject1\ronghe\feature+2-4gram_comp.py 
+正在读取多分类数据集: ../duofen/dga_sampled_8k.txt...
+
+提取 2-4 gram 特征 (稀疏矩阵)...
+提取 6 维统计特征 (稠密矩阵)...
+融合完成！最终特征维度: 39176 (N-gram + 6 统计特征)
+开始 XGBoost 融合模型训练...
+
+==================================================
+           实验结果: 多分类特征融合组 (统计+2-4gram)            
+==================================================
+融合后总维度:        39176
+准确率 (Accuracy):   0.8866
+宏平均 F1 (Macro-F1): 0.8763
+--------------------------------------------------
+训练总耗时:          49.96 秒
+单条推理平均延时:     0.003272 毫秒
+==================================================
+
+各家族详细分类报告:
+              precision    recall  f1-score   support
+
+     banjori     1.0000    1.0000    1.0000       800
+      emotet     0.8696    1.0000    0.9302       800
+    gameover     1.0000    0.9888    0.9943       800
+      necurs     0.6573    0.2925    0.4048       800
+   pykspa_v1     0.9851    0.9075    0.9447       800
+      ramnit     0.5474    0.7000    0.6144       800
+      rovnix     1.0000    0.9925    0.9962       800
+       simda     0.9569    0.9988    0.9774       800
+       tinba     0.9078    0.9975    0.9506       800
+       virut     0.9145    0.9888    0.9502       800
+
+    accuracy                         0.8866      8000
+   macro avg     0.8839    0.8866    0.8763      8000
+weighted avg     0.8839    0.8866    0.8763      8000
+
+
+进程已结束，退出代码为 0
+
+
+
+C:\Users\Girlorn\PycharmProjects\PythonProject1\.venv\Scripts\python.exe C:\Users\Girlorn\PycharmProjects\PythonProject1\ronghe\optuna_feature+2-4gram_comp.py 
+正在读取多分类数据集: dga_sampled_8k.txt...
+
+执行 2-4 gram 特征提取...
+执行 6 维统计特征提取...
+执行特征水平融合 (hstack)...
+融合特征锁定完成！总维度: 39176
+
+--- 开始融合特征组贝叶斯调参 (Trials=20) ---
+[I 2026-02-24 20:48:08,708] A new study created in memory with name: no-name-9cd98c87-ce5c-412e-b271-93cbd3f78ac5
+[I 2026-02-24 20:48:35,046] Trial 0 finished with value: 0.8722507522078781 and parameters: {'n_estimators': 244, 'max_depth': 10, 'learning_rate': 0.10818705939032158, 'subsample': 0.8271153446927386, 'colsample_bytree': 0.648870995560346, 'gamma': 2.8572516216659762}. Best is trial 0 with value: 0.8722507522078781.
+[I 2026-02-24 20:49:35,541] Trial 1 finished with value: 0.861088944068304 and parameters: {'n_estimators': 440, 'max_depth': 7, 'learning_rate': 0.017601863234075928, 'subsample': 0.6539966791210606, 'colsample_bytree': 0.5198248624720265, 'gamma': 1.7542703303970253}. Best is trial 0 with value: 0.8722507522078781.
+[I 2026-02-24 20:50:00,156] Trial 2 finished with value: 0.8575318287760118 and parameters: {'n_estimators': 111, 'max_depth': 10, 'learning_rate': 0.022338938847986264, 'subsample': 0.8150478810801096, 'colsample_bytree': 0.966178078204111, 'gamma': 1.6190339181947606}. Best is trial 0 with value: 0.8722507522078781.
+[I 2026-02-24 20:52:02,104] Trial 3 finished with value: 0.8801617103133076 and parameters: {'n_estimators': 475, 'max_depth': 12, 'learning_rate': 0.03883840854196488, 'subsample': 0.6405283427662684, 'colsample_bytree': 0.6390846102867944, 'gamma': 0.02956794737705215}. Best is trial 3 with value: 0.8801617103133076.
+[I 2026-02-24 20:52:43,346] Trial 4 finished with value: 0.8624602771708203 and parameters: {'n_estimators': 535, 'max_depth': 3, 'learning_rate': 0.042637414441794926, 'subsample': 0.7272486666000075, 'colsample_bytree': 0.6855050694045707, 'gamma': 3.7081661130905657}. Best is trial 3 with value: 0.8801617103133076.
+[I 2026-02-24 20:53:01,638] Trial 5 finished with value: 0.8494488333484502 and parameters: {'n_estimators': 214, 'max_depth': 3, 'learning_rate': 0.033917389711528856, 'subsample': 0.6241135648270637, 'colsample_bytree': 0.6401749885329779, 'gamma': 1.5205331007971328}. Best is trial 3 with value: 0.8801617103133076.
+[I 2026-02-24 20:54:31,038] Trial 6 finished with value: 0.8650187981318469 and parameters: {'n_estimators': 475, 'max_depth': 10, 'learning_rate': 0.015878847354340295, 'subsample': 0.7363106242552051, 'colsample_bytree': 0.8160190918061268, 'gamma': 2.018874185816078}. Best is trial 3 with value: 0.8801617103133076.
+[I 2026-02-24 20:55:30,809] Trial 7 finished with value: 0.8810800520557838 and parameters: {'n_estimators': 536, 'max_depth': 10, 'learning_rate': 0.08070710482521036, 'subsample': 0.8976679706119027, 'colsample_bytree': 0.778925404771255, 'gamma': 1.3521252485518342}. Best is trial 7 with value: 0.8810800520557838.
+[I 2026-02-24 20:55:55,739] Trial 8 finished with value: 0.877830371107644 and parameters: {'n_estimators': 249, 'max_depth': 13, 'learning_rate': 0.12226715956806392, 'subsample': 0.9693571639773084, 'colsample_bytree': 0.5141611465807752, 'gamma': 2.1184085545620186}. Best is trial 7 with value: 0.8810800520557838.
+[I 2026-02-24 20:56:19,468] Trial 9 finished with value: 0.8812267886659632 and parameters: {'n_estimators': 171, 'max_depth': 11, 'learning_rate': 0.19281033514613366, 'subsample': 0.9801559395310389, 'colsample_bytree': 0.9176086777710282, 'gamma': 1.1294076826232842}. Best is trial 9 with value: 0.8812267886659632.
+[I 2026-02-24 20:56:27,844] Trial 10 finished with value: 0.8706083551941509 and parameters: {'n_estimators': 101, 'max_depth': 7, 'learning_rate': 0.27229669167840603, 'subsample': 0.9929202987640505, 'colsample_bytree': 0.9961928285079609, 'gamma': 4.737951884568295}. Best is trial 9 with value: 0.8812267886659632.
+[I 2026-02-24 20:57:36,851] Trial 11 finished with value: 0.881753927484804 and parameters: {'n_estimators': 351, 'max_depth': 15, 'learning_rate': 0.0999658234179388, 'subsample': 0.9089862223070447, 'colsample_bytree': 0.8629986173786626, 'gamma': 0.518893438010965}. Best is trial 11 with value: 0.881753927484804.
+[I 2026-02-24 20:58:20,394] Trial 12 finished with value: 0.8814166196864356 and parameters: {'n_estimators': 348, 'max_depth': 15, 'learning_rate': 0.23159295988377213, 'subsample': 0.9128090175378022, 'colsample_bytree': 0.888780094558125, 'gamma': 0.3352315039424102}. Best is trial 11 with value: 0.881753927484804.
+[I 2026-02-24 20:59:20,556] Trial 13 finished with value: 0.8821721086551069 and parameters: {'n_estimators': 337, 'max_depth': 15, 'learning_rate': 0.17068296427885585, 'subsample': 0.8957552370766709, 'colsample_bytree': 0.8795481859367874, 'gamma': 0.11107243535082834}. Best is trial 13 with value: 0.8821721086551069.
+[I 2026-02-24 21:00:18,419] Trial 14 finished with value: 0.8822039502612025 and parameters: {'n_estimators': 331, 'max_depth': 15, 'learning_rate': 0.07961547956670807, 'subsample': 0.8864021742626743, 'colsample_bytree': 0.8461841110464465, 'gamma': 0.604688217414501}. Best is trial 14 with value: 0.8822039502612025.
+[I 2026-02-24 21:01:12,436] Trial 15 finished with value: 0.8798523626196285 and parameters: {'n_estimators': 339, 'max_depth': 14, 'learning_rate': 0.06531541356431474, 'subsample': 0.8695657681080612, 'colsample_bytree': 0.7334117459065609, 'gamma': 0.7672553172065766}. Best is trial 14 with value: 0.8822039502612025.
+[I 2026-02-24 21:01:30,946] Trial 16 finished with value: 0.8764224224099593 and parameters: {'n_estimators': 303, 'max_depth': 13, 'learning_rate': 0.18043804488355442, 'subsample': 0.7579702541826773, 'colsample_bytree': 0.8250201890928086, 'gamma': 3.20929931692329}. Best is trial 14 with value: 0.8822039502612025.
+[I 2026-02-24 21:02:13,437] Trial 17 finished with value: 0.8774406627568286 and parameters: {'n_estimators': 406, 'max_depth': 15, 'learning_rate': 0.1485486216081515, 'subsample': 0.9414127521554719, 'colsample_bytree': 0.9379005160077661, 'gamma': 0.8744024130295883}. Best is trial 14 with value: 0.8822039502612025.
+[I 2026-02-24 21:03:40,772] Trial 18 finished with value: 0.8641605317611794 and parameters: {'n_estimators': 594, 'max_depth': 8, 'learning_rate': 0.011067172549981175, 'subsample': 0.8386419025170899, 'colsample_bytree': 0.8610976116187516, 'gamma': 0.018613924802950058}. Best is trial 14 with value: 0.8822039502612025.
+[I 2026-02-24 21:04:15,049] Trial 19 finished with value: 0.8767757659567259 and parameters: {'n_estimators': 275, 'max_depth': 13, 'learning_rate': 0.05596903076684817, 'subsample': 0.7760802780959561, 'colsample_bytree': 0.7540138761731662, 'gamma': 2.492619426384046}. Best is trial 14 with value: 0.8822039502612025.
+
+调参完成！最优 Macro-F1: 0.8822
+
+=======================================================
+            实验结果: 多分类特征融合 (统计+2-4gram) 贝叶斯版            
+=======================================================
+融合后总维度:        39176
+最优参数组合:        {'n_estimators': 331, 'max_depth': 15, 'learning_rate': 0.07961547956670807, 'subsample': 0.8864021742626743, 'colsample_bytree': 0.8461841110464465, 'gamma': 0.604688217414501}
+调参总耗时:          966.34 秒
+-------------------------------------------------------
+准确率 (Accuracy):   0.8872
+宏平均 F1 (Macro-F1): 0.8806
+最终训练耗时:         56.63 秒
+单条推理平均延时:     0.010579 毫秒
+=======================================================
+
+终极模型各家族分类报告:
+              precision    recall  f1-score   support
+
+     banjori     1.0000    1.0000    1.0000       800
+      emotet     0.8683    0.9975    0.9284       800
+    gameover     1.0000    0.9888    0.9943       800
+      necurs     0.5996    0.3688    0.4567       800
+   pykspa_v1     0.9801    0.9250    0.9518       800
+      ramnit     0.5437    0.6225    0.5804       800
+      rovnix     1.0000    0.9925    0.9962       800
+       simda     0.9756    1.0000    0.9877       800
+       tinba     0.9181    0.9950    0.9550       800
+       virut     0.9291    0.9825    0.9550       800
+
+    accuracy                         0.8872      8000
+   macro avg     0.8815    0.8873    0.8806      8000
+weighted avg     0.8815    0.8872    0.8806      8000
+
+
+进程已结束，退出代码为 0
+
+
+C:\Users\Girlorn\PycharmProjects\PythonProject1\.venv\Scripts\python.exe C:\Users\Girlorn\PycharmProjects\PythonProject1\ronghe\feature+2_gram_comp.py 
+正在读取多分类数据集: dga_sampled_8k.txt...
+
+提取 2-gram 特征 (ngram_range=(2, 2))...
+提取 6 维统计特征...
+融合完成！最终特征维度: 1302
+开始 XGBoost 融合模型训练 (2-gram 版)...
+
+==================================================
+          实验结果: 多分类特征融合 (统计+2-gram) 默认版           
+==================================================
+融合后总维度:        1302
+准确率 (Accuracy):   0.8875
+宏平均 F1 (Macro-F1): 0.8795
+--------------------------------------------------
+训练总耗时:          2.39 秒
+单条推理平均延时:     0.001933 毫秒
+==================================================
+
+各家族详细分类报告:
+              precision    recall  f1-score   support
+
+     banjori     1.0000    1.0000    1.0000       800
+      emotet     0.8685    0.9988    0.9291       800
+    gameover     1.0000    0.9888    0.9943       800
+      necurs     0.6300    0.3513    0.4510       800
+   pykspa_v1     0.9877    0.9050    0.9446       800
+      ramnit     0.5557    0.6488    0.5986       800
+      rovnix     1.0000    0.9925    0.9962       800
+       simda     0.9604    1.0000    0.9798       800
+       tinba     0.9078    0.9975    0.9506       800
+       virut     0.9126    0.9925    0.9509       800
+
+    accuracy                         0.8875      8000
+   macro avg     0.8823    0.8875    0.8795      8000
+weighted avg     0.8823    0.8875    0.8795      8000
+
+
+进程已结束，退出代码为 0
+
+C:\Users\Girlorn\PycharmProjects\PythonProject1\.venv\Scripts\python.exe C:\Users\Girlorn\PycharmProjects\PythonProject1\ronghe\optuna_feature+2_gram_comp.py 
+正在读取多分类数据集: dga_sampled_8k.txt...
+
+提取 2-gram 字符特征...
+提取 6 维统计特征...
+执行特征空间融合 (Fusion)...
+特征维度锁定: 1302
+
+--- 开始多分类融合组 (2-gram) 贝叶斯寻优 ---
+[I 2026-02-24 21:08:51,811] A new study created in memory with name: no-name-f000b849-9572-40c6-b4ad-0aa7d5113d2f
+[I 2026-02-24 21:09:02,229] Trial 0 finished with value: 0.8766226501944218 and parameters: {'n_estimators': 394, 'max_depth': 11, 'learning_rate': 0.028234875607475014, 'subsample': 0.8797763742048728, 'colsample_bytree': 0.621388604513791, 'gamma': 0.7364038378190954}. Best is trial 0 with value: 0.8766226501944218.
+[I 2026-02-24 21:09:04,185] Trial 1 finished with value: 0.8641621920043783 and parameters: {'n_estimators': 146, 'max_depth': 5, 'learning_rate': 0.07779485292530061, 'subsample': 0.96911516881245, 'colsample_bytree': 0.9494207829303123, 'gamma': 0.02944583121780564}. Best is trial 0 with value: 0.8766226501944218.
+[I 2026-02-24 21:09:08,134] Trial 2 finished with value: 0.8568872855482692 and parameters: {'n_estimators': 369, 'max_depth': 3, 'learning_rate': 0.034800363721540696, 'subsample': 0.9539404549324391, 'colsample_bytree': 0.7930034277762588, 'gamma': 1.003288112237896}. Best is trial 0 with value: 0.8766226501944218.
+[I 2026-02-24 21:09:12,956] Trial 3 finished with value: 0.8757028222050659 and parameters: {'n_estimators': 315, 'max_depth': 8, 'learning_rate': 0.05803175746140068, 'subsample': 0.7134500308436301, 'colsample_bytree': 0.9210414291238626, 'gamma': 1.6448229696675367}. Best is trial 0 with value: 0.8766226501944218.
+[I 2026-02-24 21:09:19,089] Trial 4 finished with value: 0.8617117734972565 and parameters: {'n_estimators': 538, 'max_depth': 4, 'learning_rate': 0.02312937248740543, 'subsample': 0.9054308115849967, 'colsample_bytree': 0.9210613623116015, 'gamma': 2.2180311991013895}. Best is trial 0 with value: 0.8766226501944218.
+[I 2026-02-24 21:09:20,301] Trial 5 finished with value: 0.8518722272527232 and parameters: {'n_estimators': 107, 'max_depth': 3, 'learning_rate': 0.0703010517112004, 'subsample': 0.9022451538216092, 'colsample_bytree': 0.9683498260355482, 'gamma': 2.685638743162636}. Best is trial 0 with value: 0.8766226501944218.
+[I 2026-02-24 21:09:23,142] Trial 6 finished with value: 0.8628740644145736 and parameters: {'n_estimators': 142, 'max_depth': 12, 'learning_rate': 0.015790255559815478, 'subsample': 0.9836989009629318, 'colsample_bytree': 0.6807590756809233, 'gamma': 2.510055472000899}. Best is trial 0 with value: 0.8766226501944218.
+[I 2026-02-24 21:09:27,797] Trial 7 finished with value: 0.8750587779395547 and parameters: {'n_estimators': 436, 'max_depth': 3, 'learning_rate': 0.1282743262511518, 'subsample': 0.7168509850147806, 'colsample_bytree': 0.6110179335549956, 'gamma': 1.9570744857258626}. Best is trial 0 with value: 0.8766226501944218.
+[I 2026-02-24 21:09:31,868] Trial 8 finished with value: 0.8764620233718704 and parameters: {'n_estimators': 430, 'max_depth': 6, 'learning_rate': 0.12809937033018778, 'subsample': 0.9334841771746438, 'colsample_bytree': 0.6433466347867952, 'gamma': 2.2433967411480875}. Best is trial 0 with value: 0.8766226501944218.
+[I 2026-02-24 21:09:34,253] Trial 9 finished with value: 0.8514931676700431 and parameters: {'n_estimators': 145, 'max_depth': 7, 'learning_rate': 0.021981502612500266, 'subsample': 0.7918077263090504, 'colsample_bytree': 0.701808177423546, 'gamma': 0.28646166013153873}. Best is trial 0 with value: 0.8766226501944218.
+[I 2026-02-24 21:09:46,587] Trial 10 finished with value: 0.8701534987755183 and parameters: {'n_estimators': 599, 'max_depth': 12, 'learning_rate': 0.010185097118554842, 'subsample': 0.8270472219861118, 'colsample_bytree': 0.7777536184817493, 'gamma': 0.9194978764923494}. Best is trial 0 with value: 0.8766226501944218.
+[I 2026-02-24 21:09:51,152] Trial 11 finished with value: 0.8808704291033258 and parameters: {'n_estimators': 437, 'max_depth': 9, 'learning_rate': 0.2638247015637481, 'subsample': 0.855260699653513, 'colsample_bytree': 0.6040039582098762, 'gamma': 1.1247356711139138}. Best is trial 11 with value: 0.8808704291033258.
+[I 2026-02-24 21:09:54,623] Trial 12 finished with value: 0.8795969436587043 and parameters: {'n_estimators': 298, 'max_depth': 10, 'learning_rate': 0.2984824025378859, 'subsample': 0.8335290126447369, 'colsample_bytree': 0.7230444081176866, 'gamma': 0.9519491454324003}. Best is trial 11 with value: 0.8808704291033258.
+[I 2026-02-24 21:09:58,369] Trial 13 finished with value: 0.8753825799867909 and parameters: {'n_estimators': 272, 'max_depth': 9, 'learning_rate': 0.2992739909521493, 'subsample': 0.6025253149539089, 'colsample_bytree': 0.7317621665115768, 'gamma': 1.2486499017926411}. Best is trial 11 with value: 0.8808704291033258.
+[I 2026-02-24 21:10:01,076] Trial 14 finished with value: 0.8774234432413909 and parameters: {'n_estimators': 236, 'max_depth': 10, 'learning_rate': 0.2883531018421784, 'subsample': 0.8201608386228252, 'colsample_bytree': 0.852765279451994, 'gamma': 1.4509634774476752}. Best is trial 11 with value: 0.8808704291033258.
+[I 2026-02-24 21:10:07,563] Trial 15 finished with value: 0.8820415381320673 and parameters: {'n_estimators': 474, 'max_depth': 9, 'learning_rate': 0.18968861397755207, 'subsample': 0.7851608884195048, 'colsample_bytree': 0.7350654671975462, 'gamma': 0.5082304707894403}. Best is trial 15 with value: 0.8820415381320673.
+[I 2026-02-24 21:10:15,425] Trial 16 finished with value: 0.8834499159657868 and parameters: {'n_estimators': 500, 'max_depth': 8, 'learning_rate': 0.16500209333116042, 'subsample': 0.7490432641200073, 'colsample_bytree': 0.8377002384732359, 'gamma': 0.18616137993512416}. Best is trial 16 with value: 0.8834499159657868.
+[I 2026-02-24 21:10:22,472] Trial 17 finished with value: 0.8777570314553417 and parameters: {'n_estimators': 506, 'max_depth': 7, 'learning_rate': 0.15827147787994914, 'subsample': 0.7572325391767751, 'colsample_bytree': 0.8462746626112108, 'gamma': 0.530039440021989}. Best is trial 16 with value: 0.8834499159657868.
+[I 2026-02-24 21:10:31,007] Trial 18 finished with value: 0.8812279478161271 and parameters: {'n_estimators': 508, 'max_depth': 8, 'learning_rate': 0.171519329061408, 'subsample': 0.637680234436847, 'colsample_bytree': 0.8425104455613515, 'gamma': 0.09988092768822088}. Best is trial 16 with value: 0.8834499159657868.
+[I 2026-02-24 21:10:39,227] Trial 19 finished with value: 0.8788799258743729 and parameters: {'n_estimators': 580, 'max_depth': 6, 'learning_rate': 0.10552422749666812, 'subsample': 0.6807465816476814, 'colsample_bytree': 0.7632466849060995, 'gamma': 0.48741176250933405}. Best is trial 16 with value: 0.8834499159657868.
+[I 2026-02-24 21:10:44,306] Trial 20 finished with value: 0.8773002795209204 and parameters: {'n_estimators': 481, 'max_depth': 9, 'learning_rate': 0.20566253768141515, 'subsample': 0.7708257026087674, 'colsample_bytree': 0.8736378371031216, 'gamma': 2.9945517890497744}. Best is trial 16 with value: 0.8834499159657868.
+[I 2026-02-24 21:10:53,732] Trial 21 finished with value: 0.8785553708899672 and parameters: {'n_estimators': 528, 'max_depth': 8, 'learning_rate': 0.1833289949427846, 'subsample': 0.6258073293926748, 'colsample_bytree': 0.8291578646357662, 'gamma': 0.025004407658901107}. Best is trial 16 with value: 0.8834499159657868.
+[I 2026-02-24 21:11:01,589] Trial 22 finished with value: 0.8805538087766138 and parameters: {'n_estimators': 476, 'max_depth': 8, 'learning_rate': 0.09397252486960564, 'subsample': 0.6492503990263404, 'colsample_bytree': 0.8887676987429696, 'gamma': 0.4547637823564523}. Best is trial 16 with value: 0.8834499159657868.
+[I 2026-02-24 21:11:10,250] Trial 23 finished with value: 0.8810990398592711 and parameters: {'n_estimators': 566, 'max_depth': 10, 'learning_rate': 0.20695542289018454, 'subsample': 0.7354939203876814, 'colsample_bytree': 0.7986183333150809, 'gamma': 0.2652250272268289}. Best is trial 16 with value: 0.8834499159657868.
+[I 2026-02-24 21:11:17,297] Trial 24 finished with value: 0.8739844999137161 and parameters: {'n_estimators': 480, 'max_depth': 6, 'learning_rate': 0.04457626977325706, 'subsample': 0.6680070901438326, 'colsample_bytree': 0.8227515644854831, 'gamma': 0.6688169255315177}. Best is trial 16 with value: 0.8834499159657868.
+[I 2026-02-24 21:11:25,448] Trial 25 finished with value: 0.8805982614725749 and parameters: {'n_estimators': 544, 'max_depth': 7, 'learning_rate': 0.1450731823586501, 'subsample': 0.6942030781440603, 'colsample_bytree': 0.7576057922569049, 'gamma': 0.2524460861716704}. Best is trial 16 with value: 0.8834499159657868.
+[I 2026-02-24 21:11:33,080] Trial 26 finished with value: 0.8817640991250884 and parameters: {'n_estimators': 409, 'max_depth': 9, 'learning_rate': 0.10240327828881185, 'subsample': 0.762387420151791, 'colsample_bytree': 0.8860604060283819, 'gamma': 0.024971887317531083}. Best is trial 16 with value: 0.8834499159657868.
+[I 2026-02-24 21:11:39,767] Trial 27 finished with value: 0.8784807497931627 and parameters: {'n_estimators': 398, 'max_depth': 11, 'learning_rate': 0.105403704625084, 'subsample': 0.7872664191591313, 'colsample_bytree': 0.8936368648771774, 'gamma': 0.6422708042775775}. Best is trial 16 with value: 0.8834499159657868.
+[I 2026-02-24 21:11:45,792] Trial 28 finished with value: 0.8785677687282487 and parameters: {'n_estimators': 343, 'max_depth': 9, 'learning_rate': 0.08188352301929522, 'subsample': 0.7471801682870562, 'colsample_bytree': 0.6786832554901646, 'gamma': 0.30203784371634756}. Best is trial 16 with value: 0.8834499159657868.
+
+最优参数组合: {'n_estimators': 500, 'max_depth': 8, 'learning_rate': 0.16500209333116042, 'subsample': 0.7490432641200073, 'colsample_bytree': 0.8377002384732359, 'gamma': 0.18616137993512416}
+[I 2026-02-24 21:11:52,490] Trial 29 finished with value: 0.8773654849477118 and parameters: {'n_estimators': 387, 'max_depth': 11, 'learning_rate': 0.06186838014705246, 'subsample': 0.8624886119510637, 'colsample_bytree': 0.9195135747026189, 'gamma': 0.8087214027884291}. Best is trial 16 with value: 0.8834499159657868.
+
+=======================================================
+             实验结果: 多分类融合组 (统计+2-gram) 贝叶斯版             
+=======================================================
+融合特征总维度:      1302
+调参总耗时:          180.68 秒
+-------------------------------------------------------
+准确率 (Accuracy):   0.8895
+宏平均 F1 (Macro-F1): 0.8845
+最终训练耗时:         7.84 秒
+单条推理平均延时:     0.012224 毫秒
+=======================================================
+
+各家族详细分类报告 (调参后最终模型):
+              precision    recall  f1-score   support
+
+     banjori     1.0000    1.0000    1.0000       800
+      emotet     0.8685    0.9988    0.9291       800
+    gameover     1.0000    0.9888    0.9943       800
+      necurs     0.5898    0.4475    0.5089       800
+   pykspa_v1     0.9754    0.9413    0.9580       800
+      ramnit     0.5527    0.5575    0.5551       800
+      rovnix     0.9987    0.9925    0.9956       800
+       simda     0.9816    1.0000    0.9907       800
+       tinba     0.9178    0.9912    0.9531       800
+       virut     0.9433    0.9775    0.9601       800
+
+    accuracy                         0.8895      8000
+   macro avg     0.8828    0.8895    0.8845      8000
+weighted avg     0.8828    0.8895    0.8845      8000
+
+
+进程已结束，退出代码为 0
+
+C:\Users\Girlorn\PycharmProjects\PythonProject1\.venv\Scripts\python.exe C:\Users\Girlorn\PycharmProjects\PythonProject1\ronghe\erfen_feature+2-gram_comp.py 
+正在读取纯域名数据集 (目标各取: 200000 条)...
+执行 8:1:1 严谨划分 (Train:Val:Test)...
+数据就绪: 训练集(319999), 验证集(40000), 测试集(40000)
+
+提取 2-gram 字符特征 (稀疏矩阵)...
+提取 6 维统计特征 (稠密矩阵)...
+融合完成！总特征维度: 1375
+开始 XGBoost 融合模型训练...
+
+=============================================
+          实验结果: 二分类特征融合 (统计+2-gram)          
+=============================================
+最终特征维度:        1375
+准确率 (Accuracy):   0.9758
+精确率 (Precision):  0.9848
+召回率 (Recall):     0.9664
+F1 值 (F1-Score):    0.9755
+AUC 曲线下面积:      0.9972
+---------------------------------------------
+训练总耗时:          7.71 秒
+单条推理平均延时:     0.000753 毫秒
+=============================================
+
+进程已结束，退出代码为 0
+
+
+C:\Users\Girlorn\PycharmProjects\PythonProject1\.venv\Scripts\python.exe C:\Users\Girlorn\PycharmProjects\PythonProject1\ronghe\erfen_optuna_feature+2_gram_comp.py 
+正在读取纯域名数据集 (目标各取: 200000 条)...
+执行 8:1:1 严谨划分 (Train:Val:Test)...
+
+提取 N-gram 与统计特征并融合...
+融合特征锁定完成！总维度: 1375
+
+--- 开始二分类融合组贝叶斯调参 (Trials=20) ---
+[I 2026-02-24 21:24:02,975] A new study created in memory with name: no-name-5e973e1f-2bc3-48c0-93f9-b5a55478bce5
+[I 2026-02-24 21:24:11,289] Trial 0 finished with value: 0.9768686868686869 and parameters: {'n_estimators': 590, 'max_depth': 12, 'learning_rate': 0.027300383175770677, 'subsample': 0.9918382563316095, 'colsample_bytree': 0.8675977238908315, 'gamma': 2.7453095696370986}. Best is trial 0 with value: 0.9768686868686869.
+[I 2026-02-24 21:24:17,067] Trial 1 finished with value: 0.9681215287464178 and parameters: {'n_estimators': 544, 'max_depth': 10, 'learning_rate': 0.014216673254926173, 'subsample': 0.643613873244692, 'colsample_bytree': 0.9937263334918855, 'gamma': 1.527665341853489}. Best is trial 0 with value: 0.9768686868686869.
+[I 2026-02-24 21:24:18,346] Trial 2 finished with value: 0.9574088242795206 and parameters: {'n_estimators': 139, 'max_depth': 7, 'learning_rate': 0.038021847705751004, 'subsample': 0.9305196078268417, 'colsample_bytree': 0.9743819187539493, 'gamma': 0.767489437637148}. Best is trial 0 with value: 0.9768686868686869.
+[I 2026-02-24 21:24:19,459] Trial 3 finished with value: 0.9486621431314812 and parameters: {'n_estimators': 107, 'max_depth': 7, 'learning_rate': 0.01192334881915212, 'subsample': 0.6142193997320395, 'colsample_bytree': 0.6796452283956125, 'gamma': 0.6031289615206522}. Best is trial 0 with value: 0.9768686868686869.
+[I 2026-02-24 21:24:22,384] Trial 4 finished with value: 0.9752818076125966 and parameters: {'n_estimators': 355, 'max_depth': 9, 'learning_rate': 0.05628921579197634, 'subsample': 0.8933251643948319, 'colsample_bytree': 0.6432640062405452, 'gamma': 0.4206480754587216}. Best is trial 0 with value: 0.9768686868686869.
+[I 2026-02-24 21:24:24,537] Trial 5 finished with value: 0.9523274519316702 and parameters: {'n_estimators': 374, 'max_depth': 5, 'learning_rate': 0.014747076957954318, 'subsample': 0.9520457395333766, 'colsample_bytree': 0.678192121483183, 'gamma': 1.3753728635102085}. Best is trial 0 with value: 0.9768686868686869.
+[I 2026-02-24 21:24:27,259] Trial 6 finished with value: 0.9605199439276156 and parameters: {'n_estimators': 244, 'max_depth': 9, 'learning_rate': 0.019050385805396055, 'subsample': 0.7222024428213294, 'colsample_bytree': 0.9992064128019432, 'gamma': 1.6770583514347237}. Best is trial 0 with value: 0.9768686868686869.
+[I 2026-02-24 21:24:28,905] Trial 7 finished with value: 0.9812224322621298 and parameters: {'n_estimators': 196, 'max_depth': 9, 'learning_rate': 0.22170012511916914, 'subsample': 0.9187020755478524, 'colsample_bytree': 0.6907126215923702, 'gamma': 0.6660570530312203}. Best is trial 7 with value: 0.9812224322621298.
+[I 2026-02-24 21:24:30,781] Trial 8 finished with value: 0.9531329857916795 and parameters: {'n_estimators': 218, 'max_depth': 7, 'learning_rate': 0.015327718091624962, 'subsample': 0.9968862973671823, 'colsample_bytree': 0.9192696282149901, 'gamma': 1.4928738924356013}. Best is trial 7 with value: 0.9812224322621298.
+[I 2026-02-24 21:24:31,591] Trial 9 finished with value: 0.9427688535893965 and parameters: {'n_estimators': 111, 'max_depth': 4, 'learning_rate': 0.029017540304289397, 'subsample': 0.661962249911825, 'colsample_bytree': 0.77764057931732, 'gamma': 1.1531904796700023}. Best is trial 7 with value: 0.9812224322621298.
+[I 2026-02-24 21:24:35,627] Trial 10 finished with value: 0.9851053675934996 and parameters: {'n_estimators': 443, 'max_depth': 12, 'learning_rate': 0.29887701362765684, 'subsample': 0.8248865600465489, 'colsample_bytree': 0.7694830548111236, 'gamma': 0.05357080476024201}. Best is trial 10 with value: 0.9851053675934996.
+[I 2026-02-24 21:24:40,080] Trial 11 finished with value: 0.985357277408012 and parameters: {'n_estimators': 495, 'max_depth': 12, 'learning_rate': 0.2802311919080533, 'subsample': 0.8329485676341516, 'colsample_bytree': 0.7695272558694278, 'gamma': 0.030936236629540335}. Best is trial 11 with value: 0.985357277408012.
+[I 2026-02-24 21:24:44,301] Trial 12 finished with value: 0.9850303913196363 and parameters: {'n_estimators': 468, 'max_depth': 12, 'learning_rate': 0.28820166439911044, 'subsample': 0.8302728521791506, 'colsample_bytree': 0.7762522744586187, 'gamma': 0.07014225301416666}. Best is trial 11 with value: 0.985357277408012.
+[I 2026-02-24 21:24:48,549] Trial 13 finished with value: 0.9845015850651638 and parameters: {'n_estimators': 465, 'max_depth': 11, 'learning_rate': 0.14405399724549514, 'subsample': 0.7926321673998904, 'colsample_bytree': 0.8245535802714954, 'gamma': 0.028520971452930866}. Best is trial 11 with value: 0.985357277408012.
+[I 2026-02-24 21:24:52,131] Trial 14 finished with value: 0.9833505453263142 and parameters: {'n_estimators': 466, 'max_depth': 11, 'learning_rate': 0.11177952483857519, 'subsample': 0.8324161155445138, 'colsample_bytree': 0.7370053517597798, 'gamma': 2.0996437643745103}. Best is trial 11 with value: 0.985357277408012.
+[I 2026-02-24 21:24:56,101] Trial 15 finished with value: 0.9832368487289203 and parameters: {'n_estimators': 391, 'max_depth': 12, 'learning_rate': 0.10749112873649297, 'subsample': 0.7632121306813009, 'colsample_bytree': 0.8430858082349679, 'gamma': 0.2888134031873619}. Best is trial 11 with value: 0.985357277408012.
+[I 2026-02-24 21:24:58,520] Trial 16 finished with value: 0.9836346240999043 and parameters: {'n_estimators': 297, 'max_depth': 10, 'learning_rate': 0.19472325114508923, 'subsample': 0.8734188385995578, 'colsample_bytree': 0.7388289733301634, 'gamma': 0.9653400189734734}. Best is trial 11 with value: 0.985357277408012.
+[I 2026-02-24 21:25:00,958] Trial 17 finished with value: 0.9658234592647096 and parameters: {'n_estimators': 513, 'max_depth': 3, 'learning_rate': 0.06812444732509522, 'subsample': 0.728370722382292, 'colsample_bytree': 0.6064127936968114, 'gamma': 2.223216027701285}. Best is trial 11 with value: 0.985357277408012.
+[I 2026-02-24 21:25:03,466] Trial 18 finished with value: 0.9837146668680309 and parameters: {'n_estimators': 425, 'max_depth': 11, 'learning_rate': 0.2786108465676654, 'subsample': 0.8290982889402232, 'colsample_bytree': 0.8972647127442833, 'gamma': 2.9688798573365274}. Best is trial 11 with value: 0.985357277408012.
+
+最优参数: {'n_estimators': 495, 'max_depth': 12, 'learning_rate': 0.2802311919080533, 'subsample': 0.8329485676341516, 'colsample_bytree': 0.7695272558694278, 'gamma': 0.030936236629540335}
+[I 2026-02-24 21:25:05,288] Trial 19 finished with value: 0.9781066134693568 and parameters: {'n_estimators': 291, 'max_depth': 6, 'learning_rate': 0.17014997745474533, 'subsample': 0.7703546945418992, 'colsample_bytree': 0.7357531459444169, 'gamma': 0.30535747681138253}. Best is trial 11 with value: 0.985357277408012.
+
+==================================================
+          实验结果: 二分类特征融合 (统计+2-gram) 贝叶斯版          
+==================================================
+融合总维度:          1375
+调参耗时:            62.31 秒
+--------------------------------------------------
+准确率 (Accuracy):   0.9840
+精确率 (Precision):  0.9876
+召回率 (Recall):     0.9805
+F1 值 (F1-Score):    0.9840
+AUC 曲线下面积:      0.9989
+--------------------------------------------------
+最终训练耗时:         4.34 秒
+单条推理平均延时:     0.004195 毫秒
+==================================================
+
+进程已结束，退出代码为 0
+
+
+
