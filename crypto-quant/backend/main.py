@@ -18,7 +18,7 @@ from auth import (
     create_access_token, verify_token, check_first_run
 )
 from market import (
-    get_all_tickers, get_ticker, get_klines, get_orderbook,
+    get_all_tickers, get_ticker, get_klines,
     calculate_indicators, SYMBOLS_LIST
 )
 from strategies import list_strategies, get_strategy, STRATEGY_META
@@ -186,12 +186,6 @@ def single_ticker(symbol: str):
 def klines(symbol: str, timeframe: str = "1h", limit: int = 100):
     """获取 K 线数据"""
     return get_klines(symbol.upper(), timeframe, limit)
-
-
-@app.get("/api/market/orderbook/{symbol}")
-def orderbook(symbol: str, limit: int = 10):
-    """获取订单簿"""
-    return get_orderbook(symbol.upper(), limit)
 
 
 @app.get("/api/market/indicators/{symbol}")
