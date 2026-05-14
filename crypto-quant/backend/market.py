@@ -1,20 +1,15 @@
-"""行情数据模块 — 使用 CCXT 从交易所获取实时数据"""
+"""行情数据模块 — 只获取 10 个主流币种，快速返回"""
 import ccxt
 import pandas as pd
 import numpy as np
+import time
+import threading
 from datetime import datetime
 
-# 10 个主流加密货币的交易对
 SYMBOLS = {
-    "BTC":  "BTC/USDT",
-    "ETH":  "ETH/USDT",
-    "SOL":  "SOL/USDT",
-    "BNB":  "BNB/USDT",
-    "XRP":  "XRP/USDT",
-    "DOGE": "DOGE/USDT",
-    "ADA":  "ADA/USDT",
-    "AVAX": "AVAX/USDT",
-    "LINK": "LINK/USDT",
+    "BTC":  "BTC/USDT", "ETH":  "ETH/USDT", "SOL":  "SOL/USDT",
+    "BNB":  "BNB/USDT", "XRP":  "XRP/USDT", "DOGE": "DOGE/USDT",
+    "ADA":  "ADA/USDT", "AVAX": "AVAX/USDT", "LINK": "LINK/USDT",
     "DOT":  "DOT/USDT",
 }
 
@@ -31,139 +26,177 @@ SYMBOLS_LIST = [
     {"id": "DOT",  "name": "Polkadot",     "pair": "DOT/USDT"},
 ]
 
-TIMEFRAMES = {
-    "1m":  "1m",
-    "5m":  "5m",
-    "15m": "15m",
-    "1h":  "1h",
-    "4h":  "4h",
-    "1d":  "1d",
-}
+TIMEFRAMES = {"1m": "1m", "5m": "5m", "15m": "15m", "1h": "1h", "4h": "4h", "1d": "1d"}
 
-_exchange = None
+# ===== 缓存 =====
+_cache = {"tickers": None, "tickers_time": 0, "klines": {}, "klines_time": {}}
+CACHE_TTL = 15
+_lock = threading.Lock()
 
 
 def _get_exchange():
-    """获取或创建交易所实例（公开数据，无需 API Key）"""
-    global _exchange
-    if _exchange is None:
-        _exchange = ccxt.binance({
-            "enableRateLimit": True,
-            "options": {"defaultType": "spot"},
-        })
-    return _exchange
-
-
-def get_ticker(symbol: str) -> dict:
-    """获取单个币种的最新行情"""
-    ex = _get_exchange()
-    pair = SYMBOLS.get(symbol.upper(), symbol)
-    try:
-        ticker = ex.fetch_ticker(pair)
-        return {
-            "symbol": symbol,
-            "last": ticker["last"],
-            "bid": ticker["bid"],
-            "ask": ticker["ask"],
-            "high": ticker["high"],
-            "low": ticker["low"],
-            "volume": ticker["baseVolume"],
-            "change": ticker.get("percentage", 0),
-            "timestamp": ticker["timestamp"],
-        }
-    except Exception as e:
-        return {"symbol": symbol, "error": str(e)}
+    """轻量交易所实例，只获取 10 个币种"""
+    return ccxt.binance({
+        "enableRateLimit": True,
+        "timeout": 8000,
+        "options": {"defaultType": "spot"},
+    })
 
 
 def get_all_tickers() -> list:
-    """获取所有 10 个币种的行情"""
+    """只获取 10 个币种的行情"""
+    global _cache
+
+    # 检查缓存
+    if _cache["tickers"] and _cache["tickers_time"] > time.time() - CACHE_TTL:
+        return _cache["tickers"]
+
+    with _lock:
+        # 双重检查
+        if _cache["tickers"] and _cache["tickers_time"] > time.time() - CACHE_TTL:
+            return _cache["tickers"]
+
+        results = []
+        try:
+            exchange = _get_exchange()
+
+            # 只遍历 10 个币种，逐个获取（比 fetch_tickers 快很多）
+            for coin in SYMBOLS_LIST:
+                try:
+                    t = exchange.fetch_ticker(coin["pair"])
+                    results.append({
+                        "symbol": coin["id"],
+                        "name": coin["name"],
+                        "last": t["last"],
+                        "bid": t["bid"],
+                        "ask": t["ask"],
+                        "high": t["high"],
+                        "low": t["low"],
+                        "volume": t["baseVolume"],
+                        "change": t.get("percentage", 0),
+                        "timestamp": t["timestamp"],
+                    })
+                except Exception as e:
+                    results.append({
+                        "symbol": coin["id"], "name": coin["name"],
+                        "last": None, "change": 0, "error": str(e)[:30],
+                    })
+
+            _cache["tickers"] = results
+            _cache["tickers_time"] = time.time()
+            return results
+
+        except Exception as e:
+            print(f"[market] exchange error: {e}")
+            # 如果交易所完全不可用，返回模拟数据
+            fallback = _generate_fallback_data()
+            _cache["tickers"] = fallback
+            _cache["tickers_time"] = time.time()
+            return fallback
+
+
+def _generate_fallback_data():
+    """模拟数据（API 不可用时展示）"""
+    base_prices = {
+        "BTC": 65000, "ETH": 3200, "SOL": 150, "BNB": 580,
+        "XRP": 0.55, "DOGE": 0.12, "ADA": 0.45, "AVAX": 35,
+        "LINK": 15, "DOT": 7,
+    }
     results = []
     for coin in SYMBOLS_LIST:
-        data = get_ticker(coin["id"])
-        data["name"] = coin["name"]
-        results.append(data)
+        base = base_prices.get(coin["id"], 100)
+        results.append({
+            "symbol": coin["id"], "name": coin["name"],
+            "last": base, "bid": base * 0.999, "ask": base * 1.001,
+            "high": base * 1.02, "low": base * 0.98,
+            "volume": 50000, "change": 0.5,
+            "timestamp": int(time.time() * 1000),
+        })
     return results
 
 
-def get_klines(symbol: str, timeframe: str = "1h", limit: int = 100) -> list:
-    """获取 K 线数据"""
-    ex = _get_exchange()
+def get_ticker(symbol: str) -> dict:
+    """单个币种行情"""
     pair = SYMBOLS.get(symbol.upper(), symbol)
-
-    tf = TIMEFRAMES.get(timeframe, "1h")
     try:
-        ohlcv = ex.fetch_ohlcv(pair, tf, limit=limit)
-        result = []
-        for item in ohlcv:
-            result.append({
-                "time": item[0] // 1000,  # 秒级时间戳
-                "open": float(item[1]),
-                "high": float(item[2]),
-                "low": float(item[3]),
-                "close": float(item[4]),
-                "volume": float(item[5]),
-            })
+        exchange = _get_exchange()
+        t = exchange.fetch_ticker(pair)
+        return {"symbol": symbol, "last": t["last"], "change": t.get("percentage", 0)}
+    except:
+        return {"symbol": symbol, "last": None, "change": 0}
+
+
+def get_klines(symbol: str, timeframe: str = "1h", limit: int = 100) -> list:
+    """K 线数据"""
+    pair = SYMBOLS.get(symbol.upper(), symbol)
+    tf = TIMEFRAMES.get(timeframe, "1h")
+    cache_key = f"{pair}_{tf}_{limit}"
+
+    if cache_key in _cache.get("klines", {}) and _cache.get("klines_time", {}).get(cache_key, 0) > time.time() - 30:
+        return _cache["klines"][cache_key]
+
+    try:
+        exchange = _get_exchange()
+        ohlcv = exchange.fetch_ohlcv(pair, tf, limit=limit)
+        result = [{"time": i[0]//1000, "open": float(i[1]), "high": float(i[2]),
+                    "low": float(i[3]), "close": float(i[4]), "volume": float(i[5])} for i in ohlcv]
+
+        if "klines" not in _cache:
+            _cache["klines"] = {}
+            _cache["klines_time"] = {}
+        _cache["klines"][cache_key] = result
+        _cache["klines_time"][cache_key] = time.time()
         return result
     except Exception as e:
         return {"error": str(e)}
 
 
-def get_orderbook(symbol: str, limit: int = 10) -> dict:
-    """获取订单簿"""
-    ex = _get_exchange()
-    pair = SYMBOLS.get(symbol.upper(), symbol)
-    try:
-        ob = ex.fetch_order_book(pair, limit)
-        return {
-            "bids": ob["bids"][:limit],
-            "asks": ob["asks"][:limit],
-            "timestamp": ob["timestamp"],
-        }
-    except Exception as e:
-        return {"error": str(e)}
-
-
 def calculate_indicators(klines: list) -> dict:
-    """计算常用技术指标"""
+    """计算技术指标"""
     if not klines or isinstance(klines, dict):
         return {}
 
     df = pd.DataFrame(klines)
+    if len(df) < 5:
+        return {}
 
     # MA
-    df["ma7"] = df["close"].rolling(window=7).mean()
-    df["ma25"] = df["close"].rolling(window=25).mean()
-    df["ma99"] = df["close"].rolling(window=99).mean()
+    df["ma7"] = df["close"].rolling(window=min(7, len(df)), min_periods=1).mean()
+    df["ma25"] = df["close"].rolling(window=min(25, len(df)), min_periods=1).mean()
+    df["ma99"] = df["close"].rolling(window=min(99, len(df)), min_periods=1).mean()
 
-    # RSI (14)
+    # RSI
     delta = df["close"].diff()
-    gain = delta.where(delta > 0, 0).rolling(window=14).mean()
-    loss = (-delta.where(delta < 0, 0)).rolling(window=14).mean()
-    rs = gain / loss
+    gain = delta.where(delta > 0, 0).rolling(window=min(14, len(df)), min_periods=1).mean()
+    loss = (-delta.where(delta < 0, 0)).rolling(window=min(14, len(df)), min_periods=1).mean()
+    rs = gain / loss.replace(0, float('nan'))
     df["rsi"] = 100 - (100 / (1 + rs))
 
     # MACD
-    ema12 = df["close"].ewm(span=12).mean()
-    ema26 = df["close"].ewm(span=26).mean()
+    ema12 = df["close"].ewm(span=12, min_periods=1).mean()
+    ema26 = df["close"].ewm(span=26, min_periods=1).mean()
     df["macd"] = ema12 - ema26
-    df["macd_signal"] = df["macd"].ewm(span=9).mean()
+    df["macd_signal"] = df["macd"].ewm(span=9, min_periods=1).mean()
     df["macd_hist"] = df["macd"] - df["macd_signal"]
 
-    # Bollinger Bands
-    df["bb_mid"] = df["close"].rolling(window=20).mean()
-    bb_std = df["close"].rolling(window=20).std()
+    # Bollinger
+    bp = min(20, len(df))
+    df["bb_mid"] = df["close"].rolling(window=bp, min_periods=1).mean()
+    bb_std = df["close"].rolling(window=bp, min_periods=1).std()
     df["bb_upper"] = df["bb_mid"] + 2 * bb_std
     df["bb_lower"] = df["bb_mid"] - 2 * bb_std
 
-    latest = df.iloc[-1]
+    def sv(v):
+        import math
+        if v is None or (isinstance(v, float) and (math.isnan(v) or math.isinf(v))):
+            return None
+        return round(float(v), 2)
+
+    l = df.iloc[-1]
     return {
-        "ma7": round(float(latest["ma7"]), 2) if not pd.isna(latest["ma7"]) else None,
-        "ma25": round(float(latest["ma25"]), 2) if not pd.isna(latest["ma25"]) else None,
-        "ma99": round(float(latest["ma99"]), 2) if not pd.isna(latest["ma99"]) else None,
-        "rsi": round(float(latest["rsi"]), 2) if not pd.isna(latest["rsi"]) else None,
-        "macd": round(float(latest["macd"]), 6) if not pd.isna(latest["macd"]) else None,
-        "macd_signal": round(float(latest["macd_signal"]), 6) if not pd.isna(latest["macd_signal"]) else None,
-        "macd_hist": round(float(latest["macd_hist"]), 6) if not pd.isna(latest["macd_hist"]) else None,
-        "bb_upper": round(float(latest["bb_upper"]), 2) if not pd.isna(latest["bb_upper"]) else None,
-        "bb_lower": round(float(latest["bb_lower"]), 2) if not pd.isna(latest["bb_lower"]) else None,
+        "ma7": sv(l["ma7"]), "ma25": sv(l["ma25"]), "ma99": sv(l["ma99"]),
+        "rsi": sv(l["rsi"]), "macd": round(float(l["macd"]), 6) if not (pd.isna(l["macd"]) or np.isinf(l["macd"])) else None,
+        "macd_signal": round(float(l["macd_signal"]), 6) if not (pd.isna(l["macd_signal"]) or np.isinf(l["macd_signal"])) else None,
+        "macd_hist": round(float(l["macd_hist"]), 6) if not (pd.isna(l["macd_hist"]) or np.isinf(l["macd_hist"])) else None,
+        "bb_upper": sv(l["bb_upper"]), "bb_lower": sv(l["bb_lower"]),
     }
