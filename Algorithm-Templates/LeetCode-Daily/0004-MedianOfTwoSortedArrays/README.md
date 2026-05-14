@@ -94,6 +94,6 @@ Y: [2 | ]      j=1
 
 | 文件 | 说明 |
 |------|------|
-| `Solution.py` | Python 实现 + 测试用例 |
-| `Solution.c` | C 实现，侧重指针和边界处理 |
+| `MedianOfTwoSortedArrays.py` | Python 实现 + 测试用例 |
+| `MedianOfTwoSortedArrays.c` | C 实现，侧重指针和边界处理 |
 | `README.md` | 学习笔记 |
