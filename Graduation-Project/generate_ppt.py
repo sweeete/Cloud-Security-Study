@@ -1,466 +1,494 @@
 #!/tmp/pptx-venv/bin/python3
-"""毕业答辩PPT v3 — 精确定位版"""
-from pptx import Presentation
-from pptx.util import Inches, Pt as E, Emu
+"""毕业答辩PPT — 最终版"""
+from pptx import Presentation, util
 from pptx.dml.color import RGBColor
-from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
-import copy
+from pptx.enum.text import PP_ALIGN
+from pptx.oxml.ns import qn
 
-def Pt(v): return E(v)
+# 只使用四种颜色：黑 蓝 红 绿
+BLACK = RGBColor(0x00, 0x00, 0x00)
+BLUE  = RGBColor(0x1A, 0x3C, 0x6E)
+RED   = RGBColor(0xCC, 0x00, 0x00)
+GREEN = RGBColor(0x00, 0x80, 0x00)
+WHITE = RGBColor(0xFF, 0xFF, 0xFF)
+GRAY  = RGBColor(0x66, 0x66, 0x66)
+LGRAY = RGBColor(0xF2, 0xF2, 0xF2)
 
-# 固定16:9宽屏
+def Pt(v): return util.Pt(v)
+
 prs = Presentation()
-prs.slide_width = Inches(13.333)
-prs.slide_height = Inches(7.5)
+prs.slide_width  = util.Inches(13.333)
+prs.slide_height = util.Inches(7.5)
 
-# 颜色
-BG      = RGBColor(0xFF, 0xFF, 0xFF)
-BG_DARK = RGBColor(0x0B, 0x0E, 0x11)
-BLUE    = RGBColor(0x1A, 0x3C, 0x6E)
-BLUE2   = RGBColor(0x29, 0x80, 0xB9)
-TEAL    = RGBColor(0x17, 0xA1, 0x8E)
-RED     = RGBColor(0xE7, 0x4C, 0x3C)
-GREEN   = RGBColor(0x27, 0xAE, 0x60)
-ORANGE  = RGBColor(0xF3, 0x9C, 0x12)
-WHITE   = RGBColor(0xFF, 0xFF, 0xFF)
-TEXT    = RGBColor(0x2C, 0x3E, 0x50)
-TEXT2   = RGBColor(0x7F, 0x8C, 0x9A)
-CARD    = RGBColor(0xF4, 0xF6, 0xF9)
-GREEN_BG = RGBColor(0xE8, 0xF5, 0xE9)
-BLUE_BG  = RGBColor(0xEB, 0xF5, 0xFB)
-
-def add_shape(s, l, t, w, h, c):
-    x = s.shapes.add_shape(1, Inches(l), Inches(t), Inches(w), Inches(h))
-    x.fill.solid(); x.fill.fore_color.rgb = c; x.line.fill.background()
+# ===== 工具函数 =====
+def rect(s, l, t, w, h, c, nofill=False):
+    x = s.shapes.add_shape(1, util.Inches(l), util.Inches(t), util.Inches(w), util.Inches(h))
+    if nofill:
+        x.fill.background()
+    else:
+        x.fill.solid()
+        x.fill.fore_color.rgb = c
+    x.line.fill.background()
     return x
 
-def add_text(s, l, t, w, h, txt, sz=16, c=TEXT, b=False, a=PP_ALIGN.LEFT, v=MSO_ANCHOR.TOP):
-    bx = s.shapes.add_textbox(Inches(l), Inches(t), Inches(w), Inches(h))
-    bx.text_frame.word_wrap = True; bx.text_frame.auto_size = None
-    bx.text_frame.paragraphs[0].text = txt
-    bx.text_frame.paragraphs[0].font.size = Pt(sz)
-    bx.text_frame.paragraphs[0].font.color.rgb = c
-    bx.text_frame.paragraphs[0].font.bold = b
-    bx.text_frame.paragraphs[0].alignment = a
-    bx.text_frame.vertical_anchor = v
-    return bx
+def txt(s, l, t, w, h, text, sz=16, c=BLACK, b=False, a=PP_ALIGN.LEFT, font="微软雅黑"):
+    box = s.shapes.add_textbox(util.Inches(l), util.Inches(t), util.Inches(w), util.Inches(h))
+    box.text_frame.word_wrap = True
+    box.text_frame.auto_size = None
+    p = box.text_frame.paragraphs[0]
+    p.text = text
+    p.font.size = Pt(sz)
+    p.font.color.rgb = c
+    p.font.bold = b
+    p.alignment = a
+    return box
 
-def add_bullets(s, l, t, w, h, items, sz=14, c=TEXT, sp=8):
-    bx = s.shapes.add_textbox(Inches(l), Inches(t), Inches(w), Inches(h))
-    bx.text_frame.word_wrap = True; bx.text_frame.auto_size = None
+def bullets(s, l, t, w, h, items, sz=14, c=BLACK, sp=8, prefix="•"):
+    box = s.shapes.add_textbox(util.Inches(l), util.Inches(t), util.Inches(w), util.Inches(h))
+    box.text_frame.word_wrap = True
     for i, item in enumerate(items):
-        p = bx.text_frame.paragraphs[0] if i == 0 else bx.text_frame.add_paragraph()
-        p.text = item; p.font.size = Pt(sz); p.font.color.rgb = c; p.space_after = Pt(sp)
-    return bx
+        p = box.text_frame.paragraphs[0] if i == 0 else box.text_frame.add_paragraph()
+        p.text = f"{prefix} {item}"
+        p.font.size = Pt(sz)
+        p.font.color.rgb = c
+        p.space_after = Pt(sp)
+    return box
 
-def page_header(s, title, subtitle=""):
-    add_shape(s, 0, 0, 13.333, 1.1, BLUE)
-    add_shape(s, 0, 0, 0.12, 1.1, BLUE2)
-    add_text(s, 0.6, 0.15, 10, 0.55, title, 26, WHITE, True)
-    if subtitle:
-        add_text(s, 0.6, 0.65, 10, 0.35, subtitle, 13, RGBColor(0xBB,0xCC,0xDD))
-    n = len(prs.slides)
-    add_text(s, 12.2, 0.3, 1, 0.5, f"{n:02d}", 14, RGBColor(0x99,0xAA,0xBB), a=PP_ALIGN.RIGHT)
+def header(s, title, num=""):
+    rect(s, 0, 0, 13.333, 1.1, BLUE)
+    if num:
+        txt(s, 0.5, 0.15, 1, 0.4, num, 20, WHITE, True)
+    txt(s, 1.8 if num else 0.5, 0.2, 10, 0.6, title, 24, WHITE, True)
+    rect(s, 0, 1.1, 13.333, 0.04, BLUE)
 
-def make_tbl(s, rows, cols, l, t, w, h, headers, data, hl=None):
-    tbl = s.shapes.add_table(rows, cols, Inches(l), Inches(t), Inches(w), Inches(h)).table
-    for j, hd in enumerate(headers):
-        c = tbl.cell(0, j); c.text = hd
-        for p in c.text_frame.paragraphs: p.font.size = Pt(11); p.font.bold = True; p.font.color.rgb = WHITE
-        c.fill.solid(); c.fill.fore_color.rgb = BLUE
-    for i, row in enumerate(data):
-        for j, val in enumerate(row):
-            c = tbl.cell(i+1, j); c.text = val
-            for p in c.text_frame.paragraphs:
-                p.font.size = Pt(10); p.font.color.rgb = TEXT
-                if hl is not None and i == hl: p.font.color.rgb = GREEN; p.font.bold = True
-            if hl is not None and i == hl: c.fill.solid(); c.fill.fore_color.rgb = GREEN_BG
-            elif i % 2 == 0: c.fill.solid(); c.fill.fore_color.rgb = RGBColor(0xF8,0xF9,0xFA)
-
-def section_box(s, l, t, w, h, title, items, color=BLUE2, title_sz=15, item_sz=12):
-    add_shape(s, l, t, w, h, WHITE)
-    add_shape(s, l, t, 0.06, h, color)
-    add_text(s, l+0.25, t+0.08, w-0.5, 0.35, title, title_sz, color, True)
-    add_bullets(s, l+0.25, t+0.45, w-0.5, h-0.55, items, item_sz, TEXT, 4)
+def section_title(s, l, t, w, text, c=BLUE):
+    rect(s, l, t, 0.08, 0.5, c)
+    txt(s, l+0.25, t+0.05, w-0.5, 0.4, text, 18, BLACK, True)
 
 # ============================================================
-# P1 封面
+# P1 封面（黑色改为蓝色）
 # ============================================================
 s = prs.slides.add_slide(prs.slide_layouts[6])
-add_shape(s, 0, 0, 13.333, 7.5, BG_DARK)
-add_shape(s, 0, 0, 13.333, 0.05, BLUE2)
-add_shape(s, 0, 7.45, 13.333, 0.05, BLUE2)
+rect(s, 0, 0, 13.333, 7.5, BLUE)
+rect(s, 0, 0, 13.333, 0.06, WHITE)
+rect(s, 0, 7.44, 13.333, 0.06, WHITE)
 
-add_text(s, 1.2, 1.0, 5, 0.5, "本科毕业设计答辩", 15, TEXT2)
-add_text(s, 1.2, 1.8, 11, 1.0, "基于优化XGBoost的\nDGA检测系统设计", 34, WHITE, True)
-add_text(s, 1.2, 3.0, 11, 0.4, "Design of DGA Detection System Based on Optimized XGBoost", 14, TEXT2)
-add_shape(s, 1.2, 3.5, 3, 0.02, BLUE2)
+txt(s, 1.5, 1.0, 10, 0.6, "本科毕业设计答辩", 16, WHITE)
+txt(s, 1.5, 2.0, 10, 1.2, "基于优化XGBoost的DGA检测系统设计", 34, WHITE, True)
+rect(s, 1.5, 3.3, 3, 0.04, WHITE)
 
 info = [
-    ("学    院：", "数学与信息科学学院"),
-    ("专    业：", "信息安全"),
-    ("班    级：", "信安221"),
-    ("学生姓名：", "苑文洋"),
-    ("学    号：", "32215300032"),
-    ("指导教师：", "余玉银"),
+    ("学    院", "数学与信息科学学院"),
+    ("专    业", "信息安全"),
+    ("班    级", "信安221"),
+    ("学生姓名", "苑文洋"),
+    ("学    号", "32215300032"),
+    ("指导教师", "余玉银"),
 ]
 for i, (k, v) in enumerate(info):
-    add_text(s, 1.2, 3.8+i*0.42, 1.5, 0.35, k, 13, TEXT2)
-    add_text(s, 2.8, 3.8+i*0.42, 4, 0.35, v, 13, WHITE)
+    txt(s, 1.5, 3.6+i*0.45, 2, 0.35, k, 14, WHITE)
+    txt(s, 3.6, 3.6+i*0.45, 5, 0.35, v, 14, WHITE)
 
 # ============================================================
-# P2 目录
+# P2-3 前言（4部分放2页）
+# ============================================================
+# P2 前言（上）
+s = prs.slides.add_slide(prs.slide_layouts[6])
+header(s, "前  言", "01")
+
+section_title(s, 0.5, 1.5, 12, "1. 研究背景", BLUE)
+bullets(s, 0.8, 2.1, 11.5, 2.0, [
+    "DGA（Domain Generation Algorithm）是僵尸网络逃避黑名单检测的核心手段",
+    "攻击者通过算法生成大量随机域名，动态切换C&C服务器",
+    "传统黑名单、签名检测等方法难以应对域名频繁变种",
+    "每日可生成数万候选域名，防御方无法提前预判封锁",
+], 14, BLACK, 8)
+
+section_title(s, 0.5, 4.0, 12, "2. 研究意义", BLUE)
+bullets(s, 0.8, 4.6, 11.5, 2.0, [
+    "DGA检测是网络安全主动防御的重要环节",
+    "高效的DGA检测可阻断僵尸网络C2通信链路",
+    "机器学习方法具备泛化能力，可检测未知变种域名",
+    "XGBoost算法在效率与精度间取得良好平衡",
+], 14, BLACK, 8)
+
+# P3 前言（下）
+s = prs.slides.add_slide(prs.slide_layouts[6])
+header(s, "前  言", "02")
+
+section_title(s, 0.5, 1.5, 12, "3. 国内外研究现状", BLUE)
+bullets(s, 0.8, 2.1, 11.5, 2.5, [
+    "传统方法：基于黑名单匹配、规则签名、DNS流量分析",
+    "深度学习方法：CNN/LSTM等模型检测精度高，但计算开销大",
+    "集成学习方法：随机森林、XGBoost等兼顾效率与可解释性",
+    "现有研究多关注二分类，对多分类家族溯源研究较少",
+], 14, BLACK, 8)
+
+section_title(s, 0.5, 4.5, 12, "4. 本文主要工作", BLUE)
+bullets(s, 0.8, 5.1, 11.5, 1.8, [
+    "构建基于XGBoost的DGA检测系统，支持二分类与多分类",
+    "对比分析统计特征、N-gram特征及融合特征方案",
+    "引入Optuna贝叶斯优化实现超参数自动寻优",
+    "二分类F1达98.40%，多分类宏平均F1达88.95%",
+], 14, BLACK, 8)
+
+# ============================================================
+# P4 DGA域名
 # ============================================================
 s = prs.slides.add_slide(prs.slide_layouts[6])
-page_header(s, "目  录", "CONTENTS")
-toc = [
-    ("01", "研究背景与意义", "DGA威胁现状与检测挑战"),
-    ("02", "相关理论与技术", "XGBoost / 贝叶斯优化 / 特征工程"),
-    ("03", "系统设计与实现", "数据预处理 / 特征提取 / 模型训练"),
-    ("04", "实验与分析", "二分类 / 多分类 / 结果对比"),
-    ("05", "总结与展望", "创新点 / 不足 / 改进方向"),
-]
-for i, (num, title, desc) in enumerate(toc):
-    y = 1.7 + i * 1.0
-    add_shape(s, 2.5, y, 0.8, 0.55, BLUE2)
-    add_text(s, 2.55, y+0.05, 0.7, 0.45, num, 18, WHITE, True, PP_ALIGN.CENTER, MSO_ANCHOR.MIDDLE)
-    add_text(s, 3.6, y+0.02, 6, 0.3, title, 18, BLUE, True)
-    add_text(s, 3.6, y+0.32, 6, 0.2, desc, 12, TEXT2)
+header(s, "相关理论与技术——DGA域名", "03")
 
-# ============================================================
-# P3 研究背景
-# ============================================================
-s = prs.slides.add_slide(prs.slide_layouts[6])
-page_header(s, "01  研究背景与意义")
+section_title(s, 0.5, 1.5, 12, "DGA域名工作原理", BLUE)
+bullets(s, 0.8, 2.1, 11, 2.5, [
+    "DGA（Domain Generation Algorithm）：恶意软件用于动态生成域名的算法",
+    "种子（种子密钥）+ 算法逻辑 → 每日/每周生成成百上千候选域名",
+    "攻击者只需注册其中少数几个，即可维持C2（命令与控制）通信",
+    "安全团队难以预判和封锁所有生成域名，形成检测盲区",
+], 14, BLACK, 8)
 
-section_box(s, 0.5, 1.5, 6, 3.5, "核心问题", [
-    "DGA：僵尸网络逃避黑名单检测的核心手段",
-    "攻击者通过算法生成随机域名，动态切换C2服务器",
-    "传统黑名单/签名检测无法应对域名频繁变种",
-    "单日可生成数万个域名，防御方难以预判",
-], BLUE2, 15, 13)
-
-section_box(s, 7, 1.5, 6, 3.5, "本文目标", [
-    "基于XGBoost构建检测模型，兼顾效率与精度",
-    "引入贝叶斯优化（Optuna）自动调参",
-    "对比统计/N-gram/融合特征方案",
-    "同时实现二分类（恶意检测）和多分类（家族溯源）",
-], RED, 15, 13)
-
-add_shape(s, 0.5, 5.5, 12.3, 1.3, BLUE_BG)
-add_text(s, 0.8, 5.6, 11.5, 0.35, "🎯  研究目标", 15, BLUE2, True)
-add_text(s, 0.8, 6.0, 11.5, 0.6, "构建基于优化XGBoost的DGA检测系统，实现高效的二分类恶意域名检测与多分类家族溯源", 13, TEXT)
-
-# ============================================================
-# P4 DGA技术
-# ============================================================
-s = prs.slides.add_slide(prs.slide_layouts[6])
-page_header(s, "02  DGA技术原理")
-
-add_shape(s, 0.5, 1.4, 12.3, 0.55, CARD)
-add_text(s, 0.8, 1.45, 4, 0.4, "DGA攻击流程", 15, BLUE2, True)
-
-flow = ["恶意软件感染", "DGA计算域名", "尝试连接C2", "注册少数域名", "执行控制指令"]
-for i, step in enumerate(flow):
-    x = 0.8 + i * 2.5
-    c = BLUE2 if i < 4 else RED
-    add_shape(s, x, 2.2, 2.0, 0.65, c)
-    add_text(s, x+0.05, 2.28, 1.9, 0.5, step, 12, WHITE, True, PP_ALIGN.CENTER, MSO_ANCHOR.MIDDLE)
-    if i < 4:
-        add_text(s, x+2.0, 2.3, 0.5, 0.4, "→", 20, BLUE, True, PP_ALIGN.CENTER)
-
-add_bullets(s, 0.5, 3.2, 12.3, 3.5, [
-    "DGA核心逻辑：种子 + 算法 → 批量生成候选域名 → 攻击者注册少量即可维持C2通信",
-    "主流DGA家族：Suppobox（日期+字典）、Kraken（字符拼接）、Shiotob（时间种子）、Bamital等",
-    "检测难点：域名高度随机化、不断变种、合法域名可能被误报",
-    "传统方法局限：黑名单无法预知、规则匹配难以应对算法变种",
-], 13, TEXT, 7)
+section_title(s, 0.5, 4.5, 12, "常见DGA家族", BLUE)
+bullets(s, 0.8, 5.1, 11, 1.8, [
+    "Suppobox：基于日期和字典的DGA，生成可读性较高的域名",
+    "Kraken：字符拼接型DGA，域名长度变化较大",
+    "Shiotob：基于时间种子的DGA，字符随机性强",
+    "Bamital：固定结构的DGA，域名模式相对稳定",
+], 14, BLACK, 8)
 
 # ============================================================
 # P5 XGBoost
 # ============================================================
 s = prs.slides.add_slide(prs.slide_layouts[6])
-page_header(s, "02  XGBoost算法原理")
+header(s, "相关理论与技术——XGBoost", "04")
 
-section_box(s, 0.5, 1.5, 6, 3.2, "核心机制", [
-    "逐步添加决策树，每棵新树修正残差",
-    "损失 = 训练误差 + L1/L2正则化",
-    "二阶泰勒展开近似，收敛快于GBDT",
-    "列采样 + Shrinkage + 早停防过拟合",
-], BLUE2, 15, 13)
+section_title(s, 0.5, 1.5, 12, "XGBoost核心原理", BLUE)
+bullets(s, 0.8, 2.1, 11, 2.0, [
+    "XGBoost（eXtreme Gradient Boosting）：基于梯度提升决策树的优化算法",
+    "逐步添加决策树，每棵新树都在修正前一棵树的残差（Boosting思想）",
+    "目标函数 = 训练损失 + 正则化项（L1+L2），防止过拟合",
+    "使用二阶泰勒展开近似损失函数，收敛速度比传统GBDT更快",
+], 14, BLACK, 8)
 
-section_box(s, 7, 1.5, 6, 3.2, "选择XGBoost的原因", [
-    "✅ 天然处理高维稀疏特征（10,000维）",
-    "✅ Boosting序列优化，偏差低于RF",
-    "✅ 训练速度快于深度学习5~10倍",
-    "✅ 可解释性强，特征重要性可直接获取",
-], TEAL, 15, 13)
-
-add_shape(s, 0.5, 5.2, 12.3, 1.5, CARD)
-add_text(s, 0.8, 5.3, 4, 0.35, "目标函数", 15, BLUE, True)
-add_text(s, 0.8, 5.7, 11, 0.9, "Obj = Σ L(yᵢ, ŷᵢ) + Σ Ω(fₖ)\nΩ(f) = γT + ½λ‖ω‖²    L=损失  Ω=正则化  T=叶节点  ω=叶权重", 13, TEXT)
+section_title(s, 0.5, 4.0, 12, "选择XGBoost的原因", BLUE)
+bullets(s, 0.8, 4.6, 11, 2.0, [
+    "天然适合高维稀疏特征（N-gram特征10,000维）",
+    "相比深度学习方法训练速度快5-10倍，可解释性强",
+    "内置列采样、缩减（Shrinkage）、早停等防过拟合机制",
+    "特征重要性可直接输出，便于分析各维度贡献",
+], 14, BLACK, 8)
 
 # ============================================================
-# P6 特征工程
+# P6 贝叶斯调参
 # ============================================================
 s = prs.slides.add_slide(prs.slide_layouts[6])
-page_header(s, "02  特征工程")
+header(s, "相关理论与技术——贝叶斯优化", "05")
 
-section_box(s, 0.5, 1.5, 6, 4.0, "统计特征（6维）", [
-    "① 域名长度 — 正常与DGA域名字符数差异",
-    "② 数字占比 — DGA含大量随机数字",
-    "③ 信息熵 — 随机字符串熵值更高",
-    "④ 连续辅音比例 — 恶意域名常辅音堆叠",
-    "⑤ 重复字符比例 — 正常域名更易记忆",
-    "⑥ 元音占比 — 正常域名可读性更强",
-], BLUE2, 15, 12)
+section_title(s, 0.5, 1.5, 12, "贝叶斯优化原理", BLUE)
+bullets(s, 0.8, 2.1, 11, 2.0, [
+    "基于高斯过程的超参数优化方法，利用历史评估结果指导下一步搜索",
+    "相比网格搜索（GridSearch）：搜索效率提升10倍以上",
+    "相比随机搜索（RandomSearch）：能更聚焦于最优区域",
+    "Optuna框架：支持自动剪枝（Pruning）、可视化、分布式并行",
+], 14, BLACK, 8)
 
-section_box(s, 7, 1.5, 6, 4.0, "N-gram 特征", [
-    "将域名按n个连续字符滑动切分",
-    "2-gram 示例：apple → ap pp pl le",
-    "CountVectorizer统计各组合频次",
-    "取最频繁的10,000维作为特征",
-    "捕捉微观字符序列模式差异",
-    "2-4gram 混合2/3/4字符组合",
-], TEAL, 15, 12)
+section_title(s, 0.5, 4.0, 12, "超参数搜索范围", BLUE)
+# 参数表
+tbl = s.shapes.add_table(7, 2, util.Inches(1), util.Inches(4.6), util.Inches(6), util.Inches(2.5)).table
+tbl.cell(0,0).text = "超参数"; tbl.cell(0,1).text = "搜索范围"
+for c in [tbl.cell(0,0), tbl.cell(0,1)]:
+    for p in c.text_frame.paragraphs: p.font.size = Pt(12); p.font.bold = True; p.font.color.rgb = WHITE
+    c.fill.solid(); c.fill.fore_color.rgb = BLUE
 
-add_shape(s, 0.5, 5.9, 12.3, 1.0, RGBColor(0xFE,0xF3,0xE0))
-add_text(s, 0.8, 6.0, 11, 0.8, "💡 融合策略：统计特征（宏观基准）+ 2-gram特征（微观指纹）→ 维度 6 + 10,000 = 10,006", 14, ORANGE, True)
-
-# ============================================================
-# P7 系统架构
-# ============================================================
-s = prs.slides.add_slide(prs.slide_layouts[6])
-page_header(s, "03  系统设计——整体架构")
-
-flow = ["域名采集", "数据预处理", "特征提取", "模型训练", "结果评估"]
-for i, step in enumerate(flow):
-    x = 0.6 + i * 2.5
-    c = BLUE2 if i < 4 else GREEN
-    add_shape(s, x, 1.6, 2.0, 0.7, c)
-    add_text(s, x+0.1, 1.65, 1.8, 0.5, f"Step {i+1}", 11, WHITE, a=PP_ALIGN.CENTER)
-    add_text(s, x+0.1, 1.85, 1.8, 0.4, step, 13, WHITE, True, PP_ALIGN.CENTER)
-    if i < 4:
-        add_text(s, x+2.0, 1.75, 0.5, 0.4, "→", 20, BLUE, True, PP_ALIGN.CENTER)
-
-details = [
-    ("📥  数据采集", "Alexa 20万 + 360 DGA 20万 = 40万样本"),
-    ("🧹  数据预处理", "去重 → 去TLD → 8:1:1 划分训练/验证/测试集"),
-    ("🔧  特征提取", "统计特征（6维）+ N-gram（CountVectorizer, top 10,000）"),
-    ("⚙️  模型训练", "XGBoost默认参数 vs Optuna贝叶斯优化"),
-    ("📊  结果评估", "准确率 / 精确率 / 召回率 / F1 / AUC"),
-]
-for i, (title, desc) in enumerate(details):
-    y = 2.7 + i * 0.75
-    add_shape(s, 1.5, y, 6, 0.55, CARD)
-    add_text(s, 1.7, y+0.02, 2.5, 0.3, title, 13, BLUE2, True)
-    add_text(s, 1.7, y+0.28, 6, 0.25, desc, 12, TEXT)
+params = [("learning_rate", "[0.01, 0.3]"),("max_depth", "[3, 12]"),
+          ("n_estimators", "[50, 500]"),("subsample", "[0.6, 1.0]"),
+          ("colsample_bytree", "[0.6, 1.0]"),("reg_lambda", "[0, 5]")]
+for i, (k, v) in enumerate(params):
+    tbl.cell(i+1,0).text = k; tbl.cell(i+1,1).text = v
+    for j in range(2):
+        for p in tbl.cell(i+1,j).text_frame.paragraphs: p.font.size = Pt(11)
+    if i % 2 == 0:
+        for j in range(2): tbl.cell(i+1,j).fill.solid(); tbl.cell(i+1,j).fill.fore_color.rgb = LGRAY
 
 # ============================================================
-# P8 预处理
+# P7 评价指标
 # ============================================================
 s = prs.slides.add_slide(prs.slide_layouts[6])
-page_header(s, "03  数据预处理")
+header(s, "相关理论与技术——评价指标", "06")
 
-section_box(s, 0.5, 1.5, 6, 4.0, "处理流程", [
-    "① 数据清洗：去除空值、重复域名",
-    "② TLD剥离：去除.com/.net等顶级域后缀",
-    "③ 标签编码：良性 → 0，DGA家族 → 1~10",
-    "④ 划分：训练80% / 验证10% / 测试10%",
-    "⑤ 特征标准化：CountVectorizer拟合",
-], BLUE2, 15, 13)
+section_title(s, 0.5, 1.5, 12, "模型评估指标", BLUE)
+bullets(s, 0.8, 2.1, 5.5, 3.5, [
+    "准确率（Accuracy）：正确分类样本占总样本比例",
+    "精确率（Precision）：预测为恶意的样本中真正恶意的比例",
+    "召回率（Recall）：所有恶意样本中被正确识别的比例",
+    "F1-score：精确率和召回率的调和平均数",
+    "AUC-ROC：ROC曲线下面积，衡量模型整体区分能力",
+], 14, BLACK, 8)
 
-section_box(s, 7, 1.5, 6, 4.0, "为什么去TLD？", [
-    "TLD是受控注册基准，对检测无贡献",
-    "DGA核心对抗逻辑在二级域名（前缀）",
-    "去除TLD可减少噪声，增强敏感度",
-    "例：abc123.com → abc123",
-    "保留全部前缀层级",
-], RED, 15, 13)
-
-add_shape(s, 0.5, 5.8, 12.3, 1.2, CARD)
-add_text(s, 0.8, 5.9, 5, 0.35, "📊  数据集统计", 15, BLUE, True)
-add_text(s, 0.8, 6.3, 11, 0.5, "训练集 320,000  |  验证集 40,000  |  测试集 40,000  |  合计 400,000 条域名样本", 14, TEXT2)
+# 公式区域
+rect(s, 7, 2.1, 5.5, 3.5, LGRAY)
+txt(s, 7.3, 2.2, 5, 0.4, "核心公式", 16, BLUE, True)
+txt(s, 7.3, 2.8, 5, 0.6, "F1 = 2 · Precision · Recall / (Precision + Recall)", 13, BLACK)
+txt(s, 7.3, 3.5, 5, 0.6, "Accuracy = (TP + TN) / (TP + TN + FP + FN)", 13, BLACK)
+txt(s, 7.3, 4.2, 5, 0.6, "Precision = TP / (TP + FP)", 13, BLACK)
+txt(s, 7.3, 4.9, 5, 0.5, "Recall = TP / (TP + FN)", 13, BLACK)
 
 # ============================================================
-# P9 实验设计
+# P8-P10 DGA域名检测方法设计（1,2,3各一页）
+# ============================================================
+# P8 方法设计1：数据采集与预处理
+s = prs.slides.add_slide(prs.slide_layouts[6])
+header(s, "DGA域名检测方法设计——数据采集与预处理", "07")
+
+section_title(s, 0.5, 1.5, 12, "1. 数据采集", BLUE)
+bullets(s, 0.8, 2.1, 11, 1.5, [
+    "良性域名来源：Alexa全球流量榜单，选取20万条正常域名",
+    "恶意域名来源：360 DGA监控库，选取20万条DGA恶意域名",
+    "合计40万条样本，涵盖多个主流DGA家族",
+], 14, BLACK, 8)
+
+section_title(s, 0.5, 3.8, 12, "2. 数据预处理", BLUE)
+bullets(s, 0.8, 4.4, 11, 2.5, [
+    "数据清洗：去除空值、重复域名，保证数据质量",
+    "TLD剥离：去除.com/.net/.org等顶级域后缀，聚焦二级域名特征",
+    "标签编码：良性域名标为0，各DGA家族标为1-10",
+    "数据集划分：训练集80%（32万）、验证集10%（4万）、测试集10%（4万）",
+], 14, BLACK, 8)
+
+# P9 方法设计2：特征提取
+s = prs.slides.add_slide(prs.slide_layouts[6])
+header(s, "DGA域名检测方法设计——特征提取", "08")
+
+section_title(s, 0.5, 1.5, 12, "3. 特征提取", BLUE)
+bullets(s, 0.8, 2.1, 5.5, 3.0, [
+    "统计特征（6维）：",
+    "  域名长度：正常与DGA域名字符数差异",
+    "  数字占比：DGA域名常含大量随机数字",
+    "  信息熵：随机字符串的熵值更高",
+    "  连续辅音比例：恶意域名常出现辅音堆叠",
+    "  重复字符比例、元音占比",
+], 13, BLACK, 6)
+
+bullets(s, 7, 2.1, 5.5, 3.0, [
+    "N-gram特征：",
+    "  将域名按n个连续字符滑动切分",
+    "  2-gram：apple → ap pp pl le",
+    "  2-4gram：混合2/3/4字符组合",
+    "  CountVectorizer统计各组合频次",
+    "  取前10,000个高频组合作为特征维度",
+], 13, BLACK, 6)
+
+rect(s, 0.5, 5.5, 12.3, 1.2, LGRAY)
+txt(s, 0.8, 5.6, 11, 0.4, "💡 融合特征策略", 14, BLUE, True)
+txt(s, 0.8, 6.0, 11, 0.5, "统计特征（宏观基准定位）+ 2-gram特征（微观指纹修正）→ 维度 6 + 10,000 = 10,006", 13, BLACK)
+
+# P10 方法设计3：模型训练
+s = prs.slides.add_slide(prs.slide_layouts[6])
+header(s, "DGA域名检测方法设计——模型训练", "09")
+
+section_title(s, 0.5, 1.5, 12, "4. 模型训练", BLUE)
+
+# 对比表
+tbl = s.shapes.add_table(5, 4, util.Inches(0.8), util.Inches(2.2), util.Inches(11.5), util.Inches(2.5)).table
+headers = ["特征组", "特征组合", "说明", "维度"]
+for j, h in enumerate(headers):
+    tbl.cell(0,j).text = h
+    for p in tbl.cell(0,j).text_frame.paragraphs: p.font.size = Pt(12); p.font.bold = True; p.font.color.rgb = WHITE
+    tbl.cell(0,j).fill.solid(); tbl.cell(0,j).fill.fore_color.rgb = BLUE
+data = [["①", "统计特征", "6维统计特征", "6"],
+        ["②", "2-gram 特征", "Bigram + CountVectorizer", "10,000"],
+        ["③", "2-4gram 特征", "混合切片", "10,000"],
+        ["④", "统计 + 2-gram", "融合特征", "10,006"]]
+for i, row in enumerate(data):
+    for j, val in enumerate(row):
+        tbl.cell(i+1,j).text = val
+        for p in tbl.cell(i+1,j).text_frame.paragraphs: p.font.size = Pt(11)
+        if i % 2 == 0: tbl.cell(i+1,j).fill.solid(); tbl.cell(i+1,j).fill.fore_color.rgb = LGRAY
+
+bullets(s, 0.8, 5.0, 11, 1.5, [
+    "每组特征分别在 XGBoost 默认参数和 Optuna 贝叶斯优化下训练",
+    "二分类任务：区分恶意域名（DGA）与良性域名（Alexa）",
+    "多分类任务：对10个DGA家族进行细粒度分类溯源",
+], 13, BLACK, 6)
+
+# ============================================================
+# P11-P12 二分类（2页）
+# ============================================================
+# P11 二分类1
+s = prs.slides.add_slide(prs.slide_layouts[6])
+header(s, "实验与结果分析——二分类结果（上）", "10")
+
+rect(s, 0.5, 1.4, 12.3, 0.8, LGRAY)
+txt(s, 0.8, 1.5, 11, 0.4, "🏆 最优结果：统计特征 + 2-gram 融合组 + Optuna 优化", 16, RED, True)
+txt(s, 0.8, 1.85, 11, 0.3, "准确率 98.40%  |  F1 98.40%  |  AUC 0.9989", 14, GREEN, True)
+
+tbl = s.shapes.add_table(5, 7, util.Inches(0.3), util.Inches(2.6), util.Inches(12.7), util.Inches(2.8)).table
+h2 = ["特征组", "优化", "准确率", "精确率", "召回率", "F1", "AUC"]
+for j, h in enumerate(h2):
+    tbl.cell(0,j).text = h
+    for p in tbl.cell(0,j).text_frame.paragraphs: p.font.size = Pt(10); p.font.bold = True; p.font.color.rgb = WHITE
+    tbl.cell(0,j).fill.solid(); tbl.cell(0,j).fill.fore_color.rgb = BLUE
+d2 = [["统计特征", "默认", "95.87%", "95.97%", "95.77%", "95.87%", "0.9931"],
+      ["统计特征", "Optuna","96.12%","96.48%","95.76%","96.12%","0.9948"],
+      ["2-gram", "默认", "97.53%", "97.44%", "97.63%", "97.53%", "0.9979"],
+      ["2-gram", "Optuna","97.69%","97.72%","97.66%","97.69%","0.9981"]]
+for i, row in enumerate(d2):
+    for j, val in enumerate(row):
+        tbl.cell(i+1,j).text = val
+        for p in tbl.cell(i+1,j).text_frame.paragraphs: p.font.size = Pt(10)
+    if i % 2 == 0:
+        for j in range(7): tbl.cell(i+1,j).fill.solid(); tbl.cell(i+1,j).fill.fore_color.rgb = LGRAY
+
+txt(s, 0.5, 5.8, 11, 0.4, "📌 分析：统计特征单独使用时，准确率约95.87%；2-gram特征表现更好，达到97.53%", 13, BLACK)
+txt(s, 0.5, 6.2, 11, 0.3, "Optuna优化在两组特征上均有小幅提升（约+0.2~0.3%），说明默认参数已接近最优", 13, GRAY)
+
+# P12 二分类2
+s = prs.slides.add_slide(prs.slide_layouts[6])
+header(s, "实验与结果分析——二分类结果（下）", "11")
+
+tbl = s.shapes.add_table(3, 7, util.Inches(0.5), util.Inches(1.6), util.Inches(12.3), util.Inches(1.8)).table
+for j, h in enumerate(h2):
+    tbl.cell(0,j).text = h
+    for p in tbl.cell(0,j).text_frame.paragraphs: p.font.size = Pt(11); p.font.bold = True; p.font.color.rgb = WHITE
+    tbl.cell(0,j).fill.solid(); tbl.cell(0,j).fill.fore_color.rgb = BLUE
+d2b = [["统计+2-gram", "默认", "98.10%", "98.39%", "97.81%", "98.10%", "0.9984"],
+       ["统计+2-gram", "Optuna","98.40%","98.47%","98.33%","98.40%","0.9989"]]
+for i, row in enumerate(d2b):
+    for j, val in enumerate(row):
+        tbl.cell(i+1,j).text = val
+        for p in tbl.cell(i+1,j).text_frame.paragraphs: p.font.size = Pt(11); p.font.color.rgb = RED if i==1 else BLACK
+        if i == 1: p.font.bold = True
+    if i == 1:
+        for j in range(7): tbl.cell(i+1,j).fill.solid(); tbl.cell(i+1,j).fill.fore_color.rgb = RGBColor(0xFF, 0xF0, 0xF0)
+
+bullets(s, 0.5, 3.8, 11.5, 3.0, [
+    "融合特征（统计+2-gram）效果显著优于单一特征",
+    "默认参数下融合组准确率98.10%，高于单一特征的97.69%和96.12%",
+    "Optuna优化后融合组达98.40%，F1 98.40%，AUC 0.9989",
+    "融合特征实现了统计特征（宏观）与2-gram特征（微观）的互补增益"
+], 14, BLACK, 8)
+
+# ============================================================
+# P13-P14 多分类（2页）
+# ============================================================
+# P13 多分类1
+s = prs.slides.add_slide(prs.slide_layouts[6])
+header(s, "实验与结果分析——多分类结果（上）", "12")
+
+tbl = s.shapes.add_table(5, 4, util.Inches(1), util.Inches(1.6), util.Inches(11), util.Inches(2.2)).table
+for j, h in enumerate(["特征组", "准确率", "宏平均F1", "说明"]):
+    tbl.cell(0,j).text = h
+    for p in tbl.cell(0,j).text_frame.paragraphs: p.font.size = Pt(12); p.font.bold = True; p.font.color.rgb = WHITE
+    tbl.cell(0,j).fill.solid(); tbl.cell(0,j).fill.fore_color.rgb = BLUE
+d3 = [["统计特征", "65.59%", "53.78%", "宏观基准定位，区分度有限"],
+      ["2-gram 特征", "84.46%", "76.80%", "微观指纹提取，效果显著"],
+      ["2-4gram 特征", "85.55%", "77.70%", "相比2-gram提升有限"],
+      ["统计+2-gram", "89.98%", "88.95%", "✅ 最优组合"]]
+for i, row in enumerate(d3):
+    for j, val in enumerate(row):
+        tbl.cell(i+1,j).text = val
+        for p in tbl.cell(i+1,j).text_frame.paragraphs: p.font.size = Pt(11)
+        if i == 3: p.font.color.rgb = GREEN; p.font.bold = True
+    if i % 2 == 0:
+        for j in range(4): tbl.cell(i+1,j).fill.solid(); tbl.cell(i+1,j).fill.fore_color.rgb = LGRAY
+
+section_title(s, 0.5, 4.2, 12, "分析发现", BLUE)
+bullets(s, 0.8, 4.8, 11.5, 2.0, [
+    "统计特征单独用于多分类效果有限（F1仅53.78%），因不同家族统计特性差异不大",
+    "2-gram特征F1提升至76.80%，说明字符序列模式能有效区分家族",
+    "2-4gram相比2-gram仅提升0.9%，说明增加n值边际收益递减",
+    "融合特征F1达88.95%，验证了宏观+微观的互补有效性",
+], 13, BLACK, 7)
+
+# P14 多分类2
+s = prs.slides.add_slide(prs.slide_layouts[6])
+header(s, "实验与结果分析——多分类结果（下）", "13")
+
+section_title(s, 0.5, 1.5, 12, "各DGA家族细粒度F1对比", BLUE)
+
+tbl = s.shapes.add_table(6, 4, util.Inches(0.8), util.Inches(2.1), util.Inches(11), util.Inches(2.8)).table
+for j, h in enumerate(["DGA家族", "F1-score", "样本量", "特征分析"]):
+    tbl.cell(0,j).text = h
+    for p in tbl.cell(0,j).text_frame.paragraphs: p.font.size = Pt(12); p.font.bold = True; p.font.color.rgb = WHITE
+    tbl.cell(0,j).fill.solid(); tbl.cell(0,j).fill.fore_color.rgb = BLUE
+f1_data = [["Kraken", "92.3%", "40,000", "长度+字符分布特征明显"],
+           ["Shiotob", "91.8%", "35,000", "n-gram模式区分度高"],
+           ["Bamital", "90.5%", "30,000", "域名结构较为固定"],
+           ["Pykspa", "87.2%", "25,000", "随机化程度较高"],
+           ["Suppobox", "72.1%", "8,000", "样本量有限，模式随机"]]
+for i, row in enumerate(f1_data):
+    for j, val in enumerate(row):
+        tbl.cell(i+1,j).text = val
+        for p in tbl.cell(i+1,j).text_frame.paragraphs: p.font.size = Pt(11)
+    if i % 2 == 0:
+        for j in range(4): tbl.cell(i+1,j).fill.solid(); tbl.cell(i+1,j).fill.fore_color.rgb = LGRAY
+
+bullets(s, 0.8, 5.3, 11.5, 1.5, [
+    "样本量超过25,000的家族F1均达87%以上，模型表现稳定",
+    "Suppobox家族F1偏低（72.1%），主要受限于样本量不足（仅8,000条）",
+    "样本量对多分类精度有显著影响，增加训练数据可进一步提升性能",
+], 13, BLACK, 7)
+
+# ============================================================
+# P15 小结
 # ============================================================
 s = prs.slides.add_slide(prs.slide_layouts[6])
-page_header(s, "04  实验设计——特征分组")
+header(s, "小  结", "14")
 
-make_tbl(s, 5, 4, 1, 1.6, 11.5, 2.2,
-    ["特征组", "特征组合", "说明", "维度"],
-    [["①", "统计特征", "6维统计特征", "6"],
-     ["②", "2-gram 特征", "Bigram切片 + CountVectorizer", "10,000"],
-     ["③", "2-4gram 特征", "混合切片（2/3/4字符）", "10,000"],
-     ["④", "统计 + 2-gram", "融合特征（最优组合）", "10,006"]])
+section_title(s, 0.5, 1.5, 12, "本文工作总结", BLUE)
+bullets(s, 0.8, 2.1, 11, 2.5, [
+    "构建了基于XGBoost的DGA检测系统，同时支持二分类（恶意检测）和多分类（家族溯源）",
+    '系统对比了统计特征、N-gram特征及融合特征四种方案，"统计+2-gram"为最优',
+    "引入Optuna贝叶斯优化自动调参，相比默认参数有稳定提升",
+    "二分类任务最优F1达98.40%，AUC达0.9989",
+    "多分类任务宏平均F1达88.95%",
+], 14, BLACK, 8)
 
-add_text(s, 1, 4.3, 8, 0.4, "实验设置", 17, BLUE, True)
-add_bullets(s, 1, 4.8, 11, 1.5, [
-    "实验一（二分类）：区分恶意域名（DGA）和良性域名（Alexa）",
-    "实验二（多分类）：对10个DGA家族进行细粒度分类",
-    "每组特征分别在 XGBoost 默认参数和 Optuna 贝叶斯优化下实验",
-], 13, TEXT, 6)
-
-# ============================================================
-# P10 二分类结果
-# ============================================================
-s = prs.slides.add_slide(prs.slide_layouts[6])
-page_header(s, "04  实验结果——二分类")
-
-add_shape(s, 0.5, 1.4, 12.3, 0.9, GREEN_BG)
-add_text(s, 0.8, 1.45, 11, 0.35, "🏆  最优结果", 15, GREEN, True)
-add_text(s, 0.8, 1.78, 11.5, 0.4, "统计特征 + 2-gram + Optuna → 准确率 98.40%  |  F1 98.40%  |  AUC 0.9989", 14, GREEN, True)
-
-make_tbl(s, 7, 7, 0.3, 2.6, 12.7, 4.2,
-    ["特征组", "优化", "准确率", "精确率", "召回率", "F1", "AUC"],
-    [["统计特征",    "默认", "95.87%", "95.97%", "95.77%", "95.87%", "0.9931"],
-     ["统计特征",    "Optuna","96.12%","96.48%","95.76%","96.12%","0.9948"],
-     ["2-gram",     "默认", "97.53%", "97.44%", "97.63%", "97.53%", "0.9979"],
-     ["2-gram",     "Optuna","97.69%","97.72%","97.66%","97.69%","0.9981"],
-     ["统计+2-gram", "默认", "98.10%", "98.39%", "97.81%", "98.10%", "0.9984"],
-     ["统计+2-gram", "Optuna","98.40%","98.47%","98.33%","98.40%","0.9989"]], hl=5)
+section_title(s, 0.5, 4.8, 12, "本文创新点", BLUE)
+bullets(s, 0.8, 5.4, 11, 1.5, [
+    "🌟 特征融合策略：揭示统计特征（宏观）与2-gram特征（微观）的正交互补机制",
+    "🌟 优化方法：引入Optuna替代网格搜索，调参效率提升10倍以上",
+    "🌟 统一框架：同时支持恶意域名检测和DGA家族溯源",
+], 14, BLACK, 8)
 
 # ============================================================
-# P11 多分类结果
+# P16 未来展望
 # ============================================================
 s = prs.slides.add_slide(prs.slide_layouts[6])
-page_header(s, "04  实验结果——多分类")
+header(s, "未来展望", "15")
 
-add_shape(s, 0.5, 1.4, 12.3, 0.75, GREEN_BG)
-add_text(s, 0.8, 1.48, 11, 0.5, "🏆  最优：统计 + 2-gram 融合组 → 宏平均 F1 = 88.95%", 15, GREEN, True)
+section_title(s, 0.5, 1.5, 12, "当前不足", BLUE)
+bullets(s, 0.8, 2.1, 11, 1.5, [
+    "多分类准确率仍有提升空间，部分DGA家族（如Suppobox）样本量不足",
+    "目前仅在离线数据集上进行验证，未部署到在线实时检测环境",
+    "模型在极端不平衡样本下的表现有待进一步验证",
+], 13, BLACK, 8)
 
-make_tbl(s, 5, 4, 1.5, 2.5, 10, 2.5,
-    ["特征组", "准确率", "宏平均 F1", "说明"],
-    [["统计特征",      "65.59%", "53.78%", "宏观基准定位，区分度有限"],
-     ["2-gram 特征",   "84.46%", "76.80%", "微观指纹提取，效果显著"],
-     ["2-4gram 特征",  "85.55%", "77.70%", "相比2-gram提升有限"],
-     ["统计+2-gram",   "89.98%", "88.95%", "✅ 最优组合"]], hl=3)
-
-add_shape(s, 0.5, 5.5, 12.3, 1.3, BLUE_BG)
-add_text(s, 0.8, 5.6, 5, 0.35, "📌 分析发现", 14, BLUE2, True)
-add_text(s, 0.8, 6.0, 11.5, 0.5, "统计特征→宏观基准  |  2-gram→微观指纹  |  融合→互补增益", 13, TEXT)
-add_text(s, 0.8, 6.35, 11.5, 0.4, "贝叶斯优化：二分类+0.3%  |  多分类+3~5%（复杂任务收益更大）", 13, TEXT)
-
-# ============================================================
-# P12 Optuna
-# ============================================================
-s = prs.slides.add_slide(prs.slide_layouts[6])
-page_header(s, "03  Optuna贝叶斯优化")
-
-add_shape(s, 0.5, 1.5, 12.3, 0.55, CARD)
-add_text(s, 0.8, 1.55, 11, 0.4, "优化流程：定义目标函数 → 搜索超参数 → 自动剪枝 → 输出最优参数", 14, BLUE2, True)
-
-section_box(s, 0.5, 2.4, 6, 3.5, "超参数搜索范围", [
-    "learning_rate:   [0.01, 0.3]",
-    "max_depth:       [3, 12]",
-    "n_estimators:    [50, 500]",
-    "subsample:       [0.6, 1.0]",
-    "colsample_bytree: [0.6, 1.0]",
-    "reg_lambda:      [0, 5]",
-], BLUE2, 14, 13)
-
-section_box(s, 7, 2.4, 6, 3.5, "优化效果对比", [
-    "统计+2-gram / 二分类：",
-    "  准确率 98.10% → 98.40%  ▲",
-    "  F1     98.10% → 98.40%  ▲",
-    "  AUC   0.9984 → 0.9989 ▲",
-    "多分类提升：+3~5%（更显著）",
-    "搜索效率：50~100次试验收敛",
-], TEAL, 14, 13)
+section_title(s, 0.5, 3.8, 12, "未来改进方向", BLUE)
+bullets(s, 0.8, 4.4, 11, 2.0, [
+    "引入深度学习模型（CNN/LSTM）与XGBoost集成，构建混合检测框架",
+    "部署在线实时检测系统，在真实网络流量中验证模型效果",
+    "增加更多DGA家族样本覆盖，提升多分类的粒度与精度",
+    "探索基于主动学习的半监督检测方法，降低对标注数据的依赖",
+], 14, BLACK, 8)
 
 # ============================================================
-# P13 结果分析
+# P17 结束页
 # ============================================================
 s = prs.slides.add_slide(prs.slide_layouts[6])
-page_header(s, "04  结果分析")
+rect(s, 0, 0, 13.333, 7.5, BLUE)
+rect(s, 0, 0, 13.333, 0.06, WHITE)
+rect(s, 0, 7.44, 13.333, 0.06, WHITE)
 
-section_box(s, 0.5, 1.5, 12.3, 1.5, "📊  特征对比", [
-    "统计特征：宏观基准定位，多分类F1仅53.78%，单独使用有限",
-    "2-gram特征：微观指纹提取，F1达76.80%，效果显著优于统计",
-    "融合特征：两者互补，F1 88.95%，为最优组合",
-    "2-4gram vs 2-gram：提升有限，融合时增益递减",
-], BLUE2, 14, 12)
+txt(s, 2, 1.5, 9, 1.0, "致  谢", 44, WHITE, True, PP_ALIGN.CENTER)
+rect(s, 5, 2.6, 3.3, 0.03, WHITE)
 
-section_box(s, 0.5, 3.3, 12.3, 1.5, "⚙️  优化对比", [
-    "二分类：默认→ Optuna 提升约+0.3%（已接近理论上限，AUC>0.99）",
-    "多分类：默认→ Optuna 提升约+3~5%（复杂任务参数调优收益更大）",
-], TEAL, 14, 12)
-
-section_box(s, 0.5, 5.1, 12.3, 1.5, "⚠️  局限性", [
-    "多分类准确率仍有提升空间（部分DGA家族样本量有限）",
-    "Suppobox等家族随机化程度高，F1偏低（72.1%）",
-    "目前仅离线验证，未部署在线环境",
-], RED, 14, 12)
-
-# ============================================================
-# P14 家族级分析
-# ============================================================
-s = prs.slides.add_slide(prs.slide_layouts[6])
-page_header(s, "04  多分类——家族级分析")
-
-make_tbl(s, 6, 4, 0.8, 1.5, 11.5, 3.0,
-    ["DGA家族", "F1-score", "样本量", "特征分析"],
-    [["Kraken",   "92.3%", "40,000", "长度+字符分布特征明显"],
-     ["Shiotob",  "91.8%", "35,000", "n-gram模式区分度高"],
-     ["Bamital",  "90.5%", "30,000", "域名结构较为固定"],
-     ["Pykspa",   "87.2%", "25,000", "随机化程度较高"],
-     ["Suppobox", "72.1%", "8,000",  "样本量有限，模式随机"]])
-
-add_shape(s, 0.5, 5.0, 12.3, 1.8, BLUE_BG)
-add_text(s, 0.8, 5.1, 5, 0.35, "📌  分析结论", 14, BLUE2, True)
-add_text(s, 0.8, 5.5, 11.5, 0.8,
-    "统计特征对域名结构固化的家族（如Bamital）区分度好\n"
-    "2-gram特征对字符模式差异大的家族（如Shiotob）更有效\n"
-    "融合特征在所有家族上取得平衡最优表现", 13, TEXT)
-add_text(s, 0.8, 6.4, 11.5, 0.3, "样本量 < 10,000 的家族 F1 明显偏低，说明数据量对多分类精度有显著影响", 12, RED, True)
-
-# ============================================================
-# P15 总结展望
-# ============================================================
-s = prs.slides.add_slide(prs.slide_layouts[6])
-page_header(s, "05  总结与展望")
-
-section_box(s, 0.5, 1.5, 6, 3.5, "✅  工作总结", [
-    "构建基于XGBoost的DGA检测系统",
-    "系统对比4种特征工程方案",
-    "引入Optuna贝叶斯优化自动调参",
-    "二分类 F1 98.40% / AUC 0.9989",
-    "多分类宏平均 F1 88.95%",
-], BLUE2, 15, 13)
-
-section_box(s, 7, 1.5, 6, 3.5, "🔭  未来展望", [
-    "引入深度学习（CNN/LSTM）集成",
-    "扩展到实时在线检测场景",
-    "增加更多DGA家族样本覆盖",
-    "探索主动学习半监督方法",
-], RED, 15, 13)
-
-add_shape(s, 0.5, 5.5, 12.3, 1.3, CARD)
-add_text(s, 0.8, 5.6, 5, 0.35, "📊  核心指标", 15, BLUE, True)
-add_text(s, 0.8, 6.0, 11.5, 0.6,
-    "二分类：准确率 98.40%  |  F1 98.40%  |  AUC 0.9989\n"
-    "多分类：宏平均 F1 88.95%  |  最优特征组合：统计 + 2-gram", 14, BLUE2, True)
-
-# ============================================================
-# P16 致谢
-# ============================================================
-s = prs.slides.add_slide(prs.slide_layouts[6])
-add_shape(s, 0, 0, 13.333, 7.5, BG_DARK)
-add_shape(s, 0, 0, 13.333, 0.05, BLUE2)
-add_shape(s, 0, 7.45, 13.333, 0.05, BLUE2)
-
-add_text(s, 2, 1.5, 9, 1.0, "致  谢", 44, WHITE, True, PP_ALIGN.CENTER)
-add_shape(s, 5.5, 2.6, 2.3, 0.02, BLUE2)
-
-add_text(s, 2, 3.0, 9, 1.5, "感谢指导老师余玉银老师的悉心指导与耐心帮助\n"
+txt(s, 2, 3.0, 9, 1.5, "感谢指导老师余玉银老师的悉心指导与耐心帮助\n"
          "感谢数学与信息科学学院各位老师的教诲与培养\n"
          "感谢家人和同学的支持与鼓励",
-         17, TEXT2, a=PP_ALIGN.CENTER)
+         18, WHITE, a=PP_ALIGN.CENTER)
 
-add_shape(s, 4.5, 5.2, 4.3, 0.02, TEXT2)
-add_text(s, 2, 5.5, 9, 0.8, "请各位老师批评指正！", 26, WHITE, True, PP_ALIGN.CENTER)
-add_text(s, 2, 6.3, 9, 0.4, "Q & A", 16, TEXT2, a=PP_ALIGN.CENTER)
+rect(s, 4.5, 5.0, 4.3, 0.03, WHITE)
+txt(s, 2, 5.3, 9, 1.0, "请各位老师批评指正！", 28, WHITE, True, PP_ALIGN.CENTER)
+txt(s, 2, 6.3, 9, 0.5, "Q & A", 18, WHITE, a=PP_ALIGN.CENTER)
 
 # ===== 保存 =====
 out = "/home/girlorn/Cloud-Security-Study/Graduation-Project/毕业答辩PPT.pptx"
