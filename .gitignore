@@ -9,5 +9,6 @@ a.c
 *.pptx
 *.docx
 
-# PPT 生成脚本（保留源码就行）
+# 毕业设计：PPT生成脚本 + 实验代码（不提交）
 Graduation-Project/generate_ppt.py
+Graduation-Project/code/
