@@ -10,4 +10,4 @@ a.c
 *.docx
 
 # PPT 生成脚本（保留源码就行）
-Graduation-Project
+Graduation-Project/generate_ppt.py
