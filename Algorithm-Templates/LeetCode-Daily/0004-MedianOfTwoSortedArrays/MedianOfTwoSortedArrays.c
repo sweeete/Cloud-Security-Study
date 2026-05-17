@@ -10,7 +10,6 @@
  */
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <limits.h>  // 提供 INT_MIN / INT_MAX
 
 /*
