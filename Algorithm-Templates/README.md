@@ -29,3 +29,4 @@
 | 0002 | [两数相加 (Add Two Numbers)](./LeetCode-Daily/0002-AddTwoNumber) | 🟡 Medium | C/python |
 | 0003 | [无重复字符的最长子串 (Longest Substring Without Repeating Characters)](./LeetCode-Daily/0003-LongestSubstring) | 🟡 Medium | C/python |
 | 0004 | [寻找两个正序数组的中位数 (Median of Two Sorted Arrays)](./LeetCode-Daily/0004-MedianOfTwoSortedArrays) | 🔴 Hard | C/python |
+| 0005 | [最长回文子串 (Longest Palindromic Substring)](./LeetCode-Daily/0005-LongestPalindromicSubstring) | 🟡 Medium | C/python |
