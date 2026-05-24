@@ -12,3 +12,4 @@ a.c
 # 毕业设计：不提交的文件
 Graduation-Project/code/
 Graduation-Project/models/
+*.log
