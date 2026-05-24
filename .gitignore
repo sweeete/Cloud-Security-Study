@@ -10,6 +10,5 @@ a.c
 *.docx
 
 # 毕业设计：不提交的文件
-Graduation-Project/generate_ppt.py
 Graduation-Project/code/
 Graduation-Project/models/

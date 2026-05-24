@@ -139,7 +139,7 @@ def run_fusion_tuning_experiment():
     # 保存模型
     model_path = os.path.join(model_dir, "duofen_fusion_model.json")
     best_model.save_model(model_path)
-
+ 
     # 保存向量化器
     vec_path = os.path.join(model_dir, "duofen_vectorizer.pkl")
     with open(vec_path, "wb") as f:
