@@ -1,13 +1,15 @@
 /*
- * LeetCode 0005 - 最长回文子串 (Longest Palindromic Substring)
+ * LeetCode 0005 - 最长回文子串
  * 核心: 中心扩展法 O(n²)
+ *
+ * 函数签名与 LeetCode 完全一致：
+ *   char* longestPalindrome(char* s)
  */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-/* 从 (left, right) 向两边扩展，返回回文子串长度 */
-int expandAroundCenter(const char* s, int left, int right, int n) {
+int expandAroundCenter(char* s, int left, int right, int n) {
     while (left >= 0 && right < n && s[left] == s[right]) {
         left--;
         right++;
@@ -15,11 +17,9 @@ int expandAroundCenter(const char* s, int left, int right, int n) {
     return right - left - 1;
 }
 
-
-char* longestPalindrome(const char* s, int* returnSize) {
+char* longestPalindrome(char* s) {
     int n = strlen(s);
     if (n < 2) {
-        *returnSize = n;
         char* result = (char*)malloc(n + 1);
         strcpy(result, s);
         return result;
@@ -29,8 +29,8 @@ char* longestPalindrome(const char* s, int* returnSize) {
     int maxLen = 1;
 
     for (int i = 0; i < n; i++) {
-        int len1 = expandAroundCenter(s, i, i, n);        // 奇数
-        int len2 = expandAroundCenter(s, i, i + 1, n);    // 偶数
+        int len1 = expandAroundCenter(s, i, i, n);
+        int len2 = expandAroundCenter(s, i, i + 1, n);
         int currLen = (len1 > len2) ? len1 : len2;
 
         if (currLen > maxLen) {
@@ -39,7 +39,6 @@ char* longestPalindrome(const char* s, int* returnSize) {
         }
     }
 
-    *returnSize = maxLen;
     char* result = (char*)malloc(maxLen + 1);
     strncpy(result, s + start, maxLen);
     result[maxLen] = '\0';
@@ -48,22 +47,25 @@ char* longestPalindrome(const char* s, int* returnSize) {
 
 
 int main() {
-    int retLen;
+    char s1[] = "babad";
+    char* r1 = longestPalindrome(s1);
+    printf("✅ \"babad\"  → \"%s\"\n", r1); free(r1);
 
-    char* r1 = longestPalindrome("babad", &retLen);
-    printf("✅ \"babad\"  → \"%.*s\"\n", retLen, r1); free(r1);
+    char s2[] = "cbbd";
+    char* r2 = longestPalindrome(s2);
+    printf("✅ \"cbbd\"   → \"%s\"\n", r2); free(r2);
 
-    char* r2 = longestPalindrome("cbbd", &retLen);
-    printf("✅ \"cbbd\"   → \"%.*s\"\n", retLen, r2); free(r2);
+    char s3[] = "a";
+    char* r3 = longestPalindrome(s3);
+    printf("✅ \"a\"      → \"%s\"\n", r3); free(r3);
 
-    char* r3 = longestPalindrome("a", &retLen);
-    printf("✅ \"a\"      → \"%.*s\"\n", retLen, r3); free(r3);
+    char s4[] = "racecar";
+    char* r4 = longestPalindrome(s4);
+    printf("✅ \"racecar\" → \"%s\"\n", r4); free(r4);
 
-    char* r4 = longestPalindrome("racecar", &retLen);
-    printf("✅ \"racecar\" → \"%.*s\"\n", retLen, r4); free(r4);
-
-    char* r5 = longestPalindrome("aaaa", &retLen);
-    printf("✅ \"aaaa\"   → \"%.*s\"\n", retLen, r5); free(r5);
+    char s5[] = "aaaa";
+    char* r5 = longestPalindrome(s5);
+    printf("✅ \"aaaa\"   → \"%s\"\n", r5); free(r5);
 
     return 0;
 }
