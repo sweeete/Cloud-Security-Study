@@ -30,3 +30,4 @@
 | 0003 | [无重复字符的最长子串 (Longest Substring Without Repeating Characters)](./LeetCode-Daily/0003-LongestSubstring) | 🟡 Medium | C/python |
 | 0004 | [寻找两个正序数组的中位数 (Median of Two Sorted Arrays)](./LeetCode-Daily/0004-MedianOfTwoSortedArrays) | 🔴 Hard | C/python |
 | 0005 | [最长回文子串 (Longest Palindromic Substring)](./LeetCode-Daily/0005-LongestPalindromicSubstring) | 🟡 Medium | C/python |
+| 0006 | [Z 字形变换 (Zigzag Conversion)](./LeetCode-Daily/0006-ZigzagConversion) | 🟡 Medium | C/python |
