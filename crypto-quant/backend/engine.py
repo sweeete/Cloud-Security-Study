@@ -2,9 +2,11 @@
 import time
 import threading
 from datetime import datetime
-from market import get_klines, calculate_indicators
+from market import get_klines, calculate_indicators, MarketDataError
 from strategies import get_strategy
 from database import save_order, log_trade, update_portfolio, get_portfolio
+from risk_manager import risk_manager
+from executor import trade_executor, TradeExecutionError
 
 
 class StrategyEngine:
@@ -40,9 +42,6 @@ class StrategyEngine:
 
             # 获取行情数据
             klines = get_klines(symbol, interval, limit=100)
-            if isinstance(klines, dict) and "error" in klines:
-                log_trade(strategy_id, symbol, "error", klines["error"])
-                return {"error": klines["error"]}
 
             # 计算指标
             indicators = calculate_indicators(klines)
@@ -54,6 +53,9 @@ class StrategyEngine:
 
             return signal
 
+        except MarketDataError as e:
+            log_trade(strategy_id, strategy.symbol, "error", str(e))
+            return {"error": str(e)}
         except Exception as e:
             log_trade(strategy_id, strategy.symbol, "error", str(e))
             return {"error": str(e)}
@@ -83,36 +85,70 @@ class StrategyEngine:
 
         cost = price * amount
 
+        ok, risk_reason = risk_manager.can_trade(action, amount, price)
+        if not ok:
+            log_trade(strategy_id, strategy.symbol, "blocked", f"风控拒绝: {risk_reason}")
+            return
+
+        if action == "sell":
+            portfolio = get_portfolio()
+            current = next((p for p in portfolio if p["symbol"] == strategy.symbol), None)
+            available = current["amount"] if current else strategy.position
+            if available <= 0:
+                log_trade(strategy_id, strategy.symbol, "blocked", "无可卖持仓")
+                return
+            amount = min(amount, available)
+            cost = price * amount
+
+        try:
+            execution = trade_executor.execute_market_order(strategy.symbol, action, amount, price)
+        except TradeExecutionError as e:
+            log_trade(strategy_id, strategy.symbol, "error", f"下单失败: {e}")
+            return
+
+        fill_price = execution["price"]
+        fill_amount = execution["amount"]
+        fill_cost = execution["cost"]
+
         # 记录订单
         save_order(
             strategy_id=strategy_id,
             symbol=strategy.symbol,
             side=action,
             type_="market",
-            price=price,
-            amount=amount,
-            cost=cost,
-            status="filled",
+            price=fill_price,
+            amount=fill_amount,
+            cost=fill_cost,
+            status=execution["status"],
+            order_id=execution["order_id"],
         )
 
+        if fill_amount <= 0:
+            log_trade(strategy_id, strategy.symbol, "submitted", f"{reason} | 订单已提交但未确认成交")
+            return
+
         # 更新策略持仓
-        strategy.on_trade(action, price, amount)
+        strategy.on_trade(action, fill_price, fill_amount)
 
         # 更新数据库持仓
         portfolio = get_portfolio()
         current = next((p for p in portfolio if p["symbol"] == strategy.symbol), None)
         if current:
-            new_amount = current["amount"] + (amount if action == "buy" else -amount)
+            new_amount = current["amount"] + (fill_amount if action == "buy" else -fill_amount)
             new_avg = current["avg_price"]
-            if current["amount"] > 0:
-                new_avg = (current["avg_price"] * current["amount"] + cost * (1 if action == "buy" else -1)) / new_amount if new_amount != 0 else 0
+            if action == "buy" and current["amount"] > 0:
+                new_avg = (current["avg_price"] * current["amount"] + fill_cost) / new_amount if new_amount != 0 else 0
+            elif new_amount <= 0:
+                new_avg = 0
             update_portfolio(strategy.symbol, max(0, new_amount), new_avg)
         else:
             if action == "buy":
-                update_portfolio(strategy.symbol, amount, price)
+                update_portfolio(strategy.symbol, fill_amount, fill_price)
+
+        risk_manager.record_trade(action, fill_cost)
 
         # 记录日志
-        log_trade(strategy_id, strategy.symbol, action, f"{reason} | 价格: {price:.2f}, 数量: {amount:.6f}, 金额: {cost:.2f}")
+        log_trade(strategy_id, strategy.symbol, action, f"{reason} | {execution['mode']} | 价格: {fill_price:.2f}, 数量: {fill_amount:.6f}, 金额: {fill_cost:.2f}")
 
     def start(self):
         """启动引擎（后台线程）"""

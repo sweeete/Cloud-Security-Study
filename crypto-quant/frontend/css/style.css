@@ -133,6 +133,15 @@ body {
 .ticker-change.up { color: var(--accent-green); }
 .ticker-change.down { color: var(--accent-red); }
 .ticker-volume { color: var(--text-secondary); font-size: 12px; margin-top: 5px; }
+.error-card {
+    grid-column: 1 / -1;
+    background: rgba(246, 70, 93, 0.08);
+    border: 1px solid rgba(246, 70, 93, 0.45);
+    border-radius: 8px;
+    color: var(--accent-red);
+    padding: 16px;
+    line-height: 1.5;
+}
 
 /* ===== 图表 ===== */
 .chart-container {
@@ -143,6 +152,15 @@ body {
     margin-bottom: 15px;
 }
 #kline-chart { height: 500px; }
+.chart-error {
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-red);
+    text-align: center;
+    padding: 24px;
+}
 .chart-controls { display: flex; gap: 10px; }
 .chart-controls select {
     background: var(--bg-card);

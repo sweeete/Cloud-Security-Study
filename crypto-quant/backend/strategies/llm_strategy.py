@@ -3,6 +3,7 @@ import json
 import re
 from typing import Optional
 from openai import OpenAI
+from config import get_llm_config
 from .base import BaseStrategy
 
 
@@ -14,22 +15,37 @@ class LLMStrategy(BaseStrategy):
 
     def __init__(self, config: dict):
         super().__init__(config)
-        self.provider = config.get("provider", "deepseek")
-        self.api_key = config.get("api_key", "")
-        self.model = config.get("model", "deepseek-chat")
-        self.base_url = config.get("base_url", "https://api.deepseek.com")
+        llm_cfg = get_llm_config()
+        self.provider = config.get("provider") or llm_cfg.get("provider") or "deepseek"
+        self.api_key = config.get("api_key") or config.get("apiKey") or llm_cfg.get("apiKey", "")
+        self.model = config.get("model") or llm_cfg.get("model") or "deepseek-chat"
+        self.base_url = (
+            config.get("base_url")
+            or config.get("baseUrl")
+            or llm_cfg.get("baseUrl")
+            or self._default_base_url(self.provider)
+        )
         self.prompt_template = config.get("prompt_template", self._default_prompt())
+        self.min_confidence = int(config.get("min_confidence", 65))
+        self.max_trade_pct = float(config.get("max_trade_pct", 10))
         self._client = None
         self._trade_history = []
+
+    def _default_base_url(self, provider: str) -> Optional[str]:
+        if provider == "deepseek":
+            return "https://api.deepseek.com"
+        if provider == "openai":
+            return None
+        return None
 
     def _get_client(self) -> Optional[OpenAI]:
         if not self.api_key:
             return None
         if self._client is None:
-            self._client = OpenAI(
-                api_key=self.api_key,
-                base_url=self.base_url,
-            )
+            kwargs = {"api_key": self.api_key}
+            if self.base_url:
+                kwargs["base_url"] = self.base_url
+            self._client = OpenAI(**kwargs)
         return self._client
 
     def _default_prompt(self) -> str:
@@ -139,20 +155,21 @@ class LLMStrategy(BaseStrategy):
 
             action = decision.get("action", "hold")
             reason = decision.get("reason", "AI 未提供理由")
-            confidence = decision.get("confidence", 50)
-            suggested_pct = decision.get("suggested_amount", 0)
+            confidence = self._to_float(decision.get("confidence", 50), 50)
+            suggested_pct = self._to_float(decision.get("suggested_amount", 0), 0)
 
             if action not in ("buy", "sell", "hold"):
                 action = "hold"
 
             # 根据置信度调整
-            if confidence < 60:
+            if confidence < self.min_confidence:
                 action = "hold"
-                reason += f" [置信度 {confidence}%，低于 60% 阈值，自动保持]"
+                reason += f" [置信度 {confidence:.0f}%，低于 {self.min_confidence}% 阈值，自动保持]"
 
             amount = 0
             if action in ("buy", "sell"):
                 base_amount = self.config.get("base_amount", 0.001)
+                suggested_pct = max(0, min(suggested_pct, self.max_trade_pct))
                 amount = round(base_amount * (suggested_pct / 100) if suggested_pct > 0 else base_amount, 6)
 
             # 记录交易历史
@@ -176,3 +193,12 @@ class LLMStrategy(BaseStrategy):
         except Exception as e:
             return {"action": "hold", "price": current_price, "amount": 0,
                     "reason": f"❌ AI 分析出错: {str(e)}"}
+
+    def _to_float(self, value, default: float) -> float:
+        if isinstance(value, (int, float)):
+            return float(value)
+        if isinstance(value, str):
+            match = re.search(r"-?\d+(\.\d+)?", value)
+            if match:
+                return float(match.group())
+        return default

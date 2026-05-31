@@ -1,5 +1,8 @@
 .env
 .aider*
+.venv/
+__pycache__/
+*.pyc
 
 # Local scratch C file; do not commit
 a.c

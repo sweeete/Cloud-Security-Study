@@ -37,9 +37,14 @@ setInterval(() => {
 // ===== 总览 =====
 async function loadTickers() {
     const data = await API.getTickers();
-    if (!data || data.error) return;
-
     const grid = document.getElementById('ticker-grid');
+    if (!data || data.error) {
+        grid.innerHTML = `<div class="error-card">行情获取失败：${data?.error || '未知错误'}</div>`;
+        document.getElementById('overview-time').textContent =
+            '失败于 ' + new Date().toLocaleTimeString('zh-CN');
+        return;
+    }
+
     grid.innerHTML = data.map(t => {
         const change = t.change || 0;
         const cls = change >= 0 ? 'up' : 'down';
@@ -91,10 +96,21 @@ async function loadChart() {
     const tf = document.getElementById('chart-timeframe').value;
 
     const data = await API.getKlines(symbol, tf, 200);
-    if (!data || data.error) return;
+    const chartBox = document.getElementById('kline-chart');
+    if (!data || data.error) {
+        if (chart) {
+            chart.remove();
+            chart = null;
+            chartSeries = null;
+        }
+        chartBox.innerHTML = `<div class="chart-error">K 线获取失败：${data?.error || '未知错误'}</div>`;
+        document.getElementById('indicators-content').textContent = '指标加载失败';
+        return;
+    }
 
     if (!chart) {
-        chart = LightweightCharts.createChart(document.getElementById('kline-chart'), {
+        chartBox.innerHTML = '';
+        chart = LightweightCharts.createChart(chartBox, {
             layout: {
                 background: { color: '#1e2329' },
                 textColor: '#848e9c',
@@ -109,7 +125,7 @@ async function loadChart() {
                 borderColor: '#3a3f48',
             },
             rightPriceScale: { borderColor: '#3a3f48' },
-            width: document.getElementById('kline-chart').clientWidth || 800,
+            width: chartBox.clientWidth || 800,
             height: 500,
         });
 
@@ -125,7 +141,7 @@ async function loadChart() {
         window.addEventListener('resize', () => {
             if (chart) {
                 chart.applyOptions({
-                    width: document.getElementById('kline-chart').clientWidth || 800
+                    width: chartBox.clientWidth || 800
                 });
             }
         });
@@ -370,16 +386,31 @@ async function loadSettings() {
     const ex = await API.getExchangeStatus();
     if (ex && ex.configured) {
         document.getElementById('ex-status').textContent = '✅ 已配置 ' + ex.exchange + (ex.testnet ? ' (测试网)' : '');
+        if (ex.exchange) document.getElementById('ex-name').value = ex.exchange;
     }
 
     const llm = await API.getLLMStatus();
     if (llm && llm.configured) {
         document.getElementById('llm-status').textContent = `✅ 已配置: ${llm.provider} / ${llm.model}`;
+        document.getElementById('llm-provider').value = llm.provider || 'deepseek';
+        document.getElementById('llm-model').value = llm.model || '';
+        document.getElementById('llm-base-url').value = llm.baseUrl || '';
+        onLLMProviderChange();
     }
+}
+
+function onLLMProviderChange() {
+    const provider = document.getElementById('llm-provider').value;
+    const group = document.getElementById('llm-base-url-group');
+    const input = document.getElementById('llm-base-url');
+    group.classList.toggle('hidden', provider !== 'custom');
+    if (provider === 'deepseek') input.value = 'https://api.deepseek.com';
+    else if (provider === 'openai') input.value = '';
 }
 
 async function saveExchangeKeys() {
     const data = {
+        exchange: document.getElementById('ex-name').value,
         apiKey: document.getElementById('ex-api-key').value,
         secret: document.getElementById('ex-secret').value,
         password: document.getElementById('ex-password').value,
@@ -395,6 +426,7 @@ async function saveLLMKeys() {
         provider,
         apiKey: document.getElementById('llm-api-key').value,
         model: document.getElementById('llm-model').value,
+        baseUrl: document.getElementById('llm-base-url').value,
     };
     const result = await API.saveLLMKeys(data);
     document.getElementById('llm-status').textContent = result.ok ? '✅ 保存成功' : '❌ 保存失败';

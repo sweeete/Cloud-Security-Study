@@ -12,6 +12,7 @@ def get_conn():
 
 
 def init_db():
+    DB_FILE.parent.mkdir(parents=True, exist_ok=True)
     conn = get_conn()
     cursor = conn.cursor()
 

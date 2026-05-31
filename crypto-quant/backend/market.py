@@ -1,10 +1,14 @@
-"""行情数据模块 — 只获取 10 个主流币种，快速返回"""
+"""真实行情数据模块。
+
+此模块只返回交易所真实数据。外部数据源不可用时抛出 MarketDataError，
+由 API 层返回失败；不要生成或返回模拟行情。
+"""
 import ccxt
+import httpx
 import pandas as pd
 import numpy as np
 import time
 import threading
-from datetime import datetime
 
 SYMBOLS = {
     "BTC":  "BTC/USDT", "ETH":  "ETH/USDT", "SOL":  "SOL/USDT",
@@ -27,11 +31,16 @@ SYMBOLS_LIST = [
 ]
 
 TIMEFRAMES = {"1m": "1m", "5m": "5m", "15m": "15m", "1h": "1h", "4h": "4h", "1d": "1d"}
+CRYPTOCOMPARE_BASE_URL = "https://min-api.cryptocompare.com/data"
 
 # ===== 缓存 =====
 _cache = {"tickers": None, "tickers_time": 0, "klines": {}, "klines_time": {}}
 CACHE_TTL = 15
 _lock = threading.Lock()
+
+
+class MarketDataError(RuntimeError):
+    """行情源不可用或返回无效数据。"""
 
 
 def _get_exchange():
@@ -44,8 +53,106 @@ def _get_exchange():
     return exchange
 
 
+def _cryptocompare_get(path: str, params: dict) -> dict:
+    url = f"{CRYPTOCOMPARE_BASE_URL}/{path}"
+    with httpx.Client(timeout=8.0) as client:
+        response = client.get(url, params=params)
+        response.raise_for_status()
+        data = response.json()
+    if data.get("Response") == "Error":
+        raise MarketDataError(data.get("Message", "CryptoCompare 返回错误"))
+    return data
+
+
+def _get_all_tickers_cryptocompare() -> list:
+    fsyms = ",".join(coin["id"] for coin in SYMBOLS_LIST)
+    data = _cryptocompare_get("pricemultifull", {"fsyms": fsyms, "tsyms": "USDT"})
+    raw = data.get("RAW", {})
+    results = []
+    failures = []
+
+    for coin in SYMBOLS_LIST:
+        item = raw.get(coin["id"], {}).get("USDT")
+        if not item or item.get("PRICE") is None:
+            failures.append(f"{coin['id']}: empty ticker")
+            continue
+        results.append({
+            "symbol": coin["id"],
+            "name": coin["name"],
+            "last": float(item["PRICE"]),
+            "bid": None,
+            "ask": None,
+            "high": float(item.get("HIGH24HOUR") or 0),
+            "low": float(item.get("LOW24HOUR") or 0),
+            "volume": float(item.get("VOLUME24HOUR") or 0),
+            "change": float(item.get("CHANGEPCT24HOUR") or 0),
+            "timestamp": int(item.get("LASTUPDATE", time.time()) * 1000),
+            "source": "cryptocompare",
+        })
+
+    if failures:
+        raise MarketDataError("CryptoCompare 行情获取失败：" + "; ".join(failures))
+    return results
+
+
+def _get_ticker_cryptocompare(symbol: str) -> dict:
+    data = _cryptocompare_get("pricemultifull", {"fsyms": symbol.upper(), "tsyms": "USDT"})
+    item = data.get("RAW", {}).get(symbol.upper(), {}).get("USDT")
+    if not item or item.get("PRICE") is None:
+        raise MarketDataError(f"{symbol} 行情为空")
+    return {
+        "symbol": symbol.upper(),
+        "last": float(item["PRICE"]),
+        "change": float(item.get("CHANGEPCT24HOUR") or 0),
+        "source": "cryptocompare",
+    }
+
+
+def _cryptocompare_history_params(symbol: str, timeframe: str, limit: int) -> tuple[str, dict]:
+    if timeframe == "1m":
+        path, aggregate = "v2/histominute", 1
+    elif timeframe == "5m":
+        path, aggregate = "v2/histominute", 5
+    elif timeframe == "15m":
+        path, aggregate = "v2/histominute", 15
+    elif timeframe == "4h":
+        path, aggregate = "v2/histohour", 4
+    elif timeframe == "1d":
+        path, aggregate = "v2/histoday", 1
+    else:
+        path, aggregate = "v2/histohour", 1
+
+    return path, {
+        "fsym": symbol.upper(),
+        "tsym": "USDT",
+        "limit": max(1, min(int(limit), 2000)),
+        "aggregate": aggregate,
+    }
+
+
+def _get_klines_cryptocompare(symbol: str, timeframe: str, limit: int) -> list:
+    path, params = _cryptocompare_history_params(symbol, timeframe, limit)
+    data = _cryptocompare_get(path, params)
+    rows = data.get("Data", {}).get("Data", [])
+    result = [
+        {
+            "time": int(i["time"]),
+            "open": float(i["open"]),
+            "high": float(i["high"]),
+            "low": float(i["low"]),
+            "close": float(i["close"]),
+            "volume": float(i.get("volumefrom") or 0),
+        }
+        for i in rows
+        if i.get("close") is not None
+    ]
+    if not result:
+        raise MarketDataError(f"{symbol} K 线为空")
+    return result
+
+
 def get_all_tickers() -> list:
-    """只获取 10 个币种的行情"""
+    """只获取 10 个币种的真实行情。"""
     global _cache
 
     # 检查缓存
@@ -57,91 +164,69 @@ def get_all_tickers() -> list:
         if _cache["tickers"] and _cache["tickers_time"] > time.time() - CACHE_TTL:
             return _cache["tickers"]
 
-        results = []
-        failed_count = 0
-
         try:
-            exchange = _get_exchange()
+            try:
+                results = _get_all_tickers_cryptocompare()
+            except Exception as first_error:
+                exchange = _get_exchange()
+                results = []
+                failures = []
+                for coin in SYMBOLS_LIST:
+                    try:
+                        t = exchange.fetch_ticker(coin["pair"])
+                        if t and t.get("last"):
+                            results.append({
+                                "symbol": coin["id"],
+                                "name": coin["name"],
+                                "last": t["last"],
+                                "bid": t["bid"],
+                                "ask": t["ask"],
+                                "high": t["high"],
+                                "low": t["low"],
+                                "volume": t["baseVolume"],
+                                "change": t.get("percentage", 0),
+                                "timestamp": t["timestamp"],
+                                "source": "okx",
+                            })
+                        else:
+                            failures.append(f"{coin['id']}: empty ticker")
+                    except Exception as e:
+                        failures.append(f"{coin['id']}: {e}")
 
-            for coin in SYMBOLS_LIST:
-                try:
-                    t = exchange.fetch_ticker(coin["pair"])
-                    if t and t.get("last"):
-                        results.append({
-                            "symbol": coin["id"],
-                            "name": coin["name"],
-                            "last": t["last"],
-                            "bid": t["bid"],
-                            "ask": t["ask"],
-                            "high": t["high"],
-                            "low": t["low"],
-                            "volume": t["baseVolume"],
-                            "change": t.get("percentage", 0),
-                            "timestamp": t["timestamp"],
-                        })
-                    else:
-                        failed_count += 1
-                        results.append({
-                            "symbol": coin["id"], "name": coin["name"],
-                            "last": None, "change": 0,
-                        })
-                except Exception as e:
-                    failed_count += 1
-                    results.append({
-                        "symbol": coin["id"], "name": coin["name"],
-                        "last": None, "change": 0,
-                    })
-
-            # 如果超过一半失败，直接用模拟数据
-            if failed_count > 5:
-                print(f"[market] {failed_count}/10 failed, using fallback data")
-                results = _generate_fallback_data()
+                if failures:
+                    raise MarketDataError(
+                        f"CryptoCompare 失败: {first_error}; OKX 失败: " + "; ".join(failures)
+                    )
 
             _cache["tickers"] = results
             _cache["tickers_time"] = time.time()
             return results
 
         except Exception as e:
-            print(f"[market] exchange completely failed: {e}")
-            fallback = _generate_fallback_data()
-            _cache["tickers"] = fallback
-            _cache["tickers_time"] = time.time()
-            return fallback
-
-
-def _generate_fallback_data():
-    """模拟数据（API 不可用时展示）"""
-    base_prices = {
-        "BTC": 65000, "ETH": 3200, "SOL": 150, "BNB": 580,
-        "XRP": 0.55, "DOGE": 0.12, "ADA": 0.45, "AVAX": 35,
-        "LINK": 15, "DOT": 7,
-    }
-    results = []
-    for coin in SYMBOLS_LIST:
-        base = base_prices.get(coin["id"], 100)
-        results.append({
-            "symbol": coin["id"], "name": coin["name"],
-            "last": base, "bid": base * 0.999, "ask": base * 1.001,
-            "high": base * 1.02, "low": base * 0.98,
-            "volume": 50000, "change": 0.5,
-            "timestamp": int(time.time() * 1000),
-        })
-    return results
+            raise MarketDataError(str(e)) from e
 
 
 def get_ticker(symbol: str) -> dict:
-    """单个币种行情"""
+    """单个币种真实行情。"""
     pair = SYMBOLS.get(symbol.upper(), symbol)
     try:
-        exchange = _get_exchange()
-        t = exchange.fetch_ticker(pair)
-        return {"symbol": symbol, "last": t["last"], "change": t.get("percentage", 0)}
-    except:
-        return {"symbol": symbol, "last": None, "change": 0}
+        try:
+            return _get_ticker_cryptocompare(symbol.upper())
+        except Exception as first_error:
+            try:
+                exchange = _get_exchange()
+                t = exchange.fetch_ticker(pair)
+                if not t or not t.get("last"):
+                    raise MarketDataError(f"{symbol} 行情为空")
+                return {"symbol": symbol, "last": t["last"], "change": t.get("percentage", 0), "source": "okx"}
+            except Exception as second_error:
+                raise MarketDataError(f"CryptoCompare 失败: {first_error}; OKX 失败: {second_error}") from second_error
+    except Exception as e:
+        raise MarketDataError(str(e)) from e
 
 
 def get_klines(symbol: str, timeframe: str = "1h", limit: int = 100) -> list:
-    """K 线数据"""
+    """真实 K 线数据。"""
     pair = SYMBOLS.get(symbol.upper(), symbol)
     tf = TIMEFRAMES.get(timeframe, "1h")
     cache_key = f"{pair}_{tf}_{limit}"
@@ -150,10 +235,18 @@ def get_klines(symbol: str, timeframe: str = "1h", limit: int = 100) -> list:
         return _cache["klines"][cache_key]
 
     try:
-        exchange = _get_exchange()
-        ohlcv = exchange.fetch_ohlcv(pair, tf, limit=limit)
-        result = [{"time": i[0]//1000, "open": float(i[1]), "high": float(i[2]),
-                    "low": float(i[3]), "close": float(i[4]), "volume": float(i[5])} for i in ohlcv]
+        try:
+            result = _get_klines_cryptocompare(symbol.upper(), timeframe, limit)
+        except Exception as first_error:
+            try:
+                exchange = _get_exchange()
+                ohlcv = exchange.fetch_ohlcv(pair, tf, limit=limit)
+                if not ohlcv:
+                    raise MarketDataError(f"{symbol} K 线为空")
+                result = [{"time": i[0]//1000, "open": float(i[1]), "high": float(i[2]),
+                            "low": float(i[3]), "close": float(i[4]), "volume": float(i[5])} for i in ohlcv]
+            except Exception as second_error:
+                raise MarketDataError(f"CryptoCompare 失败: {first_error}; OKX 失败: {second_error}") from second_error
 
         if "klines" not in _cache:
             _cache["klines"] = {}
@@ -162,7 +255,7 @@ def get_klines(symbol: str, timeframe: str = "1h", limit: int = 100) -> list:
         _cache["klines_time"][cache_key] = time.time()
         return result
     except Exception as e:
-        return {"error": str(e)}
+        raise MarketDataError(str(e)) from e
 
 
 def calculate_indicators(klines: list) -> dict:

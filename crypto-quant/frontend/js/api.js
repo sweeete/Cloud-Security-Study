@@ -12,7 +12,14 @@ const API = {
             window.location.href = '/';
             return;
         }
-        return res.json();
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+            return {
+                error: data.detail || data.error || `请求失败: HTTP ${res.status}`,
+                status: res.status,
+            };
+        }
+        return data;
     },
 
     get(path) { return this.request(path); },

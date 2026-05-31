@@ -19,7 +19,7 @@ from auth import (
 )
 from market import (
     get_all_tickers, get_ticker, get_klines,
-    calculate_indicators, SYMBOLS_LIST
+    calculate_indicators, SYMBOLS_LIST, MarketDataError
 )
 from strategies import list_strategies, get_strategy, STRATEGY_META
 from engine import engine
@@ -54,6 +54,7 @@ class SetPasswordRequest(BaseModel):
     password: str
 
 class ExchangeKeyRequest(BaseModel):
+    exchange: Optional[str] = "binance"
     apiKey: str
     secret: str
     password: Optional[str] = ""
@@ -63,6 +64,7 @@ class LLMKeyRequest(BaseModel):
     provider: str
     apiKey: str
     model: str
+    baseUrl: Optional[str] = ""
 
 class StrategyRequest(BaseModel):
     name: str
@@ -141,7 +143,7 @@ def exchange_status():
 @app.post("/api/exchange/keys", dependencies=[Depends(require_auth)])
 def set_keys(req: ExchangeKeyRequest):
     """设置交易所 API Key"""
-    set_exchange_keys(req.apiKey, req.secret, req.password, req.testnet)
+    set_exchange_keys(req.apiKey, req.secret, req.password, req.testnet, req.exchange or "binance")
     return {"ok": True, "message": "API Key 已保存"}
 
 
@@ -150,7 +152,7 @@ def set_keys(req: ExchangeKeyRequest):
 @app.post("/api/llm/keys", dependencies=[Depends(require_auth)])
 def set_llm(req: LLMKeyRequest):
     """设置 LLM API Key"""
-    set_llm_keys(req.provider, req.apiKey, req.model)
+    set_llm_keys(req.provider, req.apiKey, req.model, req.baseUrl or "")
     return {"ok": True, "message": "LLM API Key 已保存"}
 
 
@@ -164,6 +166,7 @@ def llm_status():
             "configured": True,
             "provider": llm.get("provider"),
             "model": llm.get("model"),
+            "baseUrl": llm.get("baseUrl", ""),
         }
     return {"configured": False}
 
@@ -173,28 +176,38 @@ def llm_status():
 @app.get("/api/market/tickers")
 def all_tickers():
     """获取所有币种行情"""
-    return get_all_tickers()
+    try:
+        return get_all_tickers()
+    except MarketDataError as e:
+        raise HTTPException(status_code=502, detail=str(e))
 
 
 @app.get("/api/market/ticker/{symbol}")
 def single_ticker(symbol: str):
     """获取单个币种行情"""
-    return get_ticker(symbol.upper())
+    try:
+        return get_ticker(symbol.upper())
+    except MarketDataError as e:
+        raise HTTPException(status_code=502, detail=str(e))
 
 
 @app.get("/api/market/klines/{symbol}")
 def klines(symbol: str, timeframe: str = "1h", limit: int = 100):
     """获取 K 线数据"""
-    return get_klines(symbol.upper(), timeframe, limit)
+    try:
+        return get_klines(symbol.upper(), timeframe, limit)
+    except MarketDataError as e:
+        raise HTTPException(status_code=502, detail=str(e))
 
 
 @app.get("/api/market/indicators/{symbol}")
 def indicators(symbol: str, timeframe: str = "1h", limit: int = 100):
     """获取技术指标"""
-    klines_data = get_klines(symbol.upper(), timeframe, limit)
-    if isinstance(klines_data, dict) and "error" in klines_data:
-        return klines_data
-    return calculate_indicators(klines_data)
+    try:
+        klines_data = get_klines(symbol.upper(), timeframe, limit)
+        return calculate_indicators(klines_data)
+    except MarketDataError as e:
+        raise HTTPException(status_code=502, detail=str(e))
 
 
 @app.get("/api/market/symbols")
@@ -253,7 +266,6 @@ def toggle_strategy(sid: int):
         raise HTTPException(status_code=404, detail="策略不存在")
 
     new_enabled = 0 if target["enabled"] else 1
-    update_strategy(sid, enabled=new_enabled)
 
     if new_enabled:
         import json
@@ -261,10 +273,16 @@ def toggle_strategy(sid: int):
         config["name"] = target["name"]
         config["symbol"] = target["symbol"]
         config["side"] = target["side"]
-        engine.start_strategy(sid, target["type"], config)
+        if not engine.start_strategy(sid, target["type"], config):
+            raise HTTPException(status_code=400, detail="策略类型无效")
+        update_strategy(sid, enabled=new_enabled)
+        engine.start()
         log_trade(sid, target["symbol"], "start", "策略已启动")
     else:
+        update_strategy(sid, enabled=new_enabled)
         engine.stop_strategy(sid)
+        if not engine.get_status()["active_strategies"]:
+            engine.stop()
         log_trade(sid, target["symbol"], "stop", "策略已停止")
 
     return {"ok": True, "enabled": bool(new_enabled)}

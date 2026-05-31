@@ -19,7 +19,8 @@ DEFAULT_CONFIG = {
     "llm": {
         "provider": "",
         "apiKey": "",
-        "model": ""
+        "model": "",
+        "baseUrl": ""
     },
     "app": {
         "password_hash": "",
@@ -56,10 +57,10 @@ def get_llm_config() -> dict:
     return cfg.get("llm", {})
 
 
-def set_exchange_keys(api_key: str, secret: str, password: str = "", testnet: bool = True):
+def set_exchange_keys(api_key: str, secret: str, password: str = "", testnet: bool = True, name: str = "binance"):
     cfg = load_config()
     cfg["exchange"] = {
-        "name": "binance",
+        "name": name,
         "apiKey": api_key,
         "secret": secret,
         "password": password,
@@ -68,12 +69,13 @@ def set_exchange_keys(api_key: str, secret: str, password: str = "", testnet: bo
     save_config(cfg)
 
 
-def set_llm_keys(provider: str, api_key: str, model: str):
+def set_llm_keys(provider: str, api_key: str, model: str, base_url: str = ""):
     cfg = load_config()
     cfg["llm"] = {
         "provider": provider,
         "apiKey": api_key,
-        "model": model
+        "model": model,
+        "baseUrl": base_url
     }
     save_config(cfg)
 
