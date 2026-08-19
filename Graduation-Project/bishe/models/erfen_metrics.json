@@ -1,0 +1,16 @@
+{
+  "type": "binary",
+  "accuracy": 0.9834,
+  "precision": 0.9888,
+  "recall": 0.9779,
+  "f1": 0.9833,
+  "auc": 0.9988,
+  "best_params": {
+    "n_estimators": 592,
+    "max_depth": 11,
+    "learning_rate": 0.12873264633366446,
+    "subsample": 0.7511968379343,
+    "colsample_bytree": 0.6214083628719549,
+    "gamma": 0.7965169362403437
+  }
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2048</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="game-container">
+    <div id="header">
+      <h1>2048</h1>
+      <div id="scores">
+        <div class="score-box">
+          <span class="label">分数</span>
+          <span id="score">0</span>
+        </div>
+        <div class="score-box">
+          <span class="label">最佳</span>
+          <span id="best-score">0</span>
+        </div>
+      </div>
+    </div>
+    <div id="controls">
+      <button id="restart-btn">新游戏</button>
+    </div>
+    <div id="board">
+      <!-- 16 个 tile 由 JS 动态生成 -->
+      <div id="game-over-overlay" class="hidden">
+        <h2>游戏结束!</h2>
+        <p class="final-score">得分：<span id="final-score">0</span></p>
+        <button id="try-again-btn">再来一局</button>
+      </div>
+      <div id="win-overlay" class="hidden">
+        <h2>🎉 恭喜你赢了!</h2>
+        <p class="final-score">得分：<span id="win-score">0</span></p>
+        <button id="continue-btn">继续挑战</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/game.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/input.js"></script>
+</body>
+</html>
