@@ -1,0 +1,8 @@
+# 示例脚本运行时生成的文件，不需要提交
+*/data/
+numbers.txt
+
+# Python 运行时缓存
+__pycache__/
+*.pyc
+.vscode/
