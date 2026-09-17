@@ -1,10 +1,47 @@
+# ============================================================
+# Cloud-Security-Study 忽略规则
+# 原则：密钥、隐私、运行时数据、二进制大文件一律不入库
+# ============================================================
+
+# ===== 私密配置（绝不提交）=====
 .env
+.env.*
+!.env.example
+config.local.*
 .aider*
-.venv/
+
+# ===== 密钥与证书（绝不提交）=====
+*.pem
+*.key
+*.pfx
+*.p12
+id_rsa*
+id_ed25519*
+.ssh/
+*credentials*
+*secret*
+mnemonic*.txt
+
+# ===== 运行时数据（可能包含 API Key / 交易记录等敏感信息）=====
+*.db
+*.sqlite
+*.sqlite3
+*.log
+crypto-quant/backend/data/
+
+# ===== Python =====
 __pycache__/
 *.pyc
+.venv/
 
-# Local scratch C file; do not commit
+# ===== 编辑器与系统垃圾 =====
+.idea/
+.vscode/
+*.code-workspace
+.DS_Store
+Thumbs.db
+
+# ===== 本地草稿 =====
 a.c
 
 # ===== 毕业设计 =====
@@ -12,7 +49,6 @@ a.c
 *.pptx
 *.docx
 
-# 毕业设计：不提交的文件
+# 毕业设计：不提交的目录
 Graduation-Project/code/
 Graduation-Project/models/
-*.log

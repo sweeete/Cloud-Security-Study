@@ -18,7 +18,13 @@
 *   **搜索算法**：DFS (回溯剪枝)、BFS (最短路模型)。
 *   **数学基础**：大数运算、素数筛、快速幂。
 
-### 3. [LeetCode-Daily](./LeetCode-Daily/)
+### 3. [OJ-C++](./OJ-C++/)
+*   课程 OJ 的 C++ 解题代码，按题号顺序存放。
+
+### 4. [Python_study](./Python_study/)
+*   Python 语言学习工作区（从零开始）：一主题一文件夹，每个主题含要点笔记（README）+ 可直接运行的示例代码。
+
+### 5. [LeetCode-Daily](./LeetCode-Daily/)
 *   每日一题练习记录，侧重于将模板应用于实际场景。
 
 ## 📚 算法练习索引
