@@ -4,7 +4,7 @@
 
 ## 笔记
 
-- [Transformer 架构及主流大模型原理](./Transformer.md)
+- [大模型与 Agent 开发笔记](./LLM-and-Agent-Notes.md) —— 基础概念、序列建模演进、序列标注经典方法、Agent 原理、求职要求拆解、名词速查
 
 ## 待学清单
 
@@ -18,10 +18,10 @@
 
 ### 工程能力
 
-- [ ] 独立 PE、独立搭建 Agent，根据大模型效果进行优化
+- [ ] 独立 PE、独立搭建 Agent，根据大模型效果进行优化 → 见 [笔记第四、五部分](./LLM-and-Agent-Notes.md)
 - [ ] 熟练掌握 PyTorch
 - [ ] 大模型训练全流程（预训练、SFT、对齐训练）
-- [ ] Agentic 系统开发、Function Calling
+- [ ] Agentic 系统开发、Function Calling → 见 [笔记第四部分](./LLM-and-Agent-Notes.md)
 - [ ] 多智能体框架、规划、推理链路
 - [ ] 自进化、自我改进系统
 
